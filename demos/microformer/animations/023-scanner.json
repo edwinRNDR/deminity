@@ -1,0 +1,148 @@
+{
+  "camera": {
+    "type": "ortho",
+    "keyframer": [
+      {
+        "time": 52.0,
+        "easing": "cubic-in-out",
+        "x": 640.0,
+        "y": 360.0,
+        "magnitude": 720.0,
+        "scale": 1.0
+      },
+      {
+        "time": 68.0,
+        "scale": 1.5
+
+      }
+    ]
+  },
+  "objects": [
+    {
+      "time": 52.0,
+      "type": "svg",
+      "asset": "svg/illustration-01-scan/*.svg",
+      "stagger": {
+        "mode": "in-out",
+        "window": 0
+      },
+      "stepping": {
+        "mode": "discrete",
+        "steps": 6,
+        "inertia": 0.01
+
+      },
+
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "c0": 0.0,
+          "c1": 0.0,
+          "x": "0.0 + rep * 10.0",
+          "y": 0.0,
+          "z": 0.0,
+          "rz": 0.0,
+          "scale": 1.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0,
+          "asset-index": 3.0
+        },
+
+        {
+          "time": 4.0,
+          "stroke-g": 0.5,
+
+          "c0": 0.0,
+          "c1": 1.0,
+          "rz": 45.0
+        }
+      ]
+    },
+    {
+      "time": 56.0,
+      "type": "svg",
+      "asset": "svg/illustration-02-scan/*.svg",
+      "stagger": {
+        "mode": "in-out",
+        "window": 0
+      },
+      "stepping": {
+        "mode": "discrete",
+        "steps": 6,
+        "inertia": 0.01
+
+      },
+
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "c0": 0.0,
+          "c1": 0.0,
+          "x": "0.0 + rep * 10.0",
+          "y": 0.0,
+          "z": 0.0,
+          "rz": 0.0,
+          "scale": 1.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0,
+          "asset-index": 3.0
+        },
+
+        {
+          "time": 4.0,
+          "stroke-g": 0.25,
+
+          "c0": 0.0,
+          "c1": 1.0
+        }
+      ]
+    },
+    {
+      "time": 60.0,
+      "type": "svg",
+      "asset": "svg/illustration-03-scan/*.svg",
+      "stagger": {
+        "mode": "in-out",
+        "window": 0
+      },
+      "stepping": {
+        "mode": "discrete",
+        "steps": 6,
+        "inertia": 0.01
+
+      },
+
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "c0": 0.0,
+          "c1": 0.0,
+          "x": "0.0 + rep * 10.0",
+          "y": 0.0,
+          "z": 0.0,
+          "rz": 0.0,
+          "scale": 1.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0,
+          "asset-index": 4.0
+        },
+
+        {
+          "time": 4.0,
+
+          "c0": 0.0,
+          "c1": 1.0
+        }
+      ]
+    }
+  ]
+}

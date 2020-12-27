@@ -1,0 +1,214 @@
+{
+  "zIndex": -1,
+  "camera": {
+    "type": "ortho",
+    "keyframer": [
+      {
+        "time": 6.0,
+        "easing": "cubic-in-out",
+        "x": 640.0,
+        "y": 360.0,
+        "magnitude": 720.0,
+        "scale": 1.0
+      },
+      {
+        "time": 22.0,
+        "scale": 4.0
+      },
+      {
+        "time": 32.0,
+        "scale": {
+          "value": 1.0,
+          "duration": 0.0
+        }
+      }
+    ]
+  },
+  "objects": [
+    {
+      "time": 6.0,
+      "type": "image",
+      "assets": [
+        "images/voyager/*.png"
+      ],
+      "keyframer": [
+        {
+          "time": 0.0,
+          "scale": 1.0,
+          "image-dither": 0.0,
+          "image-tint-r": 1.0,
+          "image-tint-g": 0.0,
+          "image-tint-b": 0.0,
+          "image-tint-a": 1.0,
+          "image-bottom": 0.0,
+          "image-top": 0.0,
+          "asset-index": 0
+        },
+        {
+          "time": 4.0,
+          "image-bottom": 1.0,
+          "image-top": 0.0
+        },
+        {
+          "time": 16.0,
+          "asset-index": 176,
+          "image-tint-r": 1.0,
+          "image-tint-g": 0.5,
+          "image-tint-b": 0.0,
+          "image-tint-a": 1.0
+        }
+      ]
+    },
+    {
+      "time": 32.0,
+      "type": "image",
+      "assets": [
+        "images/voyager/*.png"
+      ],
+      "keyframer": [
+        {
+          "time": 0.0,
+          "x": -300.0,
+          "scale": 1.0,
+          "image-dither": 0.0,
+          "image-tint-r": 1.0,
+          "image-tint-g": 0.0,
+          "image-tint-b": 0.0,
+          "image-tint-a": 1.0,
+          "image-bottom": 0.0,
+          "image-top": 0.0,
+          "asset-index": "172/2"
+        },
+        {
+          "time": 8.0,
+          "image-bottom": 1.0,
+          "image-top": 0.0
+        },
+        {
+          "time": 8.0,
+          "asset-index": 176,
+          "image-tint-r": 1.0,
+          "image-tint-g": 0.5,
+          "image-tint-b": 0.0,
+          "image-tint-a": 1.0
+        }
+      ]
+    },
+    {
+      "time": 32.0,
+      "type": "image",
+      "assets": [
+        "images/voyager/*.png"
+      ],
+      "keyframer": [
+        {
+          "time": 0.0,
+          "x": 300.0,
+          "scale": 1.0,
+          "image-dither": 0.0,
+          "image-tint-r": 1.0,
+          "image-tint-g": 0.0,
+          "image-tint-b": 0.0,
+          "image-tint-a": 1.0,
+          "image-bottom": 1.0,
+          "image-top": 1.0,
+          "asset-index": 0
+        },
+        {
+          "time": 8.0,
+          "image-bottom": 1.0,
+          "image-top": 0.0
+        },
+        {
+          "time": 8.0,
+          "asset-index": "176/2",
+          "image-tint-r": 1.0,
+          "image-tint-g": 0.5,
+          "image-tint-b": 0.0,
+          "image-tint-a": 1.0
+        }
+      ]
+    },
+    {
+      "time": 40.0,
+      "type": "image",
+      "assets": [
+        "images/voyager/*.png"
+      ],
+      "repetitions":{
+        "count": 5,
+        "interval": 0.0
+      },
+
+      "keyframer": [
+        {
+          "time": 0.0,
+          "x": "rep * 150 - 300",
+          "scale": 1.0,
+          "image-dither": 0.0,
+          "image-tint-r": 1.0,
+          "image-tint-g": 0.0,
+          "image-tint-b": 0.0,
+          "image-tint-a": 0.5,
+          "image-left": 0.0,
+          "image-right": 1.0,
+          "asset-index": "rep*10"
+        },
+        {
+          "time": 8.0,
+          "image-right": 1.0,
+          "image-left": 0.0
+        },
+        {
+          "time": 8.0,
+          "asset-index": "176/2 + rep*10",
+          "image-tint-r": 1.0,
+          "image-tint-g": 0.5,
+          "image-tint-b": 0.0,
+          "image-tint-a": 1.0,
+          "scale": 0.1
+        }
+      ]
+    },
+    {
+      "time": 63.5,
+      "type": "image",
+      "assets": [
+        "images/voyager/*.png"
+      ],
+      "repetitions":{
+        "count": 1,
+        "interval": 0.0
+      },
+
+      "keyframer": [
+        {
+          "time": 0.0,
+          "scale": 2.0,
+          "image-dither": 0.0,
+          "image-tint-r": 1.0,
+          "image-tint-g": 0.0,
+          "image-tint-b": 0.0,
+          "image-tint-a": 0.5,
+          "image-left": 0.0,
+          "image-right": 1.0,
+          "asset-index": 0
+        },
+        {
+          "time": 8.0,
+          "image-right": 1.0,
+          "image-left": 0.0
+        },
+        {
+          "time": 4.0,
+          "asset-index": "176/2 + rep*10",
+          "image-tint-r": 1.0,
+          "image-tint-g": 0.5,
+          "image-tint-b": 0.0,
+          "image-tint-a": 0.0,
+          "scale": 1.0
+        }
+      ]
+    }
+  ]
+}

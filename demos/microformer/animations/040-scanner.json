@@ -1,0 +1,100 @@
+{
+  "camera": {
+    "type": "perspective",
+    "keyframer": [
+      {
+        "time": 68.0,
+        "easing": "cubic-in-out",
+        "x": 640.0,
+        "y": 360.0,
+        "z": 720.0,
+        "perspective-far": 10000,
+        "rx": 0
+      },
+      {
+        "time": 86.0,
+        "z": 1800.0
+      }
+    ]
+  },
+  "objects": [
+    {
+      "time": 68.0,
+      "type": "svg-3d",
+      "asset": "svg/illustration-04-scan/120.svg",
+      "stagger": {
+        "mode": "in-out",
+        "order": "random",
+        "window": 40
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "c0": 0.0,
+          "c1": 0.0,
+          "x": "0.0 + rep * 10.0",
+          "y": 0.0,
+          "z": 500.0,
+          "rz": 0.0,
+          "scale": 1.0,
+          "stroke-weight": 4.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0
+        },
+
+        {
+          "z": 0.0,
+          "time": 16.0,
+          "stroke-weight": 5.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.25,
+          "stroke-b": 0.0,
+          "c0": 0.0,
+          "c1": 1.0
+        }
+      ]
+    },
+    {
+      "time": 68.0,
+      "type": "svg-3d",
+      "asset": "svg/illustrations/illustration-04.svg",
+      "stagger": {
+        "mode": "in-out",
+        "order": "random",
+        "window": 4
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "c0": 0.0,
+          "c1": 0.0,
+          "x": "0.0 + rep * 10.0",
+          "y": 0.0,
+          "z": 0.0,
+          "rz": 0.0,
+          "scale": 1.0,
+          "stroke-weight": 4.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0
+        },
+
+        {
+          "z": 0.0,
+          "time": 16.0,
+          "stroke-weight": 5.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.25,
+          "stroke-b": 0.0,
+          "c0": 0.0,
+          "c1": 1.0
+        }
+      ]
+    }
+  ]
+}

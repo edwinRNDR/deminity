@@ -7,7 +7,7 @@ import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 group = "org.openrndr.template"
 version = "0.3.14"
 
-val applicationMainClass = "TemplateProgramKt"
+val applicationMainClass = "DeminityKt"
 
 /*  Which additional (ORX) libraries should be added to this project. */
 val orxFeatures = setOf(
@@ -17,7 +17,7 @@ val orxFeatures = setOf(
     "orx-compositor",
 //  "orx-dnk3",
 //  "orx-easing",
-//  "orx-file-watcher",
+  "orx-file-watcher",
 //  "orx-parameters",
 //  "orx-filter-extension",
     "orx-fx",
@@ -34,7 +34,7 @@ val orxFeatures = setOf(
 //  "orx-no-clear",
     "orx-noise",
 //  "orx-obj-loader",
-    "orx-olive",
+//    "orx-olive",
 //  "orx-osc",
 //  "orx-palette",
 //  "orx-poisson-fill",
@@ -47,7 +47,7 @@ val orxFeatures = setOf(
 //  "orx-temporal-blur",
 //  "orx-time-operators",
 //  "orx-kinect-v1",
-
+    "orx-keyframer",
     "orx-panel"
 )
 
@@ -57,11 +57,11 @@ val openrndrFeatures = setOf(
 )
 
 /*  Which version of OPENRNDR and ORX should be used? */
-val openrndrUseSnapshot = false
-val openrndrVersion = if (openrndrUseSnapshot) "0.4.0-SNAPSHOT" else "0.3.44"
+val openrndrUseSnapshot = true
+val openrndrVersion = if (openrndrUseSnapshot) "0.4.0-SNAPSHOT" else "0.3.45-rc.6"
 
-val orxUseSnapshot = false
-val orxVersion = if (orxUseSnapshot) "0.4.0-SNAPSHOT" else "0.3.53"
+val orxUseSnapshot = true
+val orxVersion = if (orxUseSnapshot) "0.4.0-SNAPSHOT" else "0.3.55-rc.6"
 
 //<editor-fold desc="This is code for OPENRNDR, no need to edit this .. most of the times">
 val supportedPlatforms = setOf("windows", "macos", "linux-x64", "linux-arm64")
@@ -94,12 +94,12 @@ enum class Logging {
 /*  What type of logging should this project use? */
 val applicationLogging = Logging.FULL
 
-val kotlinVersion = "1.4.0"
+val kotlinVersion = "1.4.10"
 
 plugins {
     java
-    kotlin("jvm") version("1.4.0")
-    id("com.github.johnrengelman.shadow") version ("6.1.0")
+    kotlin("jvm") version("1.4.10")
+    id("com.github.johnrengelman.shadow") version ("6.0.0")
     id("org.beryx.runtime") version ("1.11.4")
 }
 
@@ -109,6 +109,10 @@ repositories {
         mavenLocal()
     }
     maven(url = "https://dl.bintray.com/openrndr/openrndr")
+    //    maven {
+    //        url "file:./m2-repo/"
+    //    }
+    maven(url = "file:/m2-repo/")
 }
 
 fun DependencyHandler.orx(module: String): Any {
@@ -131,7 +135,13 @@ dependencies {
     /*  This is where you add additional (third-party) dependencies */
 
 //    implementation("org.jsoup:jsoup:1.12.2")
-//    implementation("com.google.code.gson:gson:2.8.6")
+    implementation("org.nativebass:nativebass:1.1.2")
+    runtimeOnly("org.nativebass:nativebass-win64:1.1.2")
+
+
+    implementation("com.google.code.gson:gson:2.8.6")
+
+
 
     runtimeOnly(openrndr("gl3"))
     runtimeOnly(openrndrNatives("gl3"))
@@ -143,8 +153,8 @@ dependencies {
     implementation(openrndr("extensions"))
     implementation(openrndr("filter"))
 
-    implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core","1.3.9")
-    implementation("io.github.microutils", "kotlin-logging","1.12.0")
+    implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core","1.3.7")
+    implementation("io.github.microutils", "kotlin-logging","1.7.10")
 
     when(applicationLogging) {
         Logging.NONE -> {
@@ -211,6 +221,13 @@ tasks {
                             include("**/*")
                         }
                         into("build/jpackage/openrndr-application/data")
+
+                    }
+                    copy {
+                        from("demos") {
+                            include("**/*")
+                        }
+                        into("build/jpackage/openrndr-application/demos")
                     }
                 }
                 OperatingSystem.MAC_OS -> {
@@ -251,4 +268,5 @@ runtime {
     modules.empty()
     modules.add("jdk.unsupported")
     modules.add("java.management")
+    modules.add("java.sql")
 }

@@ -1,0 +1,47 @@
+{
+  "camera": {
+    "type": "ortho",
+    "keyframer": [
+      {
+        "time": 0.0,
+        "easing": "cubic-in-out",
+        "x": 640.0,
+        "y": 360.0,
+        "magnitude": 720.0
+      }
+    ]
+  },
+  "objects": [
+    {
+      "time": 67.0,
+      "type": "svg",
+      "asset": "svg/hexagon.svg",
+      "repetitions": {
+        "count": 1,
+        "interval": 1.0
+      },
+      "stagger": {
+        "mode": "none"
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "c0": 0.0,
+          "c1": 0.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "rz": 0.0,
+          "scale": 4.0
+        },
+        {
+          "time": 1.0,
+          "c0": 0.0,
+          "c1": 1.0
+        }
+
+      ]
+    }
+  ]
+}
