@@ -107,7 +107,8 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
         val repetitions: Repetitions = Repetitions(),
         val repetitionCounter: Int = 0,
         val stagger: Stagger = Stagger(),
-        val stepping: Stepping = Stepping()
+        val stepping: Stepping = Stepping(),
+        val attributes: Attributes = Attributes()
     ) {
         val animation by lazy {
             ObjectAnimation().apply {
@@ -175,6 +176,19 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
 
         class Repetitions(val count: Int = 1, val interval: Double = 0.0)
 
+        enum class AttributeSource {
+            user,
+            asset,
+            modulate
+        }
+
+        class Attributes(
+            val `stroke-weight`: AttributeSource = AttributeSource.user,
+            val stroke: AttributeSource = AttributeSource.user,
+            val fill: AttributeSource = AttributeSource.user
+        )
+
+
         fun flattenRepetitions(demo: Demo) = (0 until repetitions.count).map {
             Object(
                 time = time + it * repetitions.interval,
@@ -195,7 +209,8 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
                 repetitions = Repetitions(1, 0.0),
                 repetitionCounter = it,
                 stagger = stagger,
-                stepping = stepping
+                stepping = stepping,
+                attributes = attributes
             )
         }
     }
@@ -228,9 +243,19 @@ class LayerRenderer(val program: Program, val demo: Demo) {
     var channel = Channel()
     var enableUI = false
 
+    class ObjectDraw3D(
+        val shapeIndex: Int,
+        val fill: ColorRGBa?,
+        val triangulation: VertexBuffer?,
+        val paths: List<ObjectPath3D>
+    )
+
+    class ObjectPath3D(val stroke: ColorRGBa?, val strokeWeight: Double?, val path3D: Path3D)
+
+
     private val compositionWatchers = mutableMapOf<String, () -> Composition>()
     private val compositionShapes = mutableMapOf<String, List<ShapeNode>>()
-    private val compositionPaths3D = mutableMapOf<String, List<Path3D>>()
+    private val compositionDraws3D = mutableMapOf<String, List<ObjectDraw3D>>()
     private val images = mutableMapOf<String, ColorBuffer>()
     private val processedImages = mutableMapOf<String, ColorBuffer>()
 
@@ -314,9 +339,11 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                                     loadSVG(it)
                                 }.apply {
                                     this.watch {
-                                        compositionPaths3D[asset] = it.findShapes().flatMap {
-                                            it.flatten().shape.contours.map { contour ->
-                                                path3D {
+                                        var contourIndex = 0
+                                        compositionDraws3D[asset] = it.findShapes().mapIndexed { shapeIndex, it ->
+                                            val flattened = it.flatten()
+                                            val paths = flattened.shape.contours.map { contour ->
+                                                val path = path3D {
                                                     moveTo(contour.position(0.0).xy0)
                                                     for (c in contour.segments) {
                                                         when (c.type) {
@@ -336,7 +363,30 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                                                         close()
                                                     }
                                                 }
+                                                contourIndex++
+                                                ObjectPath3D(it.effectiveStroke, it.effectiveStrokeWeight, path)
                                             }
+                                            val triangulation = if (it.shape.topology != ShapeTopology.OPEN) {
+                                                val triangles = flattened.shape.triangulation
+                                                val vb = vertexBuffer(vertexFormat {
+                                                    position(3)
+                                                    textureCoordinate(2)
+                                                }, triangles.size * 3)
+                                                vb.put {
+                                                    for (triangle in triangles) {
+                                                        write(triangle.x1.xy0)
+                                                        write(triangle.x1 / Vector2(1280.0, 720.0))
+                                                        write(triangle.x2.xy0)
+                                                        write(triangle.x2 / Vector2(1280.0, 720.0))
+                                                        write(triangle.x3.xy0)
+                                                        write(triangle.x3 / Vector2(1280.0, 720.0))
+                                                    }
+                                                }
+                                                vb
+                                            } else {
+                                                null
+                                            }
+                                            ObjectDraw3D(shapeIndex, it.effectiveFill, triangulation, paths)
                                         }
                                     }
                                 }
@@ -397,9 +447,13 @@ class LayerRenderer(val program: Program, val demo: Demo) {
             drawer.lineSegment(x, 0.0, x, (sortedLayers.size + 1) * 24.0)
             drawer.fill = ColorRGBa.YELLOW
             val lx = x.coerceAtMost(RenderTarget.active.width - 128.0 - 150.0)
-            drawer.text(String.format("%.3f", cuePoint), lx, -12.0 + (sortedLayers.size+2) * 24.0)
+            drawer.text(String.format("%.3f", cuePoint), lx, -12.0 + (sortedLayers.size + 2) * 24.0)
             drawer.fill = ColorRGBa.RED
-            drawer.text(String.format("%.3fs", cuePoint / demo.timescale), lx + 64.0, -12.0  + (sortedLayers.size+2) * 24.0)
+            drawer.text(
+                String.format("%.3fs", cuePoint / demo.timescale),
+                lx + 64.0,
+                -12.0 + (sortedLayers.size + 2) * 24.0
+            )
         }
     }
 
@@ -466,137 +520,112 @@ class LayerRenderer(val program: Program, val demo: Demo) {
 
                     if (type == Layer.Object.ObjectType.svg || type == Layer.Object.ObjectType.`svg-3d`) {
                         for (obj in objects) {
-                            if (obj.stagger.mode == Layer.Object.StaggerMode.none) {
-                                obj.animation(obj.stepping.stepTime(obj.animation, time - obj.time))
-                                val a = obj.animation
-                                val assetIndex = a.assetIndex.toInt().coerceIn(0, obj.assets.size - 1)
-                                val asset = obj.assets[assetIndex]
-                                drawer.isolated {
-                                    drawer.stroke = a.stroke
-                                    drawer.strokeWeight = a.strokeWeight
-                                    drawer.fill = a.fill
+                            val a = obj.animation
+                            a(time - obj.time)
+                            val assetIndex = a.assetIndex.roundToInt().coerceIn(0, obj.assets.size - 1)
+                            val asset = obj.assets[assetIndex]
 
-                                    drawer.translate(640.0, 360.0)
-                                    drawer.model *= a.transform
-                                    drawer.scale(1.0, -1.0, 1.0)
-                                    drawer.translate(-640.0, -360.0)
-                                    when (obj.type) {
-                                        Layer.Object.ObjectType.svg -> {
-                                            val shapes = compositionShapes[asset] ?: emptyList()
-                                            for (shape in shapes) {
-                                                for (contour in shape.shape.contours) {
-                                                    val drawContour = if (a.c0 == 0.0 && a.c1 == 1.0) contour else {
-                                                        contour.sub(a.c0, a.c1)
-                                                    }
-                                                    drawer.contour(drawContour)
-                                                }
-                                            }
-                                        }
-                                        Layer.Object.ObjectType.`svg-3d` -> {
-                                            val paths = compositionPaths3D[asset] ?: emptyList()
-                                            for (path in paths) {
-                                                val drawPath = if (a.c0 == 0.0 && a.c1 == 1.0) path else {
-                                                    path.sub(a.c0, a.c1)
-                                                }
-                                                drawer.path(drawPath)
-                                            }
-                                        }
-                                        else -> error("unreachable")
-                                    }
+                            val shapeCount = when (obj.type) {
+                                Layer.Object.ObjectType.svg -> compositionShapes[asset].orEmpty().size
+                                Layer.Object.ObjectType.`svg-3d` -> compositionDraws3D[asset].orEmpty().size
+                                else -> error("unreachable")
+                            }
+
+                            val duration = a.duration
+                            val objectTime = time - obj.time
+                            val unitTime = objectTime / duration
+
+                            val staggerOrder = when (obj.stagger.order) {
+                                Layer.Object.StaggerOrder.`contour-index` -> List(shapeCount) { it }
+                                Layer.Object.StaggerOrder.`reverse-contour-index` -> List(shapeCount) { it }.reversed()
+                                Layer.Object.StaggerOrder.random -> List(shapeCount) { it }.shuffled(Random(obj.stagger.seed))
+                            }
+
+                            val stagger: (Int) -> Double = when (obj.stagger.mode) {
+                                Layer.Object.StaggerMode.`in-out` -> { shapeIndex ->
+                                    val staggerIndex = staggerOrder[shapeIndex]
+                                    val staggerStart =
+                                        (staggerIndex * 1.0) / (shapeCount + obj.stagger.window)
+                                    val staggerEnd =
+                                        (staggerIndex + 1.0 + obj.stagger.window) / (shapeCount + obj.stagger.window)
+
+                                    unitTime.map(staggerStart, staggerEnd, 0.0, duration, clamp = true)
                                 }
-                            } else {
-                                val a = obj.animation
-                                a(time - obj.time)
-                                val assetIndex = a.assetIndex.roundToInt().coerceIn(0, obj.assets.size - 1)
-                                val asset = obj.assets[assetIndex]
+                                else -> { shapeIndex -> objectTime }
+                            }
 
+                            fun Layer.Object.fill(objectFill: ColorRGBa?) = when (obj.attributes.fill) {
+                                Layer.Object.AttributeSource.user -> animation.fill
+                                Layer.Object.AttributeSource.asset -> objectFill
+                                    ?: ColorRGBa.TRANSPARENT
+                                Layer.Object.AttributeSource.modulate -> animation.fill * (objectFill
+                                    ?: ColorRGBa.TRANSPARENT)
+                            }
 
-                                val contourCount = when (obj.type) {
-                                    Layer.Object.ObjectType.svg -> {
-                                        val shapes = compositionShapes[asset] ?: emptyList()
-                                        shapes.sumBy { it.shape.contours.size }
-                                    }
-                                    Layer.Object.ObjectType.`svg-3d` -> {
-                                        (compositionPaths3D[asset] ?: emptyList()).size
-                                    }
-                                    else -> error("unreachable")
-                                }
+                            fun Layer.Object.stroke(objectStroke: ColorRGBa?) = when (obj.attributes.stroke) {
+                                Layer.Object.AttributeSource.user -> animation.stroke
+                                Layer.Object.AttributeSource.asset -> objectStroke
+                                    ?: ColorRGBa.TRANSPARENT
+                                Layer.Object.AttributeSource.modulate -> animation.fill * (objectStroke
+                                    ?: ColorRGBa.TRANSPARENT)
+                            }
 
-                                val duration = a.duration
-                                val objectTime = time - obj.time
-                                val unitTime = objectTime / duration
-
-                                val staggerOrder = when (obj.stagger.order) {
-                                    Layer.Object.StaggerOrder.`contour-index` -> List(contourCount) { it }
-                                    Layer.Object.StaggerOrder.`reverse-contour-index` -> List(contourCount) { it }.reversed()
-                                    Layer.Object.StaggerOrder.random -> List(contourCount) { it }.shuffled(Random(obj.stagger.seed))
+                            fun Layer.Object.strokeWeight(objectStrokeWeight: Double?) =
+                                when (obj.attributes.`stroke-weight`) {
+                                    Layer.Object.AttributeSource.user -> animation.strokeWeight
+                                    Layer.Object.AttributeSource.asset -> objectStrokeWeight ?: 0.0
+                                    Layer.Object.AttributeSource.modulate -> animation.strokeWeight * (objectStrokeWeight
+                                        ?: 1.0)
                                 }
 
-                                var index = 0
-                                when (obj.type) {
-                                    Layer.Object.ObjectType.svg -> {
-                                        for (shape in compositionShapes[asset].orEmpty()) {
+                            when (obj.type) {
+                                Layer.Object.ObjectType.svg -> {
+                                    for ((shapeIndex, shape) in compositionShapes[asset].orEmpty().withIndex()) {
+                                        drawer.isolated {
+                                            a(obj.stepping.stepTime(obj.animation, stagger(shapeIndex)))
+                                            drawer.translate(640.0, 360.0)
+                                            drawer.model *= a.transform
+                                            drawer.scale(1.0, -1.0, 1.0)
+                                            drawer.translate(-640.0, -360.0)
+                                            drawer.fill = obj.fill(shape.effectiveFill)
+                                            drawer.strokeWeight = 0.0
+                                            drawer.stroke = null
+                                            drawer.shape(shape.shape)
+                                            drawer.fill = null
                                             for (contour in shape.shape.contours) {
-                                                val staggerIndex = staggerOrder[index]
-                                                val staggerStart =
-                                                    (staggerIndex * 1.0) / (contourCount + obj.stagger.window)
-                                                val staggerEnd =
-                                                    (staggerIndex + 1.0 + obj.stagger.window) / (contourCount + obj.stagger.window)
-
-                                                val staggerTime =
-                                                    unitTime.map(staggerStart, staggerEnd, 0.0, duration, clamp = true)
-                                                a(obj.stepping.stepTime(obj.animation, staggerTime))
-
                                                 val drawContour = if (a.c0 == 0.0 && a.c1 == 1.0) contour else {
                                                     contour.sub(a.c0, a.c1)
                                                 }
-
-                                                drawer.isolated {
-                                                    drawer.stroke = a.stroke
-                                                    drawer.strokeWeight = a.strokeWeight
-                                                    drawer.fill = a.fill
-
-                                                    drawer.translate(640.0, 360.0)
-                                                    drawer.model *= a.transform
-                                                    drawer.scale(1.0, -1.0, 1.0)
-                                                    drawer.translate(-640.0, -360.0)
-
-                                                    drawer.contour(drawContour)
-                                                }
-                                                index++
+                                                drawer.stroke = obj.stroke(shape.effectiveStroke)
+                                                drawer.strokeWeight = obj.strokeWeight(shape.effectiveStrokeWeight)
+                                                drawer.contour(drawContour)
                                             }
                                         }
                                     }
-                                    Layer.Object.ObjectType.`svg-3d` -> {
-                                        val paths = compositionPaths3D[asset].orEmpty()
-                                        for (path in paths) {
-                                            val staggerIndex = staggerOrder[index]
-                                            val staggerStart =
-                                                (staggerIndex * 1.0) / (contourCount + obj.stagger.window)
-                                            val staggerEnd =
-                                                (staggerIndex + 1.0 + obj.stagger.window) / (contourCount + obj.stagger.window)
-
-                                            val staggerTime =
-                                                unitTime.map(staggerStart, staggerEnd, 0.0, duration, clamp = true)
-                                            a(obj.stepping.stepTime(obj.animation, staggerTime))
-
-                                            val drawPath = if (a.c0 == 0.0 && a.c1 == 1.0) path else {
-                                                path.sub(a.c0, a.c1)
+                                }
+                                Layer.Object.ObjectType.`svg-3d` -> {
+                                    val objectDraws = compositionDraws3D[asset].orEmpty()
+                                    for (objectDraw in objectDraws) {
+                                        a(obj.stepping.stepTime(obj.animation, stagger(objectDraw.shapeIndex)))
+                                        drawer.isolated {
+                                            drawer.translate(640.0, 360.0)
+                                            drawer.model *= a.transform
+                                            drawer.scale(1.0, -1.0, 1.0)
+                                            drawer.translate(-640.0, -360.0)
+                                            if (objectDraw.triangulation != null) {
+                                                drawer.stroke = null
+                                                drawer.fill = obj.fill(objectDraw.fill)
+                                                drawer.vertexBuffer(objectDraw.triangulation, DrawPrimitive.TRIANGLES)
                                             }
-
-                                            drawer.isolated {
-                                                drawer.stroke = a.stroke
-                                                drawer.strokeWeight = a.strokeWeight
-                                                drawer.fill = a.fill
-
-                                                drawer.translate(640.0, 360.0)
-                                                drawer.model *= a.transform
-                                                drawer.scale(1.0, -1.0, 1.0)
-                                                drawer.translate(-640.0, -360.0)
-
+                                            for (objectPath in objectDraw.paths) {
+                                                val drawPath = if (a.c0 == 0.0 && a.c1 == 1.0) objectPath.path3D else {
+                                                    objectPath.path3D.sub(a.c0, a.c1)
+                                                }
+                                                drawer.stroke = obj.stroke(objectPath.stroke)
+                                                drawer.strokeWeight = obj.strokeWeight(objectPath.strokeWeight)
+                                                drawer.fill = null
                                                 drawer.path(drawPath)
                                             }
-                                            index++
                                         }
                                     }
                                 }
@@ -607,6 +636,10 @@ class LayerRenderer(val program: Program, val demo: Demo) {
             }
         }
     }
+}
+
+private operator fun ColorRGBa.times(other: ColorRGBa): ColorRGBa {
+    return ColorRGBa(r * other.r, g * other.g, b * other.b, a * other.a)
 }
 
 
