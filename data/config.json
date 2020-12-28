@@ -1,0 +1,23 @@
+{
+  "demo": "demos/20-20",
+  "target": {
+    "width": 1280,
+    "height": 720
+  },
+  "window": {
+    "fullscreen": false,
+    "alwaysOnTop": true,
+    "resizable": true,
+    "width": 1280,
+    "height": 720
+  },
+  "capture": {
+    "enabled": false,
+    "framerate": 60,
+    "constantRateFactor": 13,
+    "temporalBlur": {
+      "enabled": true,
+      "samples": 10
+    }
+  }
+}

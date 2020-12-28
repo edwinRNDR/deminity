@@ -1,9 +1,12 @@
 package demo
 
+import bass.Channel
 import com.google.gson.Gson
+import org.openrndr.KEY_TAB
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
+import org.openrndr.events.listen
 import org.openrndr.extra.fx.dither.ADither
 import org.openrndr.extra.keyframer.FunctionExtensions
 import org.openrndr.extra.keyframer.Keyframer
@@ -77,6 +80,8 @@ class CameraAnimation : Keyframer() {
 
 class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: List<Object> = emptyList()) {
 
+    var sourceFile = File("[unknown-source]")
+
     class Camera(val type: CameraType = CameraType.ortho, val keyframer: List<Map<String, Any>> = emptyList()) {
         val animation by lazy {
             CameraAnimation().apply {
@@ -87,6 +92,7 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
                 )
             }
         }
+
         enum class CameraType {
             ortho,
             perspective
@@ -198,8 +204,10 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
     fun flattenRepetitions(demo: Demo) = Layer(
         zIndex = zIndex,
         camera = camera,
-        objects = objects.flatMap { it.flattenRepetitions(demo) }
-    )
+        objects = objects.flatMap { it.flattenRepetitions(demo) },
+    ).also {
+        it.sourceFile = this.sourceFile
+    }
 
     companion object {
         fun loadFromJson(file: File): Layer {
@@ -209,6 +217,7 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
         fun watch(program: Program, demo: Demo, file: File): () -> Layer {
             return program.watchFile(file) {
                 val layer = loadFromJson(file)
+                layer.sourceFile = file
                 layer.flattenRepetitions(demo)
             }
         }
@@ -216,74 +225,101 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
 }
 
 class LayerRenderer(val program: Program, val demo: Demo) {
-    val compositionWatchers = mutableMapOf<String, () -> Composition>()
-    val compositionShapes = mutableMapOf<String, List<ShapeNode>>()
-    val compositionPaths3D = mutableMapOf<String, List<Path3D>>()
-    val images = mutableMapOf<String, ColorBuffer>()
-    val processedImages = mutableMapOf<String, ColorBuffer>()
 
-    val dither by lazy { ADither() }
+    var channel = Channel()
+    var enableUI = false
 
-    val layerWatchers = File(demo.dataBase, "animations").listFiles { it -> it.isFile && it.extension == "json" }.map {
-        Layer.watch(program, demo, it).apply {
-            watch {
-                it.objects.filter {
-                    it.type == Layer.Object.ObjectType.image
-                }.map { obj ->
-                    for (asset in obj.assets) {
-                        val image = images.getOrPut(asset) {
-                            loadImage(File(demo.dataBase, "assets/${asset}"))
-                        }
-                        processedImages.getOrPut(asset) {
-                            image.createEquivalent(format = ColorFormat.RGBa, type = ColorType.UINT8)
+    private val compositionWatchers = mutableMapOf<String, () -> Composition>()
+    private val compositionShapes = mutableMapOf<String, List<ShapeNode>>()
+    private val compositionPaths3D = mutableMapOf<String, List<Path3D>>()
+    private val images = mutableMapOf<String, ColorBuffer>()
+    private val processedImages = mutableMapOf<String, ColorBuffer>()
+
+    private val dither by lazy { ADither() }
+
+    init {
+        program.mouse.cursorVisible = false
+
+        listOf(program.mouse.dragged, program.mouse.buttonDown).listen {
+            val timescale = (RenderTarget.active.width - 160) / (demo.duration * demo.timescale)
+            val time = (it.position.x - 150.0) / timescale
+            channel.setPosition(time / demo.timescale)
+        }
+
+        program.keyboard.keyDown.listen {
+            if (it.key == KEY_TAB) {
+                enableUI = !enableUI
+                program.mouse.cursorVisible = enableUI
+            }
+        }
+    }
+
+
+    private val layerWatchers =
+        File(demo.dataBase, "animations").listFiles { it -> it.isFile && it.extension == "json" }.map {
+            Layer.watch(program, demo, it).apply {
+                watch {
+                    it.objects.filter {
+                        it.type == Layer.Object.ObjectType.image
+                    }.map { obj ->
+                        for (asset in obj.assets) {
+                            val image = images.getOrPut(asset) {
+                                loadImage(File(demo.dataBase, "assets/${asset}"))
+                            }
+                            processedImages.getOrPut(asset) {
+                                image.createEquivalent(format = ColorFormat.RGBa, type = ColorType.UINT8)
+                            }
                         }
                     }
-                }
 
-                it.objects.filter {
-                    it.type == Layer.Object.ObjectType.svg
-                }.map { obj ->
-                    for (asset in obj.assets) {
-                        compositionWatchers.getOrPut(asset) {
-                            watchFile(program, File(demo.dataBase, "assets/${asset}")) {
-                                loadSVG(it)
-                            }.apply {
-                                this.watch {
-                                    compositionShapes[asset] = it.findShapes().map {
-                                        it.flatten()
+                    it.objects.filter {
+                        it.type == Layer.Object.ObjectType.svg
+                    }.map { obj ->
+                        for (asset in obj.assets) {
+                            compositionWatchers.getOrPut(asset) {
+                                watchFile(program, File(demo.dataBase, "assets/${asset}")) {
+                                    loadSVG(it)
+                                }.apply {
+                                    this.watch {
+                                        compositionShapes[asset] = it.findShapes().map {
+                                            it.flatten()
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
 
-                it.objects.filter {
-                    it.type == Layer.Object.ObjectType.`svg-3d`
-                }.map { obj ->
-                    for (asset in obj.assets) {
-                        compositionWatchers.getOrPut(asset) {
-                            watchFile(program, File(demo.dataBase, "assets/${asset}")) {
-                                loadSVG(it)
-                            }.apply {
-                                this.watch {
-                                    compositionPaths3D[asset] = it.findShapes().flatMap {
-                                        it.flatten().shape.contours.map { contour ->
-                                            path3D {
-                                                moveTo(contour.position(0.0).xy0)
-                                                for (c in contour.segments) {
-                                                    when (c.type) {
-                                                        SegmentType.LINEAR -> lineTo(c.end.xy0)
-                                                        SegmentType.QUADRATIC -> curveTo(c.control[0].xy0, c.end.xy0)
-                                                        SegmentType.CUBIC -> curveTo(
-                                                            c.control[0].xy0,
-                                                            c.control[1].xy0,
-                                                            c.end.xy0
-                                                        )
+                    it.objects.filter {
+                        it.type == Layer.Object.ObjectType.`svg-3d`
+                    }.map { obj ->
+                        for (asset in obj.assets) {
+                            compositionWatchers.getOrPut(asset) {
+                                watchFile(program, File(demo.dataBase, "assets/${asset}")) {
+                                    loadSVG(it)
+                                }.apply {
+                                    this.watch {
+                                        compositionPaths3D[asset] = it.findShapes().flatMap {
+                                            it.flatten().shape.contours.map { contour ->
+                                                path3D {
+                                                    moveTo(contour.position(0.0).xy0)
+                                                    for (c in contour.segments) {
+                                                        when (c.type) {
+                                                            SegmentType.LINEAR -> lineTo(c.end.xy0)
+                                                            SegmentType.QUADRATIC -> curveTo(
+                                                                c.control[0].xy0,
+                                                                c.end.xy0
+                                                            )
+                                                            SegmentType.CUBIC -> curveTo(
+                                                                c.control[0].xy0,
+                                                                c.control[1].xy0,
+                                                                c.end.xy0
+                                                            )
+                                                        }
                                                     }
-                                                }
-                                                if (contour.closed) {
-                                                    close()
+                                                    if (contour.closed) {
+                                                        close()
+                                                    }
                                                 }
                                             }
                                         }
@@ -295,6 +331,48 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                 }
             }
         }
+
+    fun renderUI(time: Double) {
+
+        if (!enableUI) {
+            return
+        }
+
+        val sortedLayers = layerWatchers.map { it() }.sortedBy { it.zIndex }
+        val drawer = program.drawer
+
+
+        val timescale = (RenderTarget.active.width - 160) / (demo.duration * demo.timescale)
+
+        for ((layerIndex, layer) in sortedLayers.withIndex()) {
+            drawer.fill = ColorRGBa.BLACK
+            drawer.text(layer.sourceFile.nameWithoutExtension, 11.0, layerIndex * 24.0 + 12.0 + 25.0)
+            drawer.fill = if (layerIndex % 2 == 0) ColorRGBa.WHITE else ColorRGBa.WHITE.shade(0.85)
+            drawer.text(layer.sourceFile.nameWithoutExtension, 10.0, layerIndex * 24.0 + 12.0 + 24.0)
+        }
+
+        drawer.translate(150.0, 24.0)
+        for ((layerIndex, layer) in sortedLayers.withIndex()) {
+
+            for (obj in layer.objects) {
+                drawer.fill = if (layerIndex % 2 == 0) ColorRGBa.GRAY else ColorRGBa.GRAY.shade(0.5)
+
+                if (obj.time <= time && (obj.time + obj.duration) > time) {
+                    drawer.fill = ColorRGBa.WHITE
+                }
+
+                drawer.rectangle(obj.time * timescale, layerIndex * 24.0, obj.duration * timescale, 16.0)
+            }
+        }
+        drawer.stroke = ColorRGBa.GREEN
+        val x = time * timescale
+        drawer.lineSegment(x, 0.0, x, (sortedLayers.size + 1) * 24.0)
+        drawer.fill = ColorRGBa.YELLOW
+        val lx = x.coerceAtMost(RenderTarget.active.width - 128.0 - 150.0)
+        drawer.text(String.format("%.3f", time), lx, -12.0)
+        drawer.fill = ColorRGBa.RED
+        drawer.text(String.format("%.3fs", time / demo.timescale), lx + 64.0, -12.0)
+
     }
 
     fun renderLayers(time: Double) {
@@ -411,7 +489,7 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                                         shapes.sumBy { it.shape.contours.size }
                                     }
                                     Layer.Object.ObjectType.`svg-3d` -> {
-                                        (compositionPaths3D[asset]?: emptyList()).size
+                                        (compositionPaths3D[asset] ?: emptyList()).size
                                     }
                                     else -> error("unreachable")
                                 }
