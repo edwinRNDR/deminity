@@ -157,8 +157,6 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
         enum class StaggerMode {
             none,
             `in-out`,
-            `in`,
-            `out`
         }
 
         enum class StaggerOrder {
@@ -573,7 +571,8 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                             fun Layer.Object.strokeWeight(objectStrokeWeight: Double?) =
                                 when (obj.attributes.`stroke-weight`) {
                                     Layer.Object.AttributeSource.user -> animation.strokeWeight
-                                    Layer.Object.AttributeSource.asset -> objectStrokeWeight ?: 0.0
+                                    Layer.Object.AttributeSource.asset ->
+                                        objectStrokeWeight ?: 0.0
                                     Layer.Object.AttributeSource.modulate -> animation.strokeWeight * (objectStrokeWeight
                                         ?: 1.0)
                                 }
