@@ -3,3 +3,7 @@ build
 out
 .idea
 .gradle
+openrndr-application.exe
+openrndr-application.ico
+runtime
+app
