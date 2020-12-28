@@ -4,6 +4,8 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.loadImage
 import org.openrndr.shape.drawComposition
+import org.openrndr.svg.saveToFile
+import java.io.File
 import java.lang.Math.pow
 
 fun main() {
@@ -14,11 +16,11 @@ fun main() {
         }
         program {
 
-            val sourceImage = loadImage("tool-data/photo-04.png")
+            val sourceImage = loadImage("tool-data/photo-06.png")
             val shad = sourceImage.shadow
             shad.download()
 
-            val blockSize = 12
+            val blockSize = 48
             val comp = drawComposition {
 
                 translate((1280-sourceImage.width)/2.0, 0.0)
@@ -48,7 +50,7 @@ fun main() {
                     }
                 }
             }
-
+            comp.saveToFile(File("${String.format("%03d",blockSize)}.svg"))
 
             extend {
                 drawer.clear(ColorRGBa.BLACK)
