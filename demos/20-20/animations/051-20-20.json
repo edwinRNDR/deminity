@@ -6,55 +6,136 @@
         "time": 145,
         "x": 640.0,
         "y": 360.0,
-        "z": 360,
+        "z": -10,
         "perspective-far": 1000000
       },
       {
         "easing": "circ-out",
         "time": 166,
-        "z": 1800,
+        "z": 2700,
         "scale": 2
       }
     ]
   },
   "objects": [
     {
-      "time": 145,
+      "time": 148.75,
       "type": "svg",
-      "asset": "svg/title/hatch-center.svg",
+      "asset": "svg/title/20.svg",
       "stagger": {
         "mode": "in-out",
-        "window": 0
+        "window": 900
       },
       "keyframer": [
         {
           "time": 0.0,
-          "easing": "cubic-in-out",
+          "easing": "linear",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": "-152 + 400",
+          "y": 116,
+          "z": 0,
+          "stroke-weight": 0,
+          "scale": 1.0,
+          "fill-r": 1.0,
+          "fill-g": 1.0,
+          "fill-b": 1.0,
+          "fill-a": 1
+        },
+        {
+          "time": 1.0,
+          "x": "-152 + 400",
+          "y": 116
+        },
+        {
+          "time": 2.0,
+          "easing": "back-out",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": -152
+        },
+        {
+          "time": 16.0,
+          "c0": 0.0,
+          "c1": 1.0
+        }
+      ]
+    },
+    {
+      "time": 148.75,
+      "type": "svg",
+      "asset": "svg/title/mask-l.svg",
+      "keyframer": [
+        {
+          "time": 0.0,
           "c0": 0.0,
           "c1": 1.0,
           "x": 0,
           "y": 0.0,
-          "z": 0.0,
+          "z": 0,
           "rz": 0.0,
           "scale": 1.0,
-          "stroke-weight": 1.0,
-          "stroke-r": 1.0,
-          "stroke-g": 1.0,
-          "stroke-b": 1.25,
-          "stroke-a": 1.0
+          "stroke-weight": 0,
+          "fill-r": 0.0,
+          "fill-g": 0.15,
+          "fill-b": 0.0,
+          "fill-a": 1
         },
         {
-          "time": 32.0,
-          "stroke-r": 1.0,
-          "stroke-g": 1,
-          "stroke-b": 1.0,
+          "time": 2,
           "c0": 0,
           "c1": 1
         }
       ]
     },
+
+    { // right
+      "time": 148.75,
+      "type": "svg",
+      "asset": "svg/title/20.svg",
+      "stagger": {
+        "mode": "none",
+        "window": 900
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "linear",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": "152 - 400",
+          "y": -24,
+          "z": 0,
+          "scale": 1.0,
+          "stroke-weight": 0,
+          "fill-r": 1.0,
+          "fill-g": 1.0,
+          "fill-b": 1.0,
+          "fill-a": 1
+        },
+        {
+          "time": 1.0,
+          "x": "152 - 400",
+          "y": -24,
+          "z": 0
+        },
+        {
+          "time": 2.0,
+          "easing": "back-out",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": 152,
+          "y": -24
+        },
+        {
+          "time": 16.0,
+          "c0": 0.0,
+          "c1": 1.0
+        }
+      ]
+    },
     {
-      "time": 145,
+      "time": 145.00001,
       "type": "svg",
       "asset": "svg/title/hatch-tl.svg",
       "stagger": {
@@ -72,11 +153,11 @@
           "z": 0.0,
           "rz": 0.0,
           "scale": 1.0,
-          "stroke-weight": 1.0,
-          "stroke-r": 1.0,
-          "stroke-g": 0.0,
-          "stroke-b": 0.25,
-          "stroke-a": 1.0
+          "stroke-weight": 0.0,
+          "fill-r": 1.0,
+          "fill-g": 1.0,
+          "fill-b": 1,
+          "fill-a": 1.0
         },
         {
           "time": 4.0,
@@ -94,7 +175,7 @@
           "x": 288
         },
         {
-          "time": 6.0,
+          "time": 5.75,
           "c0": 0,
           "c1": 1
         }
@@ -119,11 +200,11 @@
           "z": 0.0,
           "rz": 0.0,
           "scale": 1.0,
-          "stroke-weight": 1.0,
-          "stroke-r": 1.0,
-          "stroke-g": 0.0,
-          "stroke-b": 0.25,
-          "stroke-a": 1.0
+          "stroke-weight": 0.0,
+          "fill-r": 1.0,
+          "fill-g": 1.0,
+          "fill-b": 1,
+          "fill-a": 1.0
         },
         {
           "time": 4.0,
@@ -141,7 +222,7 @@
           "x": -288
         },
         {
-          "time": 6.0,
+          "time": 5.75,
           "c0": 0,
           "c1": 1
         }
@@ -201,123 +282,6 @@
     {
       "time": 148.75,
       "type": "svg",
-      "asset": "svg/title/20.svg",
-      "stagger": {
-        "mode": "none",
-        "window": 900
-      },
-      "keyframer": [
-        {
-          "time": 0.0,
-          "easing": "linear",
-          "c0": 0.0,
-          "c1": 1.0,
-          "x": "-152 + 400",
-          "y": 116,
-          "z": 0,
-          "scale": 1.0,
-          "stroke-weight": 1,
-          "stroke-r": 1.0,
-          "stroke-g": 0.0,
-          "stroke-b": 1.0,
-          "stroke-a": 1.0
-        },
-        {
-          "time": 1.0,
-          "x": "-152 + 400",
-          "y": 116,
-          "z": 0
-        },
-        {
-          "time": 2.0,
-          "easing": "back-out",
-          "c0": 0.0,
-          "c1": 1.0,
-          "x": -152
-        },
-        {
-          "time": 16.0,
-          "c0": 0.0,
-          "c1": 1.0
-        }
-      ]
-
-    },
-    {
-      "time": 148.75,
-      "type": "svg",
-      "asset": "svg/title/20.svg",
-      "stagger": {
-        "mode": "none",
-        "window": 900
-      },
-      "keyframer": [
-        {
-          "time": 0.0,
-          "easing": "linear",
-          "c0": 0.0,
-          "c1": 1.0,
-          "x": "152 - 400",
-          "y": -24,
-          "z": 0,
-          "scale": 1.0,
-          "stroke-weight": 1,
-          "stroke-r": 1.0,
-          "stroke-g": 0.0,
-          "stroke-b": 1.0,
-          "stroke-a": 1.0
-        },
-        {
-          "time": 1.0,
-          "x": "152 - 400",
-          "y": -24,
-          "z": 0
-        },
-        {
-          "time": 2.0,
-          "easing": "back-out",
-          "c0": 0.0,
-          "c1": 1.0,
-          "x": 152,
-          "y": -24
-        },
-        {
-          "time": 16.0,
-          "c0": 0.0,
-          "c1": 1.0
-        }
-      ]
-    },
-    {
-      "time": 145,
-      "type": "svg",
-      "asset": "svg/title/mask-l.svg",
-      "keyframer": [
-        {
-          "time": 0.0,
-          "c0": 0.0,
-          "c1": 1.0,
-          "x": 0,
-          "y": 0.0,
-          "z": 0.5,
-          "rz": 0.0,
-          "scale": 1.0,
-          "stroke-weight": 1.0,
-          "stroke-r": 1.0,
-          "stroke-g": 0.0,
-          "stroke-b": 1.0,
-          "stroke-a": 1.0
-        },
-        {
-          "time": 7.0,
-          "c0": 0,
-          "c1": 1
-        }
-      ]
-    },
-    {
-      "time": 145,
-      "type": "svg",
       "asset": "svg/title/mask-r.svg",
       "stagger": {
         "mode": "in-out",
@@ -331,17 +295,48 @@
           "c1": 1.0,
           "x": 0,
           "y": 0.0,
-          "z": 0.5,
+          "z": 0,
           "rz": 0.0,
           "scale": 1.0,
-          "stroke-weight": 1.0,
-          "stroke-r": 0.0,
-          "stroke-g": 1.0,
-          "stroke-b": 1.0,
-          "stroke-a": 1.0
+          "stroke-weight": 0,
+          "fill-r": 0.0,
+          "fill-g": 0.15,
+          "fill-b": 0.0,
+          "fill-a": 1
         },
         {
-          "time": 7.0,
+          "time": 2,
+          "c0": 0,
+          "c1": 1
+        }
+      ]
+    },
+    {
+      "time": 145,
+      "type": "svg",
+      "asset": "svg/title/hatch-center.svg",
+      "stagger": {
+        "mode": "in-out",
+        "window": 0
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": 0,
+          "y": 0.0,
+          "z": 0.0,
+          "rz": 0.0,
+          "scale": 1.0,
+          "fill-r": 1.0,
+          "fill-g": 1.0,
+          "fill-b": 1.0,
+          "fill-a": 0.95
+        },
+        {
+          "time": 32.0,
           "c0": 0,
           "c1": 1
         }

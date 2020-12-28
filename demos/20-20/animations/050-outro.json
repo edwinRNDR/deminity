@@ -13,12 +13,12 @@
   },
   "objects": [
     {
-      "time": 134.0,
+      "time": 140.0,
       "type": "svg",
       "asset": "svg/circle-360-60.svg",
       "stagger": {
         "mode": "in-out",
-        "window": 0
+        "window": 2
       },
       "keyframer": [
         {
@@ -35,7 +35,7 @@
           "stroke-r": 1.0,
           "stroke-g": 0.0,
           "stroke-b": 0.0,
-          "stroke-a": 1.0
+          "stroke-a": 1
         },
 
         {
