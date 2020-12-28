@@ -6,7 +6,8 @@
         "time": 145,
         "x": 640.0,
         "y": 360.0,
-        "z": 360
+        "z": 360,
+        "perspective-far": 1000000
       },
       {
         "easing": "circ-out",
