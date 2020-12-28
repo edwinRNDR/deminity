@@ -203,7 +203,7 @@
       "type": "svg",
       "asset": "svg/title/20.svg",
       "stagger": {
-        "mode": "discrete",
+        "mode": "none",
         "window": 900
       },
       "keyframer": [
@@ -248,7 +248,7 @@
       "type": "svg",
       "asset": "svg/title/20.svg",
       "stagger": {
-        "mode": "discrete",
+        "mode": "none",
         "window": 900
       },
       "keyframer": [
