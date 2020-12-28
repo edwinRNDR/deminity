@@ -84,7 +84,6 @@
       "value": 0.0,
       "duration": 0.0
     },
-
     "crt-amplitude": {
       "value": 3.0,
       "duration": 0.0
@@ -154,7 +153,6 @@
       "value": 0.0,
       "duration": 0.0
     },
-
     "crt-amplitude": {
       "value": 1.0,
       "duration": 0.0
@@ -193,6 +191,24 @@
     }
   },
   {
+    "time": 52.0,
+    "laser-radius": {
+      "value": 0.01,
+      "duration": -1.0
+    },
+    "pal-amount": {
+      "value": 3.0,
+      "duration": -1.0
+    }
+  },
+  {
+    "time": 54.0,
+    "pal-amount": {
+      "value": 0.3,
+      "duration": -1.0
+    }
+  },
+  {
     "time": 55.25,
     "vcr-gain": {
       "value": 1.0,
@@ -205,6 +221,7 @@
       "value": 0.0,
       "duration": 0.0
     }
+
   },
   {
     "time": 60.0,
@@ -212,6 +229,7 @@
       "value": 1.0,
       "duration": 0.0
     }
+
   },
   {
     "time": 61.0,
@@ -232,6 +250,17 @@
     "vcr-gain": {
       "value": 0.0,
       "duration": 0.0
+    }
+  },
+  {
+    "time": 68.0,
+    "pal-amount": {
+      "value": 0.0,
+      "duration": -1.0
+    },
+    "laser-radius": {
+      "value": 0.085,
+      "duration": -1.0
     }
   }
 ]

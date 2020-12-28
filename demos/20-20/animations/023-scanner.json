@@ -118,6 +118,109 @@
       ]
     },
     {
+      "time": 52.0,
+      "type": "svg",
+      "asset": "svg/type/type-01.svg",
+      "stagger": {
+        "mode": "none",
+        "window": 20,
+        "order": "random"
+      },
+      "stepping": {
+        "mode": "none",
+        "steps": 10,
+        "inertia": 0.01
+
+      },
+
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "c0": 0.00,
+          "c1": 1.00,
+          "x": 0.0,
+          "y": 0,
+          "z": 0.0,
+          "rx": 40.0,
+          "fill-r": 0.0,
+          "fill-g": 0.0,
+          "fill-b": 0.0,
+          "fill-a": 1.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.2,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0,
+          "asset-index": 3.0,
+          "scale": 1.0,
+          "stroke-weight": 1.0
+        },
+
+        {
+          "time": 4.0,
+          "scale": 1.2,
+          "stroke-g": 0.0,
+          "stroke-a": 0.0,
+          "stroke-weight": 0.0,
+          "rx": 0.0,
+          "y": 0.0,
+          "x": 0.0
+        }
+
+      ]
+    },
+    {
+      "time": 56.0,
+      "type": "svg",
+      "asset": "svg/type/type-02.svg",
+      "stagger": {
+        "mode": "none",
+        "window": 20,
+        "order": "random"
+      },
+      "stepping": {
+        "mode": "none",
+        "steps": 10,
+        "inertia": 0.01
+
+      },
+
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "c0": 0.00,
+          "c1": 1.00,
+          "x": 0.0,
+          "y": 0,
+          "z": 0.0,
+          "fill-r": 0.0,
+          "fill-g": 0.0,
+          "fill-b": 0.0,
+          "fill-a": 1.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.2,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0,
+          "asset-index": 3.0,
+          "scale": 1.0,
+          "stroke-weight": 1.0
+        },
+
+        {
+          "time": 4.0,
+          "scale": 1.0,
+          "stroke-g": 0.0,
+          "stroke-a": 0.0,
+          "stroke-weight": 0.0,
+          "y": 0.0,
+          "x": 0.0
+        }
+
+      ]
+    },
+
+    {
       "time": 54.0,
       "type": "svg",
       "asset": "svg/illustration-02-scan/*.svg",
@@ -156,60 +259,7 @@
           "c1": 1.0
         }
       ]
-    },
-    {
-      "time": 60.0,
-      "type": "svg",
-      "asset": "svg/photo-05-grid/*.svg",
-      "stagger": {
-        "mode": "in-out",
-        "window": 50,
-        "order": "random"
-      },
-      "stepping": {
-        "mode": "discrete",
-        "steps": 10,
-        "inertia": 0.01
-
-      },
-      "attributes": {
-        "stroke-weight": "asset"
-      },
-
-      "keyframer": [
-        {
-          "time": 0.0,
-          "easing": "cubic-in-out",
-          "c0": 0.05,
-          "c1": 0.05,
-          "x": 0.0,
-          "y": -50,
-          "z": 0.0,
-          "rz": 0.0,
-          "stroke-r": 1.0,
-          "stroke-g": 0.5,
-          "stroke-b": 0.0,
-          "stroke-a": 0.5,
-          "asset-index": 2.0,
-          "scale": 0.9,
-          "stroke-weight": 1.0
-        },
-        {
-          "time": 1.0,
-          "asset-index": 0.0
-        },
-
-        {
-          "time": 4.0,
-          "stroke-g": 0.0,
-          "stroke-a": 1.0,
-          "stroke-weight": 1.0,
-          "c0": 0.05,
-          "c1": 0.95
-
-        }
-
-      ]
     }
+
   ]
 }

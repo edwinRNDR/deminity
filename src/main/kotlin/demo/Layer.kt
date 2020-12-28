@@ -100,6 +100,7 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
 
     class Object(
         val time: Double = 0.0,
+        val `z-index`: Int = 0,
         val type: ObjectType = ObjectType.svg,
         val asset: String = "default-asset",
         var assets: List<String> = emptyList(),
@@ -134,11 +135,8 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
         }
 
         class Stepping(val mode: SteppingMode = SteppingMode.none, val steps: Int = 10, val inertia: Double = 0.0) {
-
-
             fun stepTime(animation: Keyframer, time: Double): Double {
                 val duration by lazy { animation.duration }
-
 
                 return when (mode) {
                     SteppingMode.none -> time
@@ -190,6 +188,7 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
         fun flattenRepetitions(demo: Demo) = (0 until repetitions.count).map {
             Object(
                 time = time + it * repetitions.interval,
+                `z-index` = `z-index`,
                 type = type,
                 asset = asset,
                 assets = assets.let { if (it.isEmpty()) listOf(asset) else it }.flatMap {
@@ -484,7 +483,7 @@ class LayerRenderer(val program: Program, val demo: Demo) {
 
                 val objectGroups = layer.objects
                     .filter { time >= it.time && time < (it.time + it.duration) }
-                    .sortedBy { it.time }
+                    .sortedBy { it.`z-index` }
                     .groupBy { it.type }
 
                 for ((type, objects) in objectGroups) {
