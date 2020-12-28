@@ -8,6 +8,7 @@ import jouvieje.bass.defines.BASS_POS
 import jouvieje.bass.defines.BASS_SAMPLE
 import org.openrndr.KEY_ARROW_LEFT
 import org.openrndr.KEY_ARROW_RIGHT
+import org.openrndr.KEY_SPACEBAR
 import org.openrndr.Program
 
 open class Channel() {
@@ -96,11 +97,19 @@ fun Program.playMusic(path: String, timescale: Double = 1.0, scrubbable: Boolean
                     channel.setPosition((channel.getPosition() - timescale).coerceAtLeast(0.0))
                 }
 
+                if (it.key == KEY_SPACEBAR) {
+                    paused = !paused
+                    if (paused) {
+                        channel.pause()
+                    } else {
+                        channel.resume()
+                    }
+                }
+
             }
             keyboard.character.listen {
                 if (it.character == 'q') {
                     pitch /= 2.0
-                    println("setting pitch to $pitch")
                     channel.setPitch(pitch)
                 }
                 if (it.character == 'w') {

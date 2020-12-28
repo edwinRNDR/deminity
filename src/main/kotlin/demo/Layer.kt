@@ -2,8 +2,7 @@ package demo
 
 import bass.Channel
 import com.google.gson.Gson
-import org.openrndr.KEY_TAB
-import org.openrndr.Program
+import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.events.listen
@@ -237,12 +236,17 @@ class LayerRenderer(val program: Program, val demo: Demo) {
 
     private val dither by lazy { ADither() }
 
+    private var cuePoint = 0.0
+
     init {
         program.mouse.cursorVisible = false
 
         listOf(program.mouse.dragged, program.mouse.buttonDown).listen {
             val timescale = (RenderTarget.active.width - 160) / (demo.duration * demo.timescale)
-            val time = (it.position.x - 150.0) / timescale
+            val time = ((it.position.x - 150.0) / timescale).coerceAtLeast(0.0)
+            if (KeyModifier.SHIFT in it.modifiers) {
+                cuePoint = time
+            }
             channel.setPosition(time / demo.timescale)
         }
 
@@ -251,7 +255,16 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                 enableUI = !enableUI
                 program.mouse.cursorVisible = enableUI
             }
+
+            if (it.key == KEY_ARROW_DOWN) {
+                cuePoint = program.seconds * demo.timescale
+            }
+
+            if (it.key == KEY_ARROW_UP) {
+                channel.setPosition(cuePoint / demo.timescale)
+            }
         }
+
     }
 
 
@@ -259,6 +272,8 @@ class LayerRenderer(val program: Program, val demo: Demo) {
         File(demo.dataBase, "animations").listFiles { it -> it.isFile && it.extension == "json" }.map {
             Layer.watch(program, demo, it).apply {
                 watch {
+                    channel.setPosition(cuePoint / demo.timescale)
+
                     it.objects.filter {
                         it.type == Layer.Object.ObjectType.image
                     }.map { obj ->
@@ -364,15 +379,28 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                 drawer.rectangle(obj.time * timescale, layerIndex * 24.0, obj.duration * timescale, 16.0)
             }
         }
-        drawer.stroke = ColorRGBa.GREEN
-        val x = time * timescale
-        drawer.lineSegment(x, 0.0, x, (sortedLayers.size + 1) * 24.0)
-        drawer.fill = ColorRGBa.YELLOW
-        val lx = x.coerceAtMost(RenderTarget.active.width - 128.0 - 150.0)
-        drawer.text(String.format("%.3f", time), lx, -12.0)
-        drawer.fill = ColorRGBa.RED
-        drawer.text(String.format("%.3fs", time / demo.timescale), lx + 64.0, -12.0)
 
+
+        run {
+            drawer.stroke = ColorRGBa.GREEN
+            val x = time * timescale
+            drawer.lineSegment(x, 0.0, x, (sortedLayers.size + 1) * 24.0)
+            drawer.fill = ColorRGBa.YELLOW
+            val lx = x.coerceAtMost(RenderTarget.active.width - 128.0 - 150.0)
+            drawer.text(String.format("%.3f", time), lx, -12.0)
+            drawer.fill = ColorRGBa.RED
+            drawer.text(String.format("%.3fs", time / demo.timescale), lx + 64.0, -12.0)
+        }
+        run {
+            drawer.stroke = ColorRGBa.BLUE
+            val x = cuePoint * timescale
+            drawer.lineSegment(x, 0.0, x, (sortedLayers.size + 1) * 24.0)
+            drawer.fill = ColorRGBa.YELLOW
+            val lx = x.coerceAtMost(RenderTarget.active.width - 128.0 - 150.0)
+            drawer.text(String.format("%.3f", cuePoint), lx, -12.0 + (sortedLayers.size+2) * 24.0)
+            drawer.fill = ColorRGBa.RED
+            drawer.text(String.format("%.3fs", cuePoint / demo.timescale), lx + 64.0, -12.0  + (sortedLayers.size+2) * 24.0)
+        }
     }
 
     fun renderLayers(time: Double) {
