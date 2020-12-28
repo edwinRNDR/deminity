@@ -1,0 +1,350 @@
+{
+  "camera": {
+    "type": "perspective",
+    "keyframer": [
+      {
+        "time": 145,
+        "x": 640.0,
+        "y": 360.0,
+        "z": 360
+      },
+      {
+        "easing": "circ-out",
+        "time": 166,
+        "z": 1800,
+        "scale": 2
+      }
+    ]
+  },
+  "objects": [
+    {
+      "time": 145,
+      "type": "svg",
+      "asset": "svg/title/hatch-center.svg",
+      "stagger": {
+        "mode": "in-out",
+        "window": 0
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": 0,
+          "y": 0.0,
+          "z": 0.0,
+          "rz": 0.0,
+          "scale": 1.0,
+          "stroke-weight": 1.0,
+          "stroke-r": 1.0,
+          "stroke-g": 1.0,
+          "stroke-b": 1.25,
+          "stroke-a": 1.0
+        },
+        {
+          "time": 32.0,
+          "stroke-r": 1.0,
+          "stroke-g": 1,
+          "stroke-b": 1.0,
+          "c0": 0,
+          "c1": 1
+        }
+      ]
+    },
+    {
+      "time": 145,
+      "type": "svg",
+      "asset": "svg/title/hatch-tl.svg",
+      "stagger": {
+        "mode": "in-out",
+        "window": -180
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "linear",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": 0,
+          "y": 0.0,
+          "z": 0.0,
+          "rz": 0.0,
+          "scale": 1.0,
+          "stroke-weight": 1.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.25,
+          "stroke-a": 1.0
+        },
+        {
+          "time": 4.0,
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": 0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        {
+          "time": 5,
+          "c0": 0.0,
+          "c1": 1.0,
+          "easing": "back-in",
+          "x": 288
+        },
+        {
+          "time": 6.0,
+          "c0": 0,
+          "c1": 1
+        }
+      ]
+    },
+    {
+      "time": 145,
+      "type": "svg",
+      "asset": "svg/title/hatch-br.svg",
+      "stagger": {
+        "mode": "in-out",
+        "window": -180
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "linear",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": 0,
+          "y": 0.0,
+          "z": 0.0,
+          "rz": 0.0,
+          "scale": 1.0,
+          "stroke-weight": 1.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.25,
+          "stroke-a": 1.0
+        },
+        {
+          "time": 4.0,
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": 0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        {
+          "time": 5,
+          "c0": 0.0,
+          "c1": 1.0,
+          "easing": "back-in",
+          "x": -288
+        },
+        {
+          "time": 6.0,
+          "c0": 0,
+          "c1": 1
+        }
+      ]
+    },
+    {
+      "time": 145,
+      "type": "svg",
+      "asset": "svg/title/text.svg",
+      "stagger": {
+        "mode": "none",
+        "window": 0
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": 0,
+          "y": 0.0,
+          "z": 0.0,
+          "rz": 0.0,
+          "scale": 1.0,
+          "stroke-weight": 1.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.25,
+          "stroke-a": 1.0
+        },
+        {
+          "time": 4.0,
+          "easing": "cubic-in-out",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": 0,
+          "y": 0.0,
+          "z": 0.0,
+          "rz": 0.0,
+          "scale": 1.0,
+          "stroke-weight": 1.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.25,
+          "stroke-a": 1.0
+        },
+        {
+          "time": 5.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.8,
+          "stroke-b": 1.0,
+          "c0": 0,
+          "c1": 0
+        }
+      ]
+    },
+    {
+      "time": 148.75,
+      "type": "svg",
+      "asset": "svg/title/20.svg",
+      "stagger": {
+        "mode": "discrete",
+        "window": 900
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "linear",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": "-152 + 400",
+          "y": 116,
+          "z": 0,
+          "scale": 1.0,
+          "stroke-weight": 1,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 1.0,
+          "stroke-a": 1.0
+        },
+        {
+          "time": 1.0,
+          "x": "-152 + 400",
+          "y": 116,
+          "z": 0
+        },
+        {
+          "time": 2.0,
+          "easing": "back-out",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": -152
+        },
+        {
+          "time": 16.0,
+          "c0": 0.0,
+          "c1": 1.0
+        }
+      ]
+
+    },
+    {
+      "time": 148.75,
+      "type": "svg",
+      "asset": "svg/title/20.svg",
+      "stagger": {
+        "mode": "discrete",
+        "window": 900
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "linear",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": "152 - 400",
+          "y": -24,
+          "z": 0,
+          "scale": 1.0,
+          "stroke-weight": 1,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 1.0,
+          "stroke-a": 1.0
+        },
+        {
+          "time": 1.0,
+          "x": "152 - 400",
+          "y": -24,
+          "z": 0
+        },
+        {
+          "time": 2.0,
+          "easing": "back-out",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": 152,
+          "y": -24
+        },
+        {
+          "time": 16.0,
+          "c0": 0.0,
+          "c1": 1.0
+        }
+      ]
+    },
+    {
+      "time": 145,
+      "type": "svg",
+      "asset": "svg/title/mask-l.svg",
+      "keyframer": [
+        {
+          "time": 0.0,
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": 0,
+          "y": 0.0,
+          "z": 0.5,
+          "rz": 0.0,
+          "scale": 1.0,
+          "stroke-weight": 1.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 1.0,
+          "stroke-a": 1.0
+        },
+        {
+          "time": 7.0,
+          "c0": 0,
+          "c1": 1
+        }
+      ]
+    },
+    {
+      "time": 145,
+      "type": "svg",
+      "asset": "svg/title/mask-r.svg",
+      "stagger": {
+        "mode": "in-out",
+        "window": 0
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": 0,
+          "y": 0.0,
+          "z": 0.5,
+          "rz": 0.0,
+          "scale": 1.0,
+          "stroke-weight": 1.0,
+          "stroke-r": 0.0,
+          "stroke-g": 1.0,
+          "stroke-b": 1.0,
+          "stroke-a": 1.0
+        },
+        {
+          "time": 7.0,
+          "c0": 0,
+          "c1": 1
+        }
+      ]
+    }
+  ]
+}
