@@ -6,6 +6,8 @@ import demo.PostProcessor
 import org.openrndr.Fullscreen
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.BufferMultisample
+import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.isolatedWithTarget
 import org.openrndr.draw.renderTarget
 import org.openrndr.extra.temporalblur.TemporalBlur
@@ -62,10 +64,11 @@ fun main() {
                 colorBuffer()
             }
 
-            val layerTarget = renderTarget(targetWidth, targetHeight) {
+            val layerTarget = renderTarget(targetWidth, targetHeight, multisample = BufferMultisample.SampleCount(8)) {
                 colorBuffer()
                 depthBuffer()
             }
+            val layerResolved = colorBuffer(targetWidth, targetHeight)
 
             if (!configuration.capture.enabled) {
                 demo.soundtrack?.let {
@@ -82,12 +85,14 @@ fun main() {
                         drawer.clear(ColorRGBa.BLACK)
                         layerRenderer.renderLayers(time * demo.timescale)
                     }
+                    layerTarget.colorBuffer(0).copyTo(layerResolved)
+
                     if (enablePostProcessing) {
-                        postProcessor.postProcess(layerTarget.colorBuffer(0), time * demo.timescale)
+                        postProcessor.postProcess(layerResolved, time * demo.timescale)
                         drawer.clear(ColorRGBa.BLACK)
                         drawer.image(postProcessor.result)
                     } else {
-                        drawer.image(layerTarget.colorBuffer(0))
+                        drawer.image(layerResolved)
                     }
                 }
                 drawer.imageFit(target.colorBuffer(0), 0.0, 0.0, width * 1.0, height * 1.0, fitMethod = FitMethod.Contain)

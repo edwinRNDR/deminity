@@ -281,7 +281,11 @@ class LayerRenderer(val program: Program, val demo: Demo) {
 
     private val clipMaskTargets by lazy {
         List(2) {
-            renderTarget(RenderTarget.active.width, RenderTarget.active.height, multisample = BufferMultisample.SampleCount(8)) {
+            renderTarget(
+                RenderTarget.active.width,
+                RenderTarget.active.height,
+                multisample = BufferMultisample.SampleCount(8)
+            ) {
                 colorBuffer()
                 depthBuffer()
             }
@@ -324,6 +328,11 @@ class LayerRenderer(val program: Program, val demo: Demo) {
             }
         }
     }
+
+    private val postWatcher = program.watchFile(File(demo.dataBase, "post/post.json")) {
+        channel.setPosition(cuePoint / demo.timescale)
+    }
+
 
     private val layerWatchers =
         File(demo.dataBase, "animations").listFiles { it -> it.isFile && it.extension == "json" }.map {
@@ -478,8 +487,8 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                 -12.0 + (sortedLayers.size + 2) * 24.0
             )
         }
-        drawer.image(clipMasks[0], 0.0, (sortedLayers.size+3) * 24.0, 192.0, 108.0)
-        drawer.image(clipMasks[1], 192+24.0, (sortedLayers.size+3) * 24.0, 192.0, 108.0)
+        drawer.image(clipMasks[0], 0.0, (sortedLayers.size + 3) * 24.0, 192.0, 108.0)
+        drawer.image(clipMasks[1], 192 + 24.0, (sortedLayers.size + 3) * 24.0, 192.0, 108.0)
     }
 
     fun renderLayers(time: Double) {
@@ -532,7 +541,8 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                     val objects = objectGroups[target].orEmpty()
                     if (objects.isNotEmpty()) {
                         when (target) {
-                            Layer.Object.Target.image -> {}
+                            Layer.Object.Target.image -> {
+                            }
                             Layer.Object.Target.`clip-a` -> {
                                 clipMaskTargets[0].bind()
                             }
@@ -694,8 +704,9 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                         }
                     }
                     if (objects.isNotEmpty()) {
-                        when(target) {
-                            Layer.Object.Target.image -> {}
+                        when (target) {
+                            Layer.Object.Target.image -> {
+                            }
                             Layer.Object.Target.`clip-a` -> {
                                 clipMaskTargets[0].unbind()
                                 clipMaskTargets[0].colorBuffer(0).copyTo(clipMaskResolved)

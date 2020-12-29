@@ -1,6 +1,7 @@
 package demo
 
 import com.google.gson.Gson
+import mu.KotlinLogging
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorBuffer
@@ -17,6 +18,7 @@ import org.openrndr.extra.keyframer.Keyframer
 import org.openrndr.math.Vector2
 import org.operndr.extras.filewatcher.watchFile
 import java.io.File
+private val logger = KotlinLogging.logger {}
 
 class PostAnimation : Keyframer() {
     val bloomGain by DoubleChannel("bloom-gain")
@@ -45,7 +47,7 @@ class PostAnimation : Keyframer() {
     val vcrTint by RGBChannel(arrayOf("vcr-tint-r", "vcr-tint-g", "vcr-tint-b"), ColorRGBa.WHITE)
 }
 
-class PostProcessor(val animation: PostAnimation) {
+class PostProcessor(val animationWatcher: () -> PostAnimation) {
     private val bloom by lazy {
         GaussianBloom()
     }
@@ -85,6 +87,7 @@ class PostProcessor(val animation: PostAnimation) {
     }
 
     fun postProcess(input: ColorBuffer, time: Double) {
+        val animation = animationWatcher()
         animation(time)
 
         bloom.gain = animation.bloomGain
@@ -129,11 +132,20 @@ class PostProcessor(val animation: PostAnimation) {
 
     companion object {
         fun loadFromJson(program: Program, file: File): PostProcessor {
-            val postAnimation = PostAnimation()
-            program.watchFile(file) {
-                postAnimation.loadFromJson(file)
+
+            val watcher = program.watchFile(file) {
+
+                val postAnimation = PostAnimation()
+                try {
+                    postAnimation.loadFromJson(file)
+                } catch(e: Throwable) {
+                    logger.error {
+                        e.message
+                    }
+                }
+                postAnimation
             }
-            return PostProcessor(postAnimation)
+            return PostProcessor(watcher)
         }
     }
 }

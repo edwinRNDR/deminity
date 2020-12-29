@@ -19,55 +19,6 @@
     ]
   },
   "objects": [
-    {
-      "time": 59.5,
-      "type": "svg",
-      "asset": "svg/photo-05-grid/*.svg",
-      "stagger": {
-        "mode": "in-out",
-        "window": 50,
-        "order": "random"
-      },
-      "stepping": {
-        "mode": "discrete",
-        "steps": 10,
-        "inertia": 0.01
-      },
-      "attributes": {
-        "stroke-weight": "asset"
-      },
-      "keyframer": [
-        {
-          "time": 0.0,
-          "easing": "cubic-in-out",
-          "c0": 0.05,
-          "c1": 0.05,
-          "x": 0.0,
-          "y": -50,
-          "z": 0.0,
-          "rz": 0.0,
-          "stroke-r": 1.0,
-          "stroke-g": 0.5,
-          "stroke-b": 0.0,
-          "stroke-a": 0.5,
-          "asset-index": 2.0,
-          "scale": 0.9,
-          "stroke-weight": 1.0
-        },
-        {
-          "time": 0.5,
-          "asset-index": 0.0
-        },
 
-        {
-          "time": 4.5,
-          "stroke-g": 0.0,
-          "stroke-a": 1.0,
-          "stroke-weight": 1.0,
-          "c0": 0.05,
-          "c1": 0.95
-        }
-      ]
-    }
   ]
 }

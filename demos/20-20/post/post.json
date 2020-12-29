@@ -204,7 +204,7 @@
   {
     "time": 54.0,
     "pal-amount": {
-      "value": 0.3,
+      "value": 0.5,
       "duration": -1.0
     }
   },
@@ -222,6 +222,34 @@
       "duration": 0.0
     }
 
+  },
+  {
+    "time": 56.0,
+    "pal-amount": {
+      "value": 3.0,
+      "duration": -1.0
+    }
+  },
+  {
+    "time": 57.0,
+    "pal-amount": {
+      "value": 0.3,
+      "duration": -1.0
+    }
+  },
+  {
+    "time": 60.0,
+    "pal-amount": {
+      "value": 1.0,
+      "duration": -0.1
+    }
+  },
+  {
+    "time": 61.0,
+    "pal-amount": {
+      "value": 0.1,
+      "duration": -1.0
+    }
   },
   {
     "time": 60.0,
