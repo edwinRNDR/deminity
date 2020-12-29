@@ -60,7 +60,7 @@
       ]
     },
     {
-      "time": 32.0,
+      "time": 27.5,
       "type": "image",
       "assets": [
         "images/voyager/*.png"
@@ -95,7 +95,7 @@
       ]
     },
     {
-      "time": 32.0,
+      "time": 27.6,
       "type": "image",
       "assets": [
         "images/voyager/*.png"
