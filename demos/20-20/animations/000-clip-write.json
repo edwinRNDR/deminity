@@ -16,7 +16,7 @@
       "time": 0.0,
       "target": "clip-a",
       "type": "svg",
-      "asset": "svg/hexagon.svg",
+      "assets": ["svg/hexagon.svg"],
       "keyframer": [
         {
           "time": 0.0,
@@ -36,6 +36,10 @@
           "fill-g": 1.0,
           "fill-b": 1.0,
           "fill-a": 1.0
+        },
+        {
+          "time": 17.0,
+          "scale": 1
         }
       ]
     },
@@ -43,11 +47,12 @@
       "time": 0.0,
       "target": "clip-b",
       "type": "svg",
-      "asset": "svg/hexagon.svg",
+      "assets": ["svg/hexagon.svg"],
       "keyframer": [
         {
           "time": 0.0,
           "easing": "cubic-in-out",
+          "asset-index": 0,
           "fill-r": 1.0,
           "fill-g": 1.0,
           "fill-b": 1.0,

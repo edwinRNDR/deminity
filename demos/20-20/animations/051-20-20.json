@@ -18,8 +18,74 @@
   },
   "objects": [
     {
+      "time": 144.5,
+      "type": "svg",
+      "target": "clip-a",
+      "asset": "svg/title/mask-l.svg",
+      "z-index": 13,
+      "keyframer": [
+        {
+          "time": 0.0,
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": 0,
+          "y": 0.0,
+          "z": 0,
+          "rz": 0.0,
+          "scale": 1.0,
+          "stroke-weight": 0,
+          "fill-r": 0,
+          "fill-g": 0,
+          "fill-b": 1,
+          "fill-a": 1
+        },
+        {
+          "time": 32,
+          "c0": 0,
+          "c1": 1
+        }
+      ]
+    },
+    {
+      "time": 144.5,
+      "type": "svg",
+      "target": "clip-b",
+      "asset": "svg/title/mask-r.svg",
+      "z-index": 3,
+      "stagger": {
+        "mode": "in-out",
+        "window": 0
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": 0,
+          "y": 0.0,
+          "z": 0,
+          "rz": 0.0,
+          "scale": 1.0,
+          "stroke-weight": 0,
+          "fill-r": 0,
+          "fill-g": 0,
+          "fill-b": 0,
+          "fill-a": 1
+        },
+        {
+          "time": 32,
+          "c0": 0,
+          "c1": 1
+        }
+      ]
+    },
+    {
       "time": 148.25,
       "type": "svg",
+      "clipping": {
+        "mask": "b"
+      },
       "asset": "svg/title/20.svg",
       "z-index": 11,
       "stagger": {
@@ -37,9 +103,9 @@
           "z": 0,
           "stroke-weight": 0,
           "scale": 1.0,
-          "fill-r": 1.0,
-          "fill-g": 1.0,
-          "fill-b": 1.0,
+          "fill-r": 0.0,
+          "fill-g": 0.0,
+          "fill-b": 0.0,
           "fill-a": 1
         },
         {
@@ -88,6 +154,28 @@
           "fill-a": 1.0
         },
         {
+          "time": 0,
+          "fill-r": 1.0,
+          "fill-g": 1.0,
+          "fill-b": 1.0,
+          "fill-a": 1
+        },
+        {
+          "time": 3.75,
+          "fill-r": 0.75,
+          "fill-g": 0.7,
+          "fill-b": 0.9,
+          "fill-a": 1
+        },
+        {
+          "time": 4,
+          "fill-r": 0,
+          "fill-g": 0,
+          "fill-b": 0,
+          "fill-a": 1
+        },
+
+        {
           "time": 5.75,
           "c0": 0,
           "c1": 1
@@ -98,6 +186,9 @@
       "time": 144.5,
       "type": "svg",
       "z-index": 2,
+      "clipping": {
+        "mask": "b"
+      },
       "asset": "svg/title/hatch-tl.svg",
       "stagger": {
         "mode": "in-out",
@@ -119,6 +210,27 @@
           "fill-g": 1.0,
           "fill-b": 1,
           "fill-a": 1.0
+        },
+        {
+          "time": 0,
+          "fill-r": 1.0,
+          "fill-g": 1.0,
+          "fill-b": 1.0,
+          "fill-a": 1
+        },
+        {
+          "time": 3.75,
+          "fill-r": 0.75,
+          "fill-g": 0.7,
+          "fill-b": 0.9,
+          "fill-a": 1
+        },
+        {
+          "time": 4,
+          "fill-r": 0,
+          "fill-g": 0,
+          "fill-b": 0,
+          "fill-a": 1
         },
         {
           "time": 4.0,
@@ -143,41 +255,15 @@
       ]
     },
     {
-      "time": 148.25,
-      "type": "svg",
-      "asset": "svg/title/mask-l.svg",
-      "z-index": 13,
-      "keyframer": [
-        {
-          "time": 0.0,
-          "c0": 0.0,
-          "c1": 1.0,
-          "x": 0,
-          "y": 0.0,
-          "z": 0,
-          "rz": 0.0,
-          "scale": 1.0,
-          "stroke-weight": 0,
-          "fill-r": 0,
-          "fill-g": 0,
-          "fill-b": 0,
-          "fill-a": 1
-        },
-        {
-          "time": 2,
-          "c0": 0,
-          "c1": 1
-        }
-      ]
-    },
-
-    {
       "time": 150.5,
       "type": "svg",
       "asset": "svg/title/20.svg",
       "z-index": 1,
+      "clipping": {
+        "mask": "a"
+      },
       "stagger": {
-        "mode": "none",
+        "mode": "in-out",
         "window": 900
       },
       "keyframer": [
@@ -191,9 +277,9 @@
           "z": 0,
           "scale": 1.0,
           "stroke-weight": 0,
-          "fill-r": 1.0,
-          "fill-g": 1.0,
-          "fill-b": 1.0,
+          "fill-r": 0.0,
+          "fill-g": 0.0,
+          "fill-b": 0.0,
           "fill-a": 1
         },
         {
@@ -221,6 +307,9 @@
       "time": 149.5,
       "type": "svg",
       "asset": "svg/title/hatch-br.svg",
+      "clipping": {
+        "mask": "a"
+      },
       "z-index": 2,
       "stagger": {
         "mode": "in-out",
@@ -238,10 +327,10 @@
           "rz": 0.0,
           "scale": 1.0,
           "stroke-weight": 0.0,
-          "fill-r": 1.0,
-          "fill-g": 1.0,
-          "fill-b": 1,
-          "fill-a": 1.0
+            "fill-r": 0.0,
+            "fill-g": 0.0,
+            "fill-b": 0,
+            "fill-a": 1.0
         },
         {
           "time": 1.0,
@@ -266,40 +355,6 @@
       ]
     },
     {
-      "time": 150.5,
-      "type": "svg",
-      "asset": "svg/title/mask-r.svg",
-      "z-index": 3,
-      "stagger": {
-        "mode": "in-out",
-        "window": 0
-      },
-      "keyframer": [
-        {
-          "time": 0.0,
-          "easing": "cubic-in-out",
-          "c0": 0.0,
-          "c1": 1.0,
-          "x": 0,
-          "y": 0.0,
-          "z": 0,
-          "rz": 0.0,
-          "scale": 1.0,
-          "stroke-weight": 0,
-          "fill-r": 0,
-          "fill-g": 0,
-          "fill-b": 0,
-          "fill-a": 1
-        },
-        {
-          "time": 2,
-          "c0": 0,
-          "c1": 1
-        }
-      ]
-    },
-
-    {
       "time": 144.5,
       "type": "svg",
       "asset": "svg/title/hatch-center.svg",
@@ -312,24 +367,34 @@
         {
           "time": 0.0,
           "easing": "cubic-in-out",
+          "stroke-weight": 0,
           "c0": 0.0,
           "c1": 1.0,
           "x": 0,
           "y": 0.0,
           "z": 0.0,
           "rz": 0.0,
-          "scale": 1.0,
+          "scale": 1.0
+        },
+        {
+          "time": 0,
           "fill-r": 1.0,
           "fill-g": 1.0,
           "fill-b": 1.0,
           "fill-a": 1
         },
         {
-          "time": 6.5,
-          "scale": 1.0,
+          "time": 3.75,
           "fill-r": 0.75,
           "fill-g": 0.7,
           "fill-b": 0.9,
+          "fill-a": 1
+        },
+        {
+          "time": 4,
+          "fill-r": 0,
+          "fill-g": 0,
+          "fill-b": 0,
           "fill-a": 1
         },
         {

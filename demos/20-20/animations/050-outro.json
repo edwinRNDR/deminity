@@ -13,7 +13,7 @@
   },
   "objects": [
     {
-      "time": 140.0,
+      "time": 133.5,
       "type": "svg",
       "asset": "svg/circle-360-60.svg",
       "stagger": {
@@ -23,7 +23,7 @@
       "keyframer": [
         {
           "time": 0.0,
-          "easing": "cubic-in-out",
+          "easing": "cubic-out",
           "c0": 0.0,
           "c1": 0.0,
           "x": "0.0 + rep * 10.0",
@@ -38,13 +38,42 @@
         },
 
         {
-          "time": 32.0,
+          "time": 28.0,
           "stroke-weight": 4.0,
           "stroke-r": 1.0,
           "stroke-g": 1.0,
           "stroke-b": 1.0,
+          "stroke-a": 0.9,
           "c0": 0.0,
           "c1": 1.0
+        }
+      ]
+    },
+    {
+      "time": 161.5,
+      "type": "svg",
+      "asset": "svg/circle-360-60.svg",
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-out",
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": "0.0 + rep * 10.0",
+          "y": 0.0,
+          "z": 0.0,
+          "scale": 1.0,
+          "stroke-weight": 4.0,
+          "stroke-r": 1.0,
+          "stroke-g": 1.0,
+          "stroke-b": 1.0,
+          "stroke-a": 1
+        },
+        {
+          "time": 2.0,
+          "c0": 0.0,
+          "c1": 1.0,
+          "stroke-a": 0
         }
       ]
     }
