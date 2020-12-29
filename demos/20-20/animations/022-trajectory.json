@@ -1,242 +1,179 @@
 {
   "camera": {
     "type": "ortho",
+    "type": "perspective",
     "keyframer": [
       {
         "time": 36.0,
         "easing": "cubic-in-out",
         "x": 640.0,
         "y": 360.0,
-        "magnitude": 720.0,
-        "scale": 1.0
+        "z": 980.0,
+        "perspective-far": 10000,
+        "rx": 40
       },
       {
         "time": 52.0,
-        "scale": 0.8
+        "z": 980.0
       }
     ]
   },
   "objects": [
     {
       "time": 36.0,
-      "type": "svg",
-      "asset": "svg/trajectory/trajectory-01.svg",
-      "attributes": {
-        "stroke": "asset"
-      },
-      "stagger": {
-        "mode": "in-out",
-        "window": 10,
-        "order": "random"
-      },
+      "type": "svg-3d",
+      "asset": "svg/trajectory/trajectory-orbit-earth.svg",
       "keyframer": [
         {
           "time": 0.0,
           "easing": "cubic-in-out",
           "c0": 0.0,
           "c1": 0.0,
-          "stroke-weight": 1.0
+          "stroke-weight": 3.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.5,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0
         },
         {
-          "c1": 1.0,
+          "time": 4.0,
+          "c1": 1.0
+        },
+        {
           "time": 16.0,
-          "stroke-weight": 1.0
+          "stroke-weight": 3.0
         }
       ]
     },
     {
       "time": 36.0,
-      "type": "svg",
-      "asset": "svg/trajectory/trajectory-02.svg",
-      "attributes": {
-        "stroke": "asset",
-        "fill": "asset"
-      },
-      "stagger": {
-        "mode": "in-out",
-        "window": 10,
-        "order": "random"
-      },
+      "type": "svg-3d",
+      "asset": "svg/trajectory/trajectory-orbit-jupiter.svg",
       "keyframer": [
         {
           "time": 0.0,
           "easing": "cubic-in-out",
           "c0": 0.0,
           "c1": 0.0,
-          "stroke-weight": 1.0
+          "stroke-weight": 3.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.5,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0
         },
         {
-          "c1": 1.0,
+          "time": 5.0,
+          "c1": 1.0
+        },
+        {
           "time": 16.0,
-          "stroke-weight": 1.0
+          "stroke-weight": 3.0
         }
       ]
     },
     {
       "time": 36.0,
-      "type": "svg",
-      "asset": "svg/trajectory/trajectory-03.svg",
-      "attributes": {
-        "stroke": "asset",
-        "fill": "asset"
-      },
-      "stagger": {
-        "mode": "in-out",
-        "window": 10,
-        "order": "random"
-      },
+      "type": "svg-3d",
+      "asset": "svg/trajectory/trajectory-orbit-saturn.svg",
       "keyframer": [
         {
           "time": 0.0,
           "easing": "cubic-in-out",
           "c0": 0.0,
           "c1": 0.0,
-          "stroke-weight": 1.0
+          "stroke-weight": 3.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.5,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0
         },
         {
-          "c1": 1.0,
+          "time": 6.0,
+          "c1": 1.0
+        },
+        {
           "time": 16.0,
-          "stroke-weight": 1.0
+          "stroke-weight": 3.0
         }
       ]
     },
     {
-      "time": 36.0,
-      "type": "svg",
-      "asset": "svg/trajectory/trajectory-04.svg",
-      "attributes": {
-        "stroke": "asset",
-        "fill": "asset"
-      },
-      "stagger": {
-        "mode": "in-out",
-        "window": 10,
-        "order": "random"
-      },
+      "time": 42.0,
+      "type": "svg-3d",
+      "asset": "svg/trajectory/trajectory-curve.svg",
       "keyframer": [
         {
           "time": 0.0,
           "easing": "cubic-in-out",
           "c0": 0.0,
           "c1": 0.0,
-          "stroke-weight": 1.0
+          "stroke-weight": 3.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0
         },
         {
-          "c1": 1.0,
-          "time": 16.0,
-          "stroke-weight": 1.0
+          "time": 10.0,
+          "c1": 1.0
+        },
+        {
+          "time": 10.0,
+          "stroke-weight": 3.0
         }
       ]
     },
     {
-      "time": 36.0,
-      "type": "svg",
-      "asset": "svg/trajectory/trajectory-05.svg",
-      "attributes": {
-        "stroke": "asset",
-        "fill": "asset"
-      },
+      "time": 42.0,
+      "type": "svg-3d",
+      "asset": "svg/trajectory/trajectory-dots.svg",
       "stagger": {
         "mode": "in-out",
-        "window": 10,
-        "order": "random"
+        "window": 0
       },
+
       "keyframer": [
         {
           "time": 0.0,
           "easing": "cubic-in-out",
           "c0": 0.0,
           "c1": 0.0,
-          "stroke-weight": 1.0
+          "stroke-weight": 3.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0
         },
         {
-          "c1": 1.0,
-          "time": 16.0,
-          "stroke-weight": 1.0
+          "time": 10.5,
+          "c1": 1.0
         }
       ]
     },
     {
-      "time": 36.0,
-      "type": "svg",
-      "asset": "svg/trajectory/trajectory-06.svg",
-      "attributes": {
-        "stroke": "asset",
-        "fill": "asset"
-      },
+      "time": 42.0,
+      "type": "svg-3d",
+      "asset": "svg/trajectory/trajectory-dates.svg",
       "stagger": {
         "mode": "in-out",
-        "window": 10,
-        "order": "random"
+        "window": 0
       },
+
       "keyframer": [
         {
           "time": 0.0,
           "easing": "cubic-in-out",
           "c0": 0.0,
           "c1": 0.0,
-          "stroke-weight": 1.0
+          "stroke-weight": 3.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0
         },
         {
-          "c1": 1.0,
-          "time": 16.0,
-          "stroke-weight": 1.0
-        }
-      ]
-    },
-    {
-      "time": 36.0,
-      "type": "svg",
-      "asset": "svg/trajectory/trajectory-07.svg",
-      "attributes": {
-        "stroke": "asset",
-        "fill": "asset"
-      },
-      "stagger": {
-        "mode": "in-out",
-        "window": 10,
-        "order": "random"
-      },
-      "keyframer": [
-        {
-          "time": 0.0,
-          "easing": "cubic-in-out",
-          "c0": 0.0,
-          "c1": 0.0,
-          "stroke-weight": 1.0
-        },
-        {
-          "c1": 1.0,
-          "time": 16.0,
-          "stroke-weight": 1.0
-        }
-      ]
-    },
-    {
-      "time": 36.0,
-      "type": "svg",
-      "asset": "svg/trajectory/trajectory-08.svg",
-      "attributes": {
-        "stroke": "asset",
-        "fill": "asset"
-      },
-      "stagger": {
-        "mode": "in-out",
-        "window": 10,
-        "order": "random"
-      },
-      "keyframer": [
-        {
-          "time": 0.0,
-          "easing": "cubic-in-out",
-          "c0": 0.0,
-          "c1": 0.0,
-          "stroke-weight": 1.0
-        },
-        {
-          "c1": 1.0,
-          "time": 16.0,
-          "stroke-weight": 1.0
+          "time": 10.5,
+          "c1": 1.0
         }
       ]
     }
