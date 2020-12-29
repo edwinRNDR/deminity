@@ -130,47 +130,6 @@
       ]
     },
     {
-      "time": 40.0,
-      "type": "image",
-      "assets": [
-        "images/voyager/*.png"
-      ],
-      "repetitions":{
-        "count": 5,
-        "interval": 0.0
-      },
-
-      "keyframer": [
-        {
-          "time": 0.0,
-          "x": "rep * 150 - 300",
-          "scale": 1.0,
-          "image-dither": 0.0,
-          "image-tint-r": 1.0,
-          "image-tint-g": 0.0,
-          "image-tint-b": 0.0,
-          "image-tint-a": 0.5,
-          "image-left": 0.0,
-          "image-right": 1.0,
-          "asset-index": "rep*10"
-        },
-        {
-          "time": 8.0,
-          "image-right": 1.0,
-          "image-left": 0.0
-        },
-        {
-          "time": 8.0,
-          "asset-index": "176/2 + rep*10",
-          "image-tint-r": 1.0,
-          "image-tint-g": 0.5,
-          "image-tint-b": 0.0,
-          "image-tint-a": 1.0,
-          "scale": 0.1
-        }
-      ]
-    },
-    {
       "time": 63.5,
       "type": "image",
       "assets": [
