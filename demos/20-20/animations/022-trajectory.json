@@ -7,14 +7,15 @@
         "time": 36.0,
         "easing": "cubic-in-out",
         "x": 640.0,
-        "y": 360.0,
+        "y": 460.0,
         "z": 980.0,
         "perspective-far": 10000,
-        "rx": 40
+        "rx": -90
       },
       {
         "time": 52.0,
-        "z": 980.0
+        "z": 960.0,
+        "rx": 0.0
       }
     ]
   },
@@ -29,6 +30,7 @@
           "easing": "cubic-in-out",
           "c0": 0.0,
           "c1": 0.0,
+          "z": 0.0,
           "stroke-weight": 3.0,
           "stroke-r": 1.0,
           "stroke-g": 0.5,
@@ -41,7 +43,8 @@
         },
         {
           "time": 16.0,
-          "stroke-weight": 3.0
+          "stroke-weight": 3.0,
+          "z": 0.0
         }
       ]
     },
@@ -55,6 +58,7 @@
           "easing": "cubic-in-out",
           "c0": 0.0,
           "c1": 0.0,
+          "z": 100.0,
           "stroke-weight": 3.0,
           "stroke-r": 1.0,
           "stroke-g": 0.5,
@@ -67,6 +71,7 @@
         },
         {
           "time": 16.0,
+          "z": 0.0,
           "stroke-weight": 3.0
         }
       ]
@@ -81,6 +86,7 @@
           "easing": "cubic-in-out",
           "c0": 0.0,
           "c1": 0.0,
+          "z": 200.0,
           "stroke-weight": 3.0,
           "stroke-r": 1.0,
           "stroke-g": 0.5,
@@ -93,6 +99,7 @@
         },
         {
           "time": 16.0,
+          "z": 0.0,
           "stroke-weight": 3.0
         }
       ]
@@ -114,7 +121,7 @@
           "stroke-a": 1.0
         },
         {
-          "time": 10.0,
+          "time": 8.0,
           "c1": 1.0
         },
         {
@@ -166,13 +173,19 @@
           "c0": 0.0,
           "c1": 0.0,
           "stroke-weight": 3.0,
-          "stroke-r": 1.0,
-          "stroke-g": 0.0,
-          "stroke-b": 0.0,
-          "stroke-a": 1.0
+          "stroke-a": 0.0,
+          "fill-r": 1.0,
+          "fill-g": 0.0,
+          "fill-b": 0.0,
+          "fill-a": 0.0
         },
         {
-          "time": 10.5,
+          "time": 10.0,
+          "fill-r": 1.0,
+          "fill-g": 0.0,
+          "fill-b": 0.0,
+          "fill-a": 1.0,
+
           "c1": 1.0
         }
       ]
