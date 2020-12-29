@@ -487,6 +487,14 @@ class LayerRenderer(val program: Program, val demo: Demo) {
         val layers = layerWatchers.map { it() }
         val sortedLayers = layers.sortedBy { it.zIndex }
 
+        clipMaskTargets.forEach {
+            it.clearColor(0, ColorRGBa.TRANSPARENT)
+            it.clearDepth()
+        }
+        clipMasks.forEach {
+            it.fill(ColorRGBa.TRANSPARENT)
+        }
+
         for (layer in sortedLayers) {
             drawer.isolated {
                 layer.camera.animation(time)
