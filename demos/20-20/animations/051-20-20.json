@@ -322,7 +322,15 @@
           "fill-r": 1.0,
           "fill-g": 1.0,
           "fill-b": 1.0,
-          "fill-a": 0.95
+          "fill-a": 1
+        },
+        {
+          "time": 6.5,
+          "scale": 1.0,
+          "fill-r": 0.75,
+          "fill-g": 0.7,
+          "fill-b": 0.9,
+          "fill-a": 1
         },
         {
           "time": 32.0,
