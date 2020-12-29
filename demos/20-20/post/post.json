@@ -305,13 +305,69 @@
     "laser-aberration": 0.011
   },
   {
+    "time": 147,
+    "crt-amplitude": 0.0
+  },
+  {
+    "time": 147.5,
+    "vcr-gain": {
+      "value": 0.45,
+      "duration": 12.0
+    }
+  },
+  {
+    "time": 148,
+    "vcr-tint-g": 0.7,
+    "vcr-tint-b": 0.7,
+    "vcr-gain": {
+      "value": 0.0,
+      "duration": 0.0
+    },
+    "crt-amplitude": {
+      "value": 3.0,
+      "duration": 0.0
+    }
+  },
+  {
+    "time": 148.5,
+    "crt-amplitude": 0.0
+  },
+  {
+    "time": 152.5,
+    "crt-amplitude": 0.0,
+    "crt-scroll0": 0.0
+  },
+  {
+    "time": 152.75,
+    "crt-amplitude": {
+      "value": 12.0,
+      "duration": 0.15
+    },
+    "crt-scroll0": -0.125
+  },
+  {
+    "time": 152.85,
+    "crt-amplitude": 0.0,
+    "crt-scroll0": 0
+  },
+
+  {
     "time": 155.0,
     "pal-amount": {
       "value": 0.185,
       "duration": 2.5
     },
+
     "laser-aberration": 1.02
   },
+  {
+    "time": 158,
+    "vcr-gain": {
+      "value": 0.45,
+      "duration": 16.0
+    }
+  },
+
   {
     "time": 161.5,
     "pal-pixelation": 0.4
