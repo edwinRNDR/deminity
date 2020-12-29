@@ -1,0 +1,67 @@
+{
+  "camera": {
+    "type": "ortho",
+    "keyframer": [
+      {
+        "time": 0.0,
+        "easing": "cubic-in-out",
+        "x": 640.0,
+        "y": 360.0,
+        "magnitude": 720.0
+      }
+    ]
+  },
+  "objects": [
+    {
+      "time": 0.0,
+      "target": "clip-a",
+      "type": "svg",
+      "asset": "svg/hexagon.svg",
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "x": 0.0,
+          "y": 100.0,
+          "z": 0.0,
+          "fill-r": 1.0,
+          "fill-g": 1.0,
+          "fill-b": 1.0,
+          "fill-a": 1.0,
+          "scale": 5.0
+        },
+        {
+          "time": 16.0,
+          "fill-r": 1.0,
+          "fill-g": 1.0,
+          "fill-b": 1.0,
+          "fill-a": 1.0
+        }
+      ]
+    },
+    {
+      "time": 0.0,
+      "target": "clip-b",
+      "type": "svg",
+      "asset": "svg/hexagon.svg",
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "fill-r": 1.0,
+          "fill-g": 1.0,
+          "fill-b": 1.0,
+          "fill-a": 1.0,
+          "scale": 2.5
+        },
+        {
+          "time": 16.0,
+          "fill-r": 1.0,
+          "fill-g": 1.0,
+          "fill-b": 1.0,
+          "fill-a": 1.0
+        }
+      ]
+    }
+  ]
+}

@@ -102,6 +102,8 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
         val time: Double = 0.0,
         val `z-index`: Int = 0,
         val type: ObjectType = ObjectType.svg,
+        val target: Target = Target.image,
+        val clipping: Clipping = Clipping(),
         val asset: String = "default-asset",
         var assets: List<String> = emptyList(),
         val keyframer: List<Map<String, Any>> = emptyList(),
@@ -123,11 +125,26 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
         val duration
             get() = animation.duration
 
+
+        enum class Target {
+            image,
+            `clip-a`,
+            `clip-b`
+        }
+
         enum class ObjectType {
             svg,
             image,
             `svg-3d`
         }
+
+        enum class ClipMask {
+            none,
+            a,
+            b
+        }
+
+        class Clipping(val mask: ClipMask = ClipMask.none)
 
         enum class SteppingMode {
             none,
@@ -151,7 +168,6 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
             }
         }
 
-
         enum class StaggerMode {
             none,
             `in-out`,
@@ -169,6 +185,7 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
             val seed: Int = 100,
             val window: Int = 0
         )
+
 
         class Repetitions(val count: Int = 1, val interval: Double = 0.0)
 
@@ -190,6 +207,8 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
                 time = time + it * repetitions.interval,
                 `z-index` = `z-index`,
                 type = type,
+                target = target,
+                clipping = clipping,
                 asset = asset,
                 assets = assets.let { if (it.isEmpty()) listOf(asset) else it }.flatMap {
                     if (it.contains("*")) {
@@ -240,6 +259,8 @@ class LayerRenderer(val program: Program, val demo: Demo) {
     var channel = Channel()
     var enableUI = false
 
+    private var cuePoint = 0.0
+
     class ObjectDraw3D(
         val shapeIndex: Int,
         val fill: ColorRGBa?,
@@ -258,7 +279,23 @@ class LayerRenderer(val program: Program, val demo: Demo) {
 
     private val dither by lazy { ADither() }
 
-    private var cuePoint = 0.0
+    private val clipMaskTargets by lazy {
+        List(2) {
+            renderTarget(RenderTarget.active.width, RenderTarget.active.height, multisample = BufferMultisample.SampleCount(8)) {
+                colorBuffer()
+                depthBuffer()
+            }
+        }
+    }
+    private val clipMaskResolved by lazy { colorBuffer(RenderTarget.active.width, RenderTarget.active.height) }
+    private val clipMasks by lazy {
+        List(2) {
+            colorBuffer(RenderTarget.active.width, RenderTarget.active.height, format = ColorFormat.R)
+        }
+    }
+    private val alphaToRed by lazy { AlphaToRed() }
+    private val clipStyle by lazy { ClipStyle() }
+
 
     init {
         program.mouse.cursorVisible = false
@@ -273,22 +310,20 @@ class LayerRenderer(val program: Program, val demo: Demo) {
         }
 
         program.keyboard.keyDown.listen {
-            if (it.key == KEY_TAB) {
-                enableUI = !enableUI
-                program.mouse.cursorVisible = enableUI
-            }
-
-            if (it.key == KEY_ARROW_DOWN) {
-                cuePoint = program.seconds * demo.timescale
-            }
-
-            if (it.key == KEY_ARROW_UP) {
-                channel.setPosition(cuePoint / demo.timescale)
+            when (it.key) {
+                KEY_TAB -> {
+                    enableUI = !enableUI
+                    program.mouse.cursorVisible = enableUI
+                }
+                KEY_ARROW_DOWN -> {
+                    cuePoint = program.seconds * demo.timescale
+                }
+                KEY_ARROW_UP -> {
+                    channel.setPosition(cuePoint / demo.timescale)
+                }
             }
         }
-
     }
-
 
     private val layerWatchers =
         File(demo.dataBase, "animations").listFiles { it -> it.isFile && it.extension == "json" }.map {
@@ -395,15 +430,12 @@ class LayerRenderer(val program: Program, val demo: Demo) {
         }
 
     fun renderUI(time: Double) {
-
         if (!enableUI) {
             return
         }
 
         val sortedLayers = layerWatchers.map { it() }.sortedBy { it.zIndex }
         val drawer = program.drawer
-
-
         val timescale = (RenderTarget.active.width - 160) / (demo.duration * demo.timescale)
 
         for ((layerIndex, layer) in sortedLayers.withIndex()) {
@@ -412,22 +444,16 @@ class LayerRenderer(val program: Program, val demo: Demo) {
             drawer.fill = if (layerIndex % 2 == 0) ColorRGBa.WHITE else ColorRGBa.WHITE.shade(0.85)
             drawer.text(layer.sourceFile.nameWithoutExtension, 10.0, layerIndex * 24.0 + 12.0 + 24.0)
         }
-
         drawer.translate(150.0, 24.0)
         for ((layerIndex, layer) in sortedLayers.withIndex()) {
-
             for (obj in layer.objects) {
                 drawer.fill = if (layerIndex % 2 == 0) ColorRGBa.GRAY else ColorRGBa.GRAY.shade(0.5)
-
                 if (obj.time <= time && (obj.time + obj.duration) > time) {
                     drawer.fill = ColorRGBa.WHITE
                 }
-
                 drawer.rectangle(obj.time * timescale, layerIndex * 24.0, obj.duration * timescale, 16.0)
             }
         }
-
-
         run {
             drawer.stroke = ColorRGBa.GREEN
             val x = time * timescale
@@ -452,6 +478,8 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                 -12.0 + (sortedLayers.size + 2) * 24.0
             )
         }
+        drawer.image(clipMasks[0], 0.0, (sortedLayers.size+3) * 24.0, 192.0, 108.0)
+        drawer.image(clipMasks[1], 192+24.0, (sortedLayers.size+3) * 24.0, 192.0, 108.0)
     }
 
     fun renderLayers(time: Double) {
@@ -484,11 +512,42 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                 val objectGroups = layer.objects
                     .filter { time >= it.time && time < (it.time + it.duration) }
                     .sortedBy { it.`z-index` }
-                    .groupBy { it.type }
+                    .groupBy { it.target }
 
-                for ((type, objects) in objectGroups) {
-                    if (type == Layer.Object.ObjectType.image) {
-                        for (obj in objects) {
+                val targetOrder = listOf(
+                    Layer.Object.Target.`clip-a`,
+                    Layer.Object.Target.`clip-b`,
+                    Layer.Object.Target.image
+                )
+
+                for (target in targetOrder) {
+                    val objects = objectGroups[target].orEmpty()
+                    if (objects.isNotEmpty()) {
+                        when (target) {
+                            Layer.Object.Target.image -> {}
+                            Layer.Object.Target.`clip-a` -> {
+                                clipMaskTargets[0].bind()
+                            }
+                            Layer.Object.Target.`clip-b` -> {
+                                clipMaskTargets[1].bind()
+                            }
+                        }
+                    }
+
+                    for (obj in objects) {
+                        when (obj.clipping.mask) {
+                            Layer.Object.ClipMask.none -> drawer.shadeStyle = null
+                            Layer.Object.ClipMask.a -> {
+                                clipStyle.clipMask = clipMasks[0]
+                                drawer.shadeStyle = clipStyle
+                            }
+                            Layer.Object.ClipMask.b -> {
+                                clipStyle.clipMask = clipMasks[1]
+                                drawer.shadeStyle = clipStyle
+                            }
+                        }
+
+                        if (obj.type == Layer.Object.ObjectType.image) {
                             obj.animation(time - obj.time)
                             val a = obj.animation
                             val asset = obj.assets[a.assetIndex.roundToInt().coerceIn(0, obj.assets.size - 1)]
@@ -512,11 +571,7 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                                     drawer.image(image, sr, tr)
                                 }
                             }
-                        }
-                    }
-
-                    if (type == Layer.Object.ObjectType.svg || type == Layer.Object.ObjectType.`svg-3d`) {
-                        for (obj in objects) {
+                        } else if (obj.type == Layer.Object.ObjectType.svg || obj.type == Layer.Object.ObjectType.`svg-3d`) {
                             val a = obj.animation
                             a(time - obj.time)
                             val assetIndex = a.assetIndex.roundToInt().coerceIn(0, obj.assets.size - 1)
@@ -627,6 +682,21 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                                         }
                                     }
                                 }
+                            }
+                        }
+                    }
+                    if (objects.isNotEmpty()) {
+                        when(target) {
+                            Layer.Object.Target.image -> {}
+                            Layer.Object.Target.`clip-a` -> {
+                                clipMaskTargets[0].unbind()
+                                clipMaskTargets[0].colorBuffer(0).copyTo(clipMaskResolved)
+                                alphaToRed.apply(clipMaskResolved, clipMasks[0])
+                            }
+                            Layer.Object.Target.`clip-b` -> {
+                                clipMaskTargets[1].unbind()
+                                clipMaskTargets[1].colorBuffer(0).copyTo(clipMaskResolved)
+                                alphaToRed.apply(clipMaskResolved, clipMasks[1])
                             }
                         }
                     }
