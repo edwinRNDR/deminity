@@ -180,10 +180,14 @@
         "count": 1,
         "interval": 0.0
       },
+      "clipping": {
+        "mask": "a"
+      },
 
       "keyframer": [
         {
           "time": 0.0,
+          "clip-blend": 0.0,
           "scale": 2.0,
           "image-dither": 0.0,
           "image-tint-r": 1.0,
@@ -193,6 +197,13 @@
           "image-left": 0.0,
           "image-right": 1.0,
           "asset-index": 0
+        },
+        {
+          "time": 1.0,
+          "clip-blend": {
+            "value": 1.0,
+            "duration": -1.0
+          }
         },
         {
           "time": 8.0,
