@@ -27,6 +27,9 @@
         "order": "random",
         "window": 40
       },
+      "clipping": {
+        "mask": "invert-b"
+      },
       "keyframer": [
         {
           "time": 0.0,
@@ -59,6 +62,10 @@
     },
     {
       "time": 68.0,
+      "clipping": {
+        "mask": "invert-b"
+      },
+
       "type": "svg-3d",
       "asset": "svg/illustrations/illustration-04.svg",
       "stagger": {

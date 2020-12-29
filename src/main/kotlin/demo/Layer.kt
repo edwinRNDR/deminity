@@ -144,7 +144,9 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
         enum class ClipMask {
             none,
             a,
-            b
+            b,
+            `invert-a`,
+            `invert-b`
         }
 
         class Clipping(val mask: ClipMask = ClipMask.none)
@@ -559,10 +561,22 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                             Layer.Object.ClipMask.none -> drawer.shadeStyle = null
                             Layer.Object.ClipMask.a -> {
                                 clipStyle.clipMask = clipMasks[0]
+                                clipStyle.invertMask = false
+                                drawer.shadeStyle = clipStyle
+                            }
+                            Layer.Object.ClipMask.`invert-a` -> {
+                                clipStyle.clipMask = clipMasks[0]
+                                clipStyle.invertMask = true
                                 drawer.shadeStyle = clipStyle
                             }
                             Layer.Object.ClipMask.b -> {
                                 clipStyle.clipMask = clipMasks[1]
+                                clipStyle.invertMask = false
+                                drawer.shadeStyle = clipStyle
+                            }
+                            Layer.Object.ClipMask.`invert-b` -> {
+                                clipStyle.clipMask = clipMasks[1]
+                                clipStyle.invertMask = true
                                 drawer.shadeStyle = clipStyle
                             }
                         }
