@@ -7,13 +7,13 @@
         "easing": "cubic-in-out",
         "x": 640.0,
         "y": 360.0,
-        "z": 720.0,
+        "z": 480.0,
         "perspective-far": 10000,
         "rx": 0
       },
       {
         "time": 86.0,
-        "z": 1800.0
+        "z": 1600.0
       }
     ]
   },
@@ -52,9 +52,9 @@
           "z": 0.0,
           "time": 16.0,
           "stroke-weight": 5.0,
-          "stroke-r": 1.0,
+          "stroke-r": 0.88,
           "stroke-g": 0.25,
-          "stroke-b": 0.0,
+          "stroke-b": 0,
           "c0": 0.0,
           "c1": 1.0
         }
