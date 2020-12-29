@@ -46,6 +46,9 @@ class ObjectAnimation : Keyframer() {
 
     val assetIndex by DoubleChannel("asset-index", 0.0)
 
+    val clipBlend by DoubleChannel("clip-blend", 1.0)
+    val objectClipBlend by DoubleChannel("object-clip-blend", 1.0)
+
     val transform
         get() = buildTransform {
             translate(position)
@@ -255,7 +258,6 @@ class Layer(val zIndex: Int = 0, val camera: Camera = Camera(), val objects: Lis
 }
 
 class LayerRenderer(val program: Program, val demo: Demo) {
-
     var channel = Channel()
     var enableUI = false
 
@@ -281,7 +283,11 @@ class LayerRenderer(val program: Program, val demo: Demo) {
 
     private val clipMaskTargets by lazy {
         List(2) {
-            renderTarget(RenderTarget.active.width, RenderTarget.active.height, multisample = BufferMultisample.SampleCount(8)) {
+            renderTarget(
+                RenderTarget.active.width,
+                RenderTarget.active.height,
+                multisample = BufferMultisample.SampleCount(8)
+            ) {
                 colorBuffer()
                 depthBuffer()
             }
@@ -324,6 +330,11 @@ class LayerRenderer(val program: Program, val demo: Demo) {
             }
         }
     }
+
+    private val postWatcher = program.watchFile(File(demo.dataBase, "post/post.json")) {
+        channel.setPosition(cuePoint / demo.timescale)
+    }
+
 
     private val layerWatchers =
         File(demo.dataBase, "animations").listFiles { it -> it.isFile && it.extension == "json" }.map {
@@ -478,8 +489,8 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                 -12.0 + (sortedLayers.size + 2) * 24.0
             )
         }
-        drawer.image(clipMasks[0], 0.0, (sortedLayers.size+3) * 24.0, 192.0, 108.0)
-        drawer.image(clipMasks[1], 192+24.0, (sortedLayers.size+3) * 24.0, 192.0, 108.0)
+        drawer.image(clipMasks[0], 0.0, (sortedLayers.size + 3) * 24.0, 192.0, 108.0)
+        drawer.image(clipMasks[1], 192 + 24.0, (sortedLayers.size + 3) * 24.0, 192.0, 108.0)
     }
 
     fun renderLayers(time: Double) {
@@ -532,7 +543,8 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                     val objects = objectGroups[target].orEmpty()
                     if (objects.isNotEmpty()) {
                         when (target) {
-                            Layer.Object.Target.image -> {}
+                            Layer.Object.Target.image -> {
+                            }
                             Layer.Object.Target.`clip-a` -> {
                                 clipMaskTargets[0].bind()
                             }
@@ -558,6 +570,7 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                         if (obj.type == Layer.Object.ObjectType.image) {
                             obj.animation(time - obj.time)
                             val a = obj.animation
+                            val objectClipBlend = a.objectClipBlend
                             val asset = obj.assets[a.assetIndex.roundToInt().coerceIn(0, obj.assets.size - 1)]
                             val image = images[asset] ?: error("no image")
                             val processed = processedImages[asset] ?: error("no image")
@@ -571,6 +584,7 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                                 val sr = image.bounds.sub(a.imageLeft, a.imageTop, a.imageRight, a.imageBottom)
                                 val tr = sr.moved(Vector2(-image.width / 2.0, -image.height / 2.0))
 
+                                clipStyle.clipBlend = objectClipBlend * a.clipBlend
                                 if (a.imageDither >= 1.0) {
                                     dither.levels = 1
                                     dither.apply(image, processed)
@@ -582,6 +596,7 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                         } else if (obj.type == Layer.Object.ObjectType.svg || obj.type == Layer.Object.ObjectType.`svg-3d`) {
                             val a = obj.animation
                             a(time - obj.time)
+                            val objectClipBlend = a.objectClipBlend
                             val assetIndex = a.assetIndex.roundToInt().coerceIn(0, obj.assets.size - 1)
                             val asset = obj.assets[assetIndex]
 
@@ -644,6 +659,7 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                                     for ((shapeIndex, shape) in compositionShapes[asset].orEmpty().withIndex()) {
                                         drawer.isolated {
                                             a(obj.stepping.stepTime(obj.animation, stagger(shapeIndex)))
+                                            clipStyle.clipBlend = objectClipBlend * a.clipBlend
                                             drawer.translate(640.0, 360.0)
                                             drawer.model *= a.transform
                                             drawer.scale(1.0, -1.0, 1.0)
@@ -668,6 +684,7 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                                     val objectDraws = compositionDraws3D[asset].orEmpty()
                                     for (objectDraw in objectDraws) {
                                         a(obj.stepping.stepTime(obj.animation, stagger(objectDraw.shapeIndex)))
+                                        clipStyle.clipBlend = objectClipBlend * a.clipBlend
                                         drawer.isolated {
                                             drawer.translate(640.0, 360.0)
                                             drawer.model *= a.transform
@@ -694,8 +711,9 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                         }
                     }
                     if (objects.isNotEmpty()) {
-                        when(target) {
-                            Layer.Object.Target.image -> {}
+                        when (target) {
+                            Layer.Object.Target.image -> {
+                            }
                             Layer.Object.Target.`clip-a` -> {
                                 clipMaskTargets[0].unbind()
                                 clipMaskTargets[0].colorBuffer(0).copyTo(clipMaskResolved)

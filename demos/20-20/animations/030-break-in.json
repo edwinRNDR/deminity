@@ -13,12 +13,12 @@
   },
   "objects": [
     {
-      "time": 67.0,
+      "time": 66.0,
       "type": "svg",
-      "asset": "svg/hexagon.svg",
+      "asset": "svg/geometry/circle-360.svg",
       "repetitions": {
-        "count": 1,
-        "interval": 1.0
+        "count": 4,
+        "interval": 16.0
       },
       "stagger": {
         "mode": "none"
@@ -26,18 +26,31 @@
       "keyframer": [
         {
           "time": 0.0,
-          "easing": "cubic-in-out",
           "c0": 0.0,
           "c1": 0.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0,
+
           "x": 0.0,
           "y": 0.0,
           "z": 0.0,
           "rz": 0.0,
-          "scale": 4.0
+          "scale": 1.0
         },
         {
-          "time": 1.0,
+          "easing": "cubic-in-out",
+
+          "time": 2.0,
           "c0": 0.0,
+          "c1": 1.0
+        },
+        {
+          "easing": "cubic-in-out",
+
+          "time": 4.0,
+          "c0": 1.0,
           "c1": 1.0
         }
 

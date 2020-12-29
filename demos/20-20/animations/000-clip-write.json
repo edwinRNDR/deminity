@@ -1,4 +1,5 @@
 {
+  "zIndex": -2,
   "camera": {
     "type": "ortho",
     "keyframer": [
@@ -13,7 +14,7 @@
   },
   "objects": [
     {
-      "time": 0.0,
+      "time": 52.0,
       "target": "clip-a",
       "type": "svg",
       "assets": ["svg/hexagon.svg"],
@@ -22,7 +23,7 @@
           "time": 0.0,
           "easing": "cubic-in-out",
           "x": 0.0,
-          "y": 100.0,
+          "y": 0.0,
           "z": 0.0,
           "fill-r": 1.0,
           "fill-g": 1.0,
@@ -35,36 +36,8 @@
           "fill-r": 1.0,
           "fill-g": 1.0,
           "fill-b": 1.0,
-          "fill-a": 1.0
-        },
-        {
-          "time": 17.0,
-          "scale": 1
-        }
-      ]
-    },
-    {
-      "time": 0.0,
-      "target": "clip-b",
-      "type": "svg",
-      "assets": ["svg/hexagon.svg"],
-      "keyframer": [
-        {
-          "time": 0.0,
-          "easing": "cubic-in-out",
-          "asset-index": 0,
-          "fill-r": 1.0,
-          "fill-g": 1.0,
-          "fill-b": 1.0,
           "fill-a": 1.0,
-          "scale": 2.5
-        },
-        {
-          "time": 16.0,
-          "fill-r": 1.0,
-          "fill-g": 1.0,
-          "fill-b": 1.0,
-          "fill-a": 1.0
+          "scale": 6.0
         }
       ]
     }
