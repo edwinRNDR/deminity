@@ -131,9 +131,9 @@
       "z-index": 4,
       "asset": "svg/illustration-07-scan/120.svg",
       "stagger": {
-        "mode": "in-out",
+        "mode": "none",
         "order": "contour-index",
-        "window": 140
+        "window": 1000
       },
       "keyframer": [
         {
@@ -153,15 +153,16 @@
           "stroke-a": 1.0
         },
         {
-          "easing": "cubic-in-out",
+         "easing": "cubic-out",
 
           "z": 0.0,
-          "time": 2.0,
-          "stroke-weight": 5.0,
+          "time": 4.0,
+          "stroke-weight": 0.0,
           "stroke-r": 1.0,
           "stroke-g": 0.25,
           "stroke-b": 0.0,
-          "c0": 1.0,
+          "stroke-a": 0.0,
+          "c0": 0.0,
           "c1": 1.0
         }
       ]
