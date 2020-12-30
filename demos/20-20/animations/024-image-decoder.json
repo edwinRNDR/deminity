@@ -12,11 +12,23 @@
         "scale": 1.0
       },
       {
-        "time": 22.0,
-        "scale": 4.0
+        "time": 20.0,
+        "scale": 3.0
       },
       {
-        "time": 32.0,
+        "time": 20.0,
+        "scale": {
+          "value": 1.0,
+          "duration": 0.0
+        }
+      },
+      {
+        "time": 36.0,
+        "scale": 3.0
+
+      },
+      {
+        "time": 50.0,
         "scale": {
           "value": 1.0,
           "duration": 0.0
@@ -60,7 +72,7 @@
       ]
     },
     {
-      "time": 27.5,
+      "time": 20.0,
       "type": "image",
       "assets": [
         "images/voyager/*.png"
@@ -68,93 +80,36 @@
       "clipping": {
         "mask": "a"
       },
+      "repetitions": {
+        "count": 80,
+        "interval": 0.25
+      },
 
       "keyframer": [
         {
           "time": 0.0,
-          "x": -300.0,
-          "clip-blend": 0.0,
+          "x": 0.0,
+          "clip-blend": 1.0,
           "scale": 1.0,
           "image-dither": 0.0,
           "image-tint-r": 1.0,
-          "image-tint-g": 0.0,
-          "image-tint-b": 0.0,
-          "image-tint-a": 1.0,
+          "image-tint-g": 1.0,
+          "image-tint-b": 1.0,
+          "image-tint-a": 0.5,
           "image-bottom": 0.0,
           "image-top": 0.0,
-          "asset-index": "172/2"
+          "asset-index": "rep"
         },
         {
-          "time": 7.0,
-          "clip-blend": {
-            "value": 1.0,
-            "duration": -1.0
-          }
-        },
+          "time": 0.25,
+          "image-tint-a": 0.0,
 
-        {
-          "time": 10.0,
           "image-bottom": 1.0,
           "image-top": 0.0
-        },
-        {
-          "time": 10.0,
-
-          "asset-index": 176,
-          "image-tint-r": 1.0,
-          "image-tint-g": 0.5,
-          "image-tint-b": 0.0,
-          "image-tint-a": 1.0
         }
       ]
     },
-    {
-      "time": 27.6,
-      "type": "image",
-      "assets": [
-        "images/voyager/*.png"
-      ],
-      "clipping": {
-        "mask": "a"
-      },
-      "keyframer": [
-        {
-          "time": 0.0,
-          "x": 300.0,
-          "scale": 1.0,
-          "clip-blend": 0.0,
-          "image-dither": 0.0,
-          "image-tint-r": 1.0,
-          "image-tint-g": 0.0,
-          "image-tint-b": 0.0,
-          "image-tint-a": 1.0,
-          "image-bottom": 1.0,
-          "image-top": 1.0,
-          "asset-index": 0
-        },
-        {
-          "time": 7.0,
-          "clip-blend": {
-            "value": 1.0,
-            "duration": -1.0
-          }
-        },
 
-        {
-          "time": 10.0,
-          "image-bottom": 1.0,
-          "image-top": 0.0
-        },
-        {
-          "time": 10.0,
-          "asset-index": "176/2",
-          "image-tint-r": 1.0,
-          "image-tint-g": 0.5,
-          "image-tint-b": 0.0,
-          "image-tint-a": 1.0
-        }
-      ]
-    },
     {
       "time": 63.5,
       "type": "image",

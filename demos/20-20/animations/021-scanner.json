@@ -8,14 +8,14 @@
         "x": 640.0,
         "y": 360.0,
         "magnitude": 720.0,
-        "scale": 1.0,
+        "scale": 0.8,
         "rx": 0.0,
         "ry": 0.0,
         "rz": 0.0
       },
       {
         "time": 36.0,
-        "scale": 1.0,
+        "scale": 1.8,
         "rz": 0.0
 
       }
@@ -28,7 +28,7 @@
       "clipping": {
         "mask": "a"
       },
-      "asset": "svg/lines-120-square.svg",
+      "asset": "svg/curves-120.svg",
       "stagger": {
         "mode": "in-out",
         "order": "random",
@@ -68,8 +68,8 @@
           "easing": "cubic-in-out",
 
           "time": 18.0,
-          "stroke-r": 1.0,
-          "stroke-g": 0.5,
+          "stroke-r": 0.0,
+          "stroke-g": 0.0,
           "stroke-b": 0.0,
           "stroke-a": 1.0,
           "stroke-weight": 1.0,
