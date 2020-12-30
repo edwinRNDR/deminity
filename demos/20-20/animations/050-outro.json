@@ -32,7 +32,7 @@
           "scale": 1.0,
           "stroke-weight": 1.0,
           "stroke-r": 1.0,
-          "stroke-g": 0.0,
+          "stroke-g": 0.25,
           "stroke-b": 0.0,
           "stroke-a": 1
         },
@@ -40,10 +40,10 @@
         {
           "time": 28.0,
           "stroke-weight": 4.0,
-          "stroke-r": 1.0,
-          "stroke-g": 1.0,
-          "stroke-b": 1.0,
-          "stroke-a": 0.9,
+          "stroke-r": 1,
+          "stroke-g": 0.375,
+          "stroke-b": 0,
+          "stroke-a": 1,
           "c0": 0.0,
           "c1": 1.0
         }
@@ -64,9 +64,9 @@
           "z": 0.0,
           "scale": 1.0,
           "stroke-weight": 4.0,
-          "stroke-r": 1.0,
-          "stroke-g": 1.0,
-          "stroke-b": 1.0,
+          "stroke-r": 0.88,
+          "stroke-g": 0.92,
+          "stroke-b": 1,
           "stroke-a": 1
         },
         {
