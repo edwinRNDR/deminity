@@ -22,11 +22,11 @@
 
       "time": 100.0,
       "type": "svg-3d",
+      "z-index": 5,
       "asset": "svg/illustration-06-scan/120.svg",
       "clipping": {
         "mask": "invert-b"
       },
-
       "stagger": {
         "mode": "in-out",
         "order": "random",
@@ -65,11 +65,11 @@
     {
       "time": 100.0,
       "type": "svg-3d",
+      "z-index": 4,
       "asset": "svg/illustrations/illustration-06.svg",
       "clipping": {
         "mask": "invert-b"
       },
-
       "stagger": {
         "mode": "in-out",
         "order": "random",
@@ -90,7 +90,11 @@
           "stroke-r": 1.0,
           "stroke-g": 0.0,
           "stroke-b": 0.0,
-          "stroke-a": 1.0
+          "stroke-a": 1.0,
+          "fill-r": 0.0,
+          "fill-g": 0.0,
+          "fill-b": 0.0,
+          "fill-a": 1
         },
 
         {
@@ -107,9 +111,9 @@
     },
     {
       "time": 100.0,
-
       "type": "svg-3d",
       "asset": "svg/circle-360-120.svg",
+      "z-index": 3,
       "stagger": {
         "mode": "in-out",
         "order": "contour-index",
@@ -145,7 +149,10 @@
           "c0": 0.0,
           "c1": 1.0
         }
-      ]
+      ],
+      "clipping": {
+        "mask": "invert-b"
+      }
     }
   ]
 }
