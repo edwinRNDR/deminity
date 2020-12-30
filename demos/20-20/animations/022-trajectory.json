@@ -1,6 +1,5 @@
 {
   "camera": {
-    "type": "ortho",
     "type": "perspective",
     "keyframer": [
       {
@@ -32,8 +31,8 @@
           "c1": 0.0,
           "z": 0.0,
           "stroke-weight": 7.0,
-          "stroke-r": 1.0,
-          "stroke-g": 0.5,
+          "stroke-r": 0.5,
+          "stroke-g": 0,
           "stroke-b": 0.0,
           "stroke-a": 1.0
         },
@@ -60,8 +59,8 @@
           "c1": 0.0,
           "z": 100.0,
           "stroke-weight": 5.0,
-          "stroke-r": 1.0,
-          "stroke-g": 0.25,
+          "stroke-r": 0.375,
+          "stroke-g": 0,
           "stroke-b": 0.0,
           "stroke-a": 1.0
         },
@@ -88,8 +87,8 @@
           "c1": 0.0,
           "z": 200.0,
           "stroke-weight": 3.0,
-          "stroke-r": 1.0,
-          "stroke-g": 0.5,
+          "stroke-r": 0.25,
+          "stroke-g": 0,
           "stroke-b": 0.0,
           "stroke-a": 1.0
         },
@@ -116,7 +115,7 @@
           "c1": 0.0,
           "stroke-weight": 3.0,
           "stroke-r": 1.0,
-          "stroke-g": 0.0,
+          "stroke-g": 0.5,
           "stroke-b": 0.0,
           "stroke-a": 1.0
         },
@@ -127,6 +126,13 @@
         {
           "time": 10.0,
           "stroke-weight": 3.0
+        },
+        {
+          "time": 12.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.25,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0
         }
       ]
     },
@@ -147,12 +153,41 @@
           "c1": 0.0,
           "stroke-weight": 3.0,
           "stroke-r": 1.0,
-          "stroke-g": 0.0,
+          "stroke-g": 0.75,
           "stroke-b": 0.0,
           "stroke-a": 1.0
         },
         {
           "time": 10.5,
+          "c1": 1.0
+        }
+      ]
+    },
+    {
+      "time": 42.0,
+      "type": "svg-3d",
+      "asset": "svg/trajectory/trajectory-dots.svg",
+      "stagger": {
+        "mode": "in-out",
+        "window": 0
+      },
+
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "expo-out",
+          "c0": 0.0,
+          "c1": 0.0,
+          "stroke-weight": 3.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.375,
+          "stroke-b": 0.0,
+          "stroke-a": 0.6
+        },
+        {
+          "time": 10.5,
+          "stroke-weight": 64,
+          "stroke-a": 0,
           "c1": 1.0
         }
       ]
@@ -174,18 +209,17 @@
           "c1": 0.0,
           "stroke-weight": 3.0,
           "stroke-a": 0.0,
-          "fill-r": 1.0,
-          "fill-g": 0.0,
+          "fill-r": 1,
+          "fill-g": 0,
           "fill-b": 0.0,
-          "fill-a": 0.0
+          "fill-a": 0
         },
         {
           "time": 10.0,
           "fill-r": 1.0,
-          "fill-g": 0.0,
-          "fill-b": 0.0,
+          "fill-g": 0.5,
+          "fill-b": 0,
           "fill-a": 1.0,
-
           "c1": 1.0
         }
       ]
