@@ -75,11 +75,11 @@ fun initBass() {
     Bass.BASS_Init(-1, 44100, 0, null, null)
 }
 
-fun Program.playMusic(path: String, timescale: Double = 1.0, scrubbable: Boolean = true, dummy:Boolean = false): Channel {
+fun Program.playMusic(path: String, timescale: Double = 1.0, scrubbable: Boolean = true, loop: Boolean = true, dummy:Boolean = false): Channel {
 
     if (!dummy) {
         initBass()
-        val stream = Bass.BASS_StreamCreateFile(false, path, 0, 0, BASS_SAMPLE.BASS_SAMPLE_LOOP)
+        val stream = Bass.BASS_StreamCreateFile(false, path, 0, 0, if (loop) BASS_SAMPLE.BASS_SAMPLE_LOOP else 0)
 
         val channel = BassChannel(stream.asInt()).apply {
             play()

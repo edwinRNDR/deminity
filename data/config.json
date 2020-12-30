@@ -1,5 +1,9 @@
 {
   "demo": "demos/20-20",
+  "presentation": {
+    "loop": "true",
+    "holdAfterEnd": 3000
+  },
   "target": {
     "width": 1280,
     "height": 720

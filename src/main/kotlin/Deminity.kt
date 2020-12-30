@@ -1,3 +1,4 @@
+import bass.Channel
 import bass.playMusic
 import demo.Configuration
 import demo.Demo
@@ -70,13 +71,25 @@ fun main() {
             }
             val layerResolved = colorBuffer(targetWidth, targetHeight)
 
+            val channel =
             if (!configuration.capture.enabled) {
                 demo.soundtrack?.let {
-                    layerRenderer.channel = playMusic(File("${demo.dataBase}/assets", it.file).path)
-                }
+                    playMusic(File("${demo.dataBase}/assets", it.file).path, loop = configuration.presentation.loop)
+                } ?: Channel()
+            } else {
+                Channel()
             }
+            layerRenderer.channel = channel
             extend {
                 val time = seconds
+                if (!configuration.presentation.loop) {
+                    if (time >= demo.duration) {
+                        channel.pause()
+                        Thread.sleep(configuration.presentation.holdAfterEnd)
+                        application.exit()
+                    }
+                }
+
                 drawer.clear(ColorRGBa.BLACK)
                 drawer.isolatedWithTarget(target) {
                     drawer.clear(ColorRGBa.BLACK)

@@ -9,8 +9,10 @@ class Demo(
     val title: String = "nameless",
     val duration: Double = 0.0,
     val soundtrack: Soundtrack? = null,
-    val timescale: Double = (112.0/60.0)
+    val timescale: Double = (112.0/60.0),
 ) {
+
+
     var dataBase = File("demos/missing")
 
     companion object {

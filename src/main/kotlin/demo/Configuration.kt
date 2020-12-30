@@ -7,8 +7,13 @@ class Configuration(
     val demo: String = "no demo specified",
     val window: Configuration.Window = Window(),
     val target: Configuration.Target = Target(),
-    val capture: Capture = Capture()
+    val capture: Capture = Capture(),
+    val presentation: Presentation = Presentation()
 ) {
+
+    class Presentation(val loop: Boolean = true, val holdAfterEnd: Long = 3000L)
+
+
     class Window(
         val fullscreen: Boolean = false,
         val resizable: Boolean = false,
