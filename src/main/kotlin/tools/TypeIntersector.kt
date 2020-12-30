@@ -15,9 +15,9 @@ fun main() {
             height = 720
         }
         program {
-            val lineCount = 5
+            val lineCount = 120
 
-            val type = loadSVG("tool-data/illustration-03.svg")
+            val type = loadSVG("tool-data/illustration-07.svg")
 
             val composition = drawComposition(documentBounds = Rectangle(0.0, 0.0, 1280.0, 720.0)) {
 
@@ -35,7 +35,7 @@ fun main() {
                             lineSegment(sx, y, ex, y)
                         }
                         clipMode = ClipMode.INTERSECT_GROUP
-                        translate( 0.0, 0.1)
+                        translate( 0.0, 0.0)
                         shape(shape.shape)
                     }
 

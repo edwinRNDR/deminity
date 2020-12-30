@@ -43,7 +43,7 @@
         },
         {
           "time": 16.0,
-          "stroke-weight": 3.0,
+          "stroke-weight": 7.0,
           "z": 0.0
         }
       ]
@@ -61,7 +61,7 @@
           "z": 100.0,
           "stroke-weight": 5.0,
           "stroke-r": 1.0,
-          "stroke-g": 0.5,
+          "stroke-g": 0.25,
           "stroke-b": 0.0,
           "stroke-a": 1.0
         },
@@ -72,7 +72,7 @@
         {
           "time": 16.0,
           "z": 0.0,
-          "stroke-weight": 3.0
+          "stroke-weight": 5.0
         }
       ]
     },

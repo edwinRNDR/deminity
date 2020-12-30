@@ -143,9 +143,9 @@
           "z": 0.0,
           "time": 16.0,
           "stroke-weight": 5.0,
-          "stroke-r": 0.66,
-          "stroke-g": 0.5,
-          "stroke-b": 1.25,
+          "stroke-r": 1.0,
+          "stroke-g": 0.25,
+          "stroke-b": 0.0,
           "c0": 0.0,
           "c1": 1.0
         }

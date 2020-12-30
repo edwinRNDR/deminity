@@ -3,7 +3,7 @@
     "type": "perspective",
     "keyframer": [
       {
-        "time": 116.0,
+        "time": 115.0,
         "easing": "cubic-in-out",
         "x": 640.0,
         "y": 360.0,
@@ -19,9 +19,75 @@
   },
   "objects": [
     {
+      "z-index": 2,
+      "time": 115.0,
+      "type": "svg-3d",
+      "asset": "svg/geometry/circle-360-b.svg",
+      "repetitions":{
+        "count": 4,
+        "interval": 0.25
+      },
+
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "c0": 0.0,
+          "c1": 0.0,
+          "x": 60,
+          "y": 20.0,
+          "z": 500.0,
+          "ry": 30.0,
+          "rz": 0.0,
+          "scale": 0.08,
+          "stroke-weight": 4.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.25,
+          "stroke-b": 0.0,
+          "stroke-a": "1.0 / (4.0 - rep)"
+        },
+        {
+          "time": 1.0,
+          "c1": 1.0
+        },
+        {
+          "time": 5.0,
+          "stroke-g": {
+            "value": 0.0,
+            "duration": -3.0
+          },
+          "stroke-a": {
+            "value": 0.0,
+            "duration": -1.0
+          },
+
+          "ry": {
+            "value": 0.0,
+            "duration": -3.0
+          },
+          "scale": {
+            "value": 0.57,
+            "duration": -4.0,
+            "easing": "cubic-in-out"
+          },
+          "x": {
+            "value": 0.4,
+            "duration": -4.0,
+            "easing": "cubic-in-out"
+          },
+          "y": {
+            "value": 0.4,
+            "duration": -4.0,
+            "easing": "cubic-in-out"
+          },
+          "rz": 45.0
+        }
+      ]
+    },
+    {
       "time": 116.0,
       "type": "svg-3d",
-      "asset": "svg/illustration-03-scan/120.svg",
+      "asset": "svg/illustration-07-scan/120.svg",
       "stagger": {
         "mode": "in-out",
         "order": "random",
@@ -44,7 +110,6 @@
           "stroke-b": 0.0,
           "stroke-a": 1.0
         },
-
         {
           "z": 0.0,
           "time": 15.0,
@@ -60,7 +125,7 @@
     {
       "time": 116.0,
       "type": "svg-3d",
-      "asset": "svg/illustrations/illustration-03.svg",
+      "asset": "svg/illustrations/illustration-07.svg",
       "stagger": {
         "mode": "none",
         "order": "random",
@@ -83,7 +148,6 @@
           "stroke-b": 0.0,
           "stroke-a": 1.0
         },
-
         {
           "z": 0.0,
           "time": 16.0,
@@ -92,16 +156,6 @@
           "stroke-g": 0.25,
           "stroke-b": 0.0,
           "c0": 0.0,
-          "c1": 1.0
-        },
-        {
-          "z": 0.0,
-          "time": 24.0,
-          "stroke-weight": 5.0,
-          "stroke-r": 1.0,
-          "stroke-g": 0.25,
-          "stroke-b": 0.0,
-          "c0": 1.0,
           "c1": 1.0
         }
       ]
