@@ -87,7 +87,7 @@
           "scale": 1.0,
           "stroke-weight": 4.0,
           "stroke-r": 1.0,
-          "stroke-g": 0.0,
+          "stroke-g": 0.25,
           "stroke-b": 0.0,
           "stroke-a": 1.0
         },
@@ -98,7 +98,7 @@
           "time": 2.0,
           "stroke-weight": 5.0,
           "stroke-r": 1.0,
-          "stroke-g": 0.25,
+          "stroke-g": 0.0,
           "stroke-b": 0.0,
           "c0": 1.0,
           "c1": 1.0

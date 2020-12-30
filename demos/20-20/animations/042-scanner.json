@@ -53,7 +53,7 @@
 
         {
           "z": 0.0,
-          "time": 15.0,
+          "time": 14.0,
           "stroke-weight": 5.0,
           "stroke-r": 1.0,
           "stroke-g": 0.25,
@@ -63,6 +63,7 @@
         }
       ]
     },
+
     {
       "time": 100.0,
       "type": "svg-3d",
@@ -107,6 +108,50 @@
           "stroke-g": 0.25,
           "stroke-b": 0.0,
           "c0": 0.0,
+          "c1": 1.0
+        }
+      ]
+    },
+    {
+      "time": 114.0,
+      "clipping": {
+        "mask": "invert-b"
+      },
+      "type": "svg-3d",
+      "z-index": 4,
+      "asset": "svg/illustration-06-scan/120.svg",
+      "stagger": {
+        "mode": "in-out",
+        "order": "contour-index",
+        "window": 140
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+
+          "c0": 0.0,
+          "c1": 1.0,
+          "x": "0.0 + rep * 10.0",
+          "y": 0.0,
+          "z": 0.0,
+          "rz": 0.0,
+          "scale": 1.0,
+          "stroke-weight": 4.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.25,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0
+        },
+        {
+          "easing": "cubic-in-out",
+
+          "z": 0.0,
+          "time": 2.0,
+          "stroke-weight": 5.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.0,
+          "c0": 1.0,
           "c1": 1.0
         }
       ]
