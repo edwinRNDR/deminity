@@ -108,23 +108,22 @@
     }
   },
   {
-    "time": 35.7,
-    "vcr-gain": {
-      "value": 0.0,
-      "duration": 0.0
-    }
-  },
-  {
     "time": 34.0,
     "crt-amplitude": 0.0
   },
   {
-    "time": 31.0,
-    "crt-amplitude": {
-      "value": 1.0,
+    "time": 35.7,
+    "pal-amount": {
+      "value": 0.1,
+      "duration": 1.0
+    },
+    "vcr-gain": {
+      "value": 0.4,
       "duration": 0.0
     }
   },
+
+
   {
     "time": 34.0,
     "crt-amplitude": 0.0
@@ -150,7 +149,7 @@
   {
     "time": 41.0,
     "vcr-gain": {
-      "value": 0.0,
+      "value": 0.4,
       "duration": 0.0
     },
     "crt-amplitude": {
@@ -172,7 +171,7 @@
   {
     "time": 46.0,
     "vcr-gain": {
-      "value": 0.0,
+      "value": 0.4,
       "duration": 0.0
     }
   },
