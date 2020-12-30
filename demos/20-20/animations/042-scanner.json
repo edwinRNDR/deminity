@@ -52,7 +52,7 @@
 
         {
           "z": 0.0,
-          "time": 15.0,
+          "time": 15,
           "stroke-weight": 5.0,
           "stroke-r": 1.0,
           "stroke-g": 0.25,
@@ -96,7 +96,28 @@
           "fill-b": 0.0,
           "fill-a": 1
         },
-
+        {
+          "time": 14.999,
+          "fill-r": 0.0,
+          "fill-g": 0.0,
+          "fill-b": 0.0,
+          "fill-a": 1
+        },
+        {
+          "time": 15,
+          "easing": "cubic-in",
+          "fill-r": 1,
+          "fill-g": 0.375,
+          "fill-b": 0,
+          "fill-a": 0.75
+        },
+        {
+          "time": 15.5,
+          "fill-r": 0.0,
+          "fill-g": 0.0,
+          "fill-b": 0.0,
+          "fill-a": 1
+        },
         {
           "z": 0.0,
           "time": 16.0,
@@ -138,7 +159,6 @@
           "stroke-b": 0.0,
           "stroke-a": 0.25
         },
-
         {
           "z": 0.0,
           "time": 16.0,
