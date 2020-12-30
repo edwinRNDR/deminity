@@ -17,7 +17,12 @@
     "vcr-noise-high": 0.95,
     "vcr-tint-r": 1.0,
     "vcr-tint-g": 0.5,
-    "vcr-tint-b": 0.0
+    "vcr-tint-b": 0.0,
+    "vcr-gap-low": -1.0,
+    "vcr-gap-high": -0.49, // original value is 0.99
+    "vcr-gap-frequency": 55.0, // original value is 10
+    "vcr-deform-gain": 0.02, // original value is 0.1
+    "vcr-deform-frequency": 2.0 // orginal value is 1
   },
   {
     "time": 3.0,
@@ -122,8 +127,6 @@
       "duration": 0.0
     }
   },
-
-
   {
     "time": 34.0,
     "crt-amplitude": 0.0
@@ -220,7 +223,6 @@
       "value": 0.0,
       "duration": 0.0
     }
-
   },
   {
     "time": 56.0,
@@ -256,7 +258,6 @@
       "value": 1.0,
       "duration": 0.0
     }
-
   },
   {
     "time": 61.0,
@@ -349,14 +350,12 @@
     "crt-amplitude": 0.0,
     "crt-scroll0": 0
   },
-
   {
     "time": 155.0,
     "pal-amount": {
       "value": 0.185,
       "duration": 2.5
     },
-
     "laser-aberration": 1.02
   },
   {
@@ -366,7 +365,6 @@
       "duration": 16.0
     }
   },
-
   {
     "time": 161.5,
     "pal-pixelation": 0.4

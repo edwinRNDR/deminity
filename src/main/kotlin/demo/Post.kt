@@ -45,6 +45,12 @@ class PostAnimation : Keyframer() {
     val vcrNoiseLow by DoubleChannel("vcr-noise-low", 0.5)
     val vcrNoiseHigh by DoubleChannel("vcr-noise-high", 0.8)
     val vcrTint by RGBChannel(arrayOf("vcr-tint-r", "vcr-tint-g", "vcr-tint-b"), ColorRGBa.WHITE)
+    val vcrGapFrequency by DoubleChannel("vcr-gap-frequency", 10.0)
+    val vcrGapLow by DoubleChannel("vcr-gap-low", -1.0)
+    val vcrGapHigh by DoubleChannel("vcr-gap-high", -0.99)
+    val vcrDeformGain by DoubleChannel("vcr-deform-gain", 0.1)
+    val vcrDeformFrequency by DoubleChannel("vcr-deform-frequency", 1.0)
+
 }
 
 class PostProcessor(val animationWatcher: () -> PostAnimation) {
@@ -119,6 +125,11 @@ class PostProcessor(val animationWatcher: () -> PostAnimation) {
         vcr.noiseLow = animation.vcrNoiseLow
         vcr.tint = animation.vcrTint
         vcr.monochrome = true
+        vcr.gapLow = animation.vcrGapLow
+        vcr.gapHigh = animation.vcrGapHigh
+        vcr.gapFrequency = animation.vcrGapFrequency
+        vcr.deformAmplitude = animation.vcrDeformGain
+        vcr.deformFrequency = animation.vcrDeformFrequency
 
 
         laserBlur.apply(input, intermediate[0])
