@@ -1,0 +1,125 @@
+{
+  "zIndex": -2,
+  "camera": {
+    "type": "ortho",
+    "type": "perspective",
+    "keyframer": [
+      {
+        "time": 20.0,
+        "easing": "cubic-in-out",
+        "x": 640.0,
+        "y": 460.0,
+        "z": 480.0,
+        "perspective-far": 10000,
+        "rx": -180.0
+      },
+      {
+        "time": 36.0,
+
+        "z": 980.0,
+        "y": 460.0,
+        "rx": -90.0
+      },
+      {
+        "time": 52.0,
+        "z": 960.0,
+        "rx": 0.0
+      }
+    ]
+  },
+  "objects": [
+    {
+      "time": 20.0,
+      "target": "clip-a",
+      "type":"svg-3d",
+      "asset": "svg/trajectory/trajectory-orbit-saturn.svg",
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "z": 0.0,
+          "stroke-weight": 7.0,
+          "fill-r": 1.0,
+          "fill-g": 1.0,
+          "fill-b": 1.0,
+          "fill-a": 1.0,
+          "stroke-a": 0.0
+        },
+        {
+          "time": 4.0
+        },
+        {
+          "time": 17.0,
+          "z": 200.0,
+          "fill-a": {
+            "value": 0.0,
+            "duration": -1.0
+          }
+        }
+      ]
+    },
+    {
+      "time": 20.0,
+      "type":"svg-3d",
+      "asset": "svg/trajectory/trajectory-orbit-jupiter.svg",
+      "target": "clip-a",
+
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "z": 0.0,
+          "stroke-weight": 7.0,
+          "fill-r": 1.0,
+          "fill-g": 1.0,
+          "fill-b": 1.0,
+          "fill-a": 1.0,
+          "stroke-a": 0.0
+        },
+        {
+          "time": 4.0
+        },
+        {
+          "time": 17.0,
+          "z": 100.0,
+          "fill-a": {
+            "value": 0.0,
+            "duration": -1.0
+          }
+        }
+      ]
+    },
+    {
+      "time": 20.0,
+      "type":"svg-3d",
+      "target": "clip-a",
+
+      "asset": "svg/trajectory/trajectory-orbit-earth.svg",
+      "keyframer": [
+        {
+          "time": 0.0,
+
+          "easing": "cubic-in-out",
+          "z": 0.0,
+          "stroke-weight": 7.0,
+          "fill-r": 1.0,
+          "fill-g": 1.0,
+          "fill-b": 1.0,
+          "fill-a": 1.0,
+          "stroke-a": 0.0
+        },
+        {
+          "time": 4.0
+        },
+        {
+          "time": 17.0,
+          "z": 0.0,
+          "fill-a": {
+            "value": 0.0,
+            "duration": -1.0
+          }
+        }
+      ]
+    }
+  ]
+}

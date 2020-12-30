@@ -15,7 +15,7 @@
       },
       {
         "time": 36.0,
-        "scale": 2.0,
+        "scale": 1.0,
         "rz": 0.0
 
       }
@@ -25,7 +25,10 @@
     {
       "time": 20.0,
       "type": "svg",
-      "asset": "svg/lines-60-square.svg",
+      "clipping": {
+        "mask": "a"
+      },
+      "asset": "svg/lines-120-square.svg",
       "stagger": {
         "mode": "in-out",
         "order": "random",
@@ -33,8 +36,8 @@
       },
       "stepping": {
         "mode": "discrete",
-        "steps": 32,
-        "inertia": 0.25
+        "steps": 16,
+        "inertia": 0.1
       },
 
       "keyframer": [
@@ -52,7 +55,7 @@
           "stroke-g": 0.0,
           "stroke-b": 0.0,
           "stroke-a": 1.0,
-          "stroke-weight": 8.0
+          "stroke-weight": 6.0
         },
         {
           "easing": "cubic-in-out",
@@ -64,11 +67,12 @@
         {
           "easing": "cubic-in-out",
 
-          "time": 16.0,
+          "time": 18.0,
           "stroke-r": 1.0,
           "stroke-g": 0.5,
           "stroke-b": 0.0,
           "stroke-a": 1.0,
+          "stroke-weight": 1.0,
           "c0": 1.0,
           "c1": 1.0
         }

@@ -412,7 +412,17 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                                                 ObjectPath3D(it.effectiveStroke, it.effectiveStrokeWeight, path)
                                             }
                                             val triangulation = if (it.shape.topology != ShapeTopology.OPEN) {
-                                                val triangles = flattened.shape.triangulation
+
+//                                                val fixedShape = flattened.shape.let {
+//                                                    if (it.contours.size == 1 && it.contours.first().closed) {
+//                                                        Shape(listOf(it.contours.first().clockwise))
+//                                                    } else {
+//                                                        it
+//                                                    }
+//                                                }
+                                                val fixedShape = flattened.shape
+
+                                                val triangles = fixedShape.triangulation
                                                 val vb = vertexBuffer(vertexFormat {
                                                     position(3)
                                                     textureCoordinate(2)

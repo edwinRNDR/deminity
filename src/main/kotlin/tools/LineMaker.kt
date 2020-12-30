@@ -16,7 +16,7 @@ fun main() {
         }
 
         program {
-            val lineCount = 60
+            val lineCount = 120
             val composition = drawComposition(documentBounds = Rectangle(0.0, 0.0, 1280.0, 720.0)) {
                 for (i in 0 until lineCount) {
                     val y = height / (lineCount) * (i+0.5)

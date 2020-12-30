@@ -50,7 +50,7 @@
           "image-top": 0.0
         },
         {
-          "time": 16.0,
+          "time": 14.25,
           "asset-index": 176,
           "image-tint-r": 1.0,
           "image-tint-g": 0.5,
@@ -65,10 +65,15 @@
       "assets": [
         "images/voyager/*.png"
       ],
+      "clipping": {
+        "mask": "a"
+      },
+
       "keyframer": [
         {
           "time": 0.0,
           "x": -300.0,
+          "clip-blend": 0.0,
           "scale": 1.0,
           "image-dither": 0.0,
           "image-tint-r": 1.0,
@@ -80,12 +85,21 @@
           "asset-index": "172/2"
         },
         {
-          "time": 8.0,
+          "time": 7.0,
+          "clip-blend": {
+            "value": 1.0,
+            "duration": -1.0
+          }
+        },
+
+        {
+          "time": 10.0,
           "image-bottom": 1.0,
           "image-top": 0.0
         },
         {
-          "time": 8.0,
+          "time": 10.0,
+
           "asset-index": 176,
           "image-tint-r": 1.0,
           "image-tint-g": 0.5,
@@ -100,11 +114,15 @@
       "assets": [
         "images/voyager/*.png"
       ],
+      "clipping": {
+        "mask": "a"
+      },
       "keyframer": [
         {
           "time": 0.0,
           "x": 300.0,
           "scale": 1.0,
+          "clip-blend": 0.0,
           "image-dither": 0.0,
           "image-tint-r": 1.0,
           "image-tint-g": 0.0,
@@ -115,12 +133,20 @@
           "asset-index": 0
         },
         {
-          "time": 8.0,
+          "time": 7.0,
+          "clip-blend": {
+            "value": 1.0,
+            "duration": -1.0
+          }
+        },
+
+        {
+          "time": 10.0,
           "image-bottom": 1.0,
           "image-top": 0.0
         },
         {
-          "time": 8.0,
+          "time": 10.0,
           "asset-index": "176/2",
           "image-tint-r": 1.0,
           "image-tint-g": 0.5,
