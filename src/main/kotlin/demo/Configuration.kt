@@ -28,9 +28,14 @@ class Configuration(
         val enabled: Boolean = false,
         val framerate: Int = 60,
         val temporalBlur: TemporalBlur = TemporalBlur(),
-        val constantRateFactor: Int = 13
-
+        val constantRateFactor: Int = 13,
+        val encoder : Encoder = Encoder.x264
     ) {
+        enum class Encoder {
+            x264,
+            x265
+        }
+
         class TemporalBlur(val enabled: Boolean = false, val samples: Int = 10)
     }
 

@@ -20,8 +20,9 @@
     "framerate": 60,
     "constantRateFactor": 13,
     "temporalBlur": {
-      "enabled": true,
+      "enabled": false,
       "samples": 10
-    }
+    },
+    "encoder": "x265"
   }
 }

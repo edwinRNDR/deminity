@@ -12,6 +12,7 @@ import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.isolatedWithTarget
 import org.openrndr.draw.renderTarget
 import org.openrndr.extra.temporalblur.TemporalBlur
+import org.openrndr.extra.videoprofiles.X265Profile
 import org.openrndr.extras.imageFit.FitMethod
 import org.openrndr.extras.imageFit.imageFit
 import org.openrndr.ffmpeg.MP4Profile
@@ -37,10 +38,22 @@ fun main() {
 
             if (configuration.capture.enabled) {
                 extend(ScreenRecorder()) {
+                    width = configuration.target.width
+                    height = configuration.target.height
                     frameRate = configuration.capture.framerate
                     maximumDuration = demo.duration
-                    (profile as MP4Profile).apply {
-                        constantRateFactor(configuration.capture.constantRateFactor)
+
+                    when (configuration.capture.encoder) {
+                        Configuration.Capture.Encoder.x264 -> (profile as MP4Profile).apply {
+                            constantRateFactor(configuration.capture.constantRateFactor)
+                        }
+
+                        Configuration.Capture.Encoder.x265 -> {
+                            val x265Profile = X265Profile().apply {
+                                constantRateFactor(configuration.capture.constantRateFactor)
+                            }
+                            profile = x265Profile
+                        }
                     }
                 }
                 if (configuration.capture.temporalBlur.enabled) {

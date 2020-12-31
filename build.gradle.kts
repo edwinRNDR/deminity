@@ -48,7 +48,8 @@ val orxFeatures = setOf(
 //  "orx-time-operators",
 //  "orx-kinect-v1",
     "orx-keyframer",
-    "orx-panel"
+    "orx-panel",
+    "orx-video-profiles"
 )
 
 /* Which OPENRNDR libraries should be added to this project? */
