@@ -258,8 +258,16 @@ runtime {
         if (OperatingSystem.current() == OperatingSystem.MAC_OS) {
             jvmArgs.add("-XstartOnFirstThread")
         }
+        imageOptions.add("--icon")
+        imageOptions.add("offline-data/icon.ico")
+        resourceDir = File("offline-data")
     }
+
     options.empty()
+//    options.add("--icon")
+//    options.add("offline-data/icon.ico")
+
+
     options.add("--strip-debug")
     options.add("--compress")
     options.add("1")

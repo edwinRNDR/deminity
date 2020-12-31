@@ -81,8 +81,8 @@ fun main() {
             }
             layerRenderer.channel = channel
             extend {
-                val time = seconds
-                if (!configuration.presentation.loop) {
+                val time = seconds.coerceAtLeast(0.0)
+                if (!configuration.presentation.loop && !configuration.capture.enabled) {
                     if (time >= demo.duration) {
                         channel.pause()
                         Thread.sleep(configuration.presentation.holdAfterEnd)
