@@ -296,9 +296,18 @@
       "value": 0.25,
       "duration": -1.0
     },
-    "bloom-gain": -0.125,
-    "crt-amplitude": 0,
-    "laser-abberation": 0
+    "bloom-gain": {
+      "value": -0.125,
+      "duration": 0.0
+    },
+    "crt-amplitude": {
+      "value": 0.0,
+      "duration": 0.0
+    },
+    "laser-aberration": {
+      "value": 0.0,
+      "duration": 0.0
+    }
   },
   {
     "time": 141.99,
