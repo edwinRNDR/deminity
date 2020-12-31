@@ -64,9 +64,9 @@
           "z": 0.0,
           "scale": 1.0,
           "stroke-weight": 4.0,
-          "stroke-r": 0.88,
-          "stroke-g": 0.92,
-          "stroke-b": 1,
+          "stroke-r": 0.6,
+          "stroke-g": 0.7,
+          "stroke-b": 1.25,
           "stroke-a": 1
         },
         {

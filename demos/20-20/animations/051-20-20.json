@@ -176,7 +176,7 @@
         },
 
         {
-          "time": 5.75,
+          "time": 4,
           "c0": 0,
           "c1": 1
         }
@@ -219,21 +219,21 @@
           "fill-a": 1
         },
         {
-          "time": 3.75,
+          "time": 3.5,
           "fill-r": 0.75,
           "fill-g": 0.7,
           "fill-b": 0.9,
           "fill-a": 1
         },
         {
-          "time": 4,
+          "time": 3.75,
           "fill-r": 0,
           "fill-g": 0,
           "fill-b": 0,
           "fill-a": 1
         },
         {
-          "time": 4.0,
+          "time": 3.75,
           "c0": 0.0,
           "c1": 1.0,
           "x": 0,
@@ -255,7 +255,7 @@
       ]
     },
     {
-      "time": 150.5,
+      "time": 148.5,
       "type": "svg",
       "asset": "svg/title/20.svg",
       "z-index": 1,
@@ -304,7 +304,7 @@
       ]
     },
     {
-      "time": 149.5,
+      "time": 147.5,
       "type": "svg",
       "asset": "svg/title/hatch-br.svg",
       "clipping": {
@@ -425,13 +425,16 @@
           "rz": 0.0,
           "scale": 1.0,
           "stroke-weight": 1.0,
+          "fill-r": 1,
+          "fill-b": 0.2,
+          "fill-a": 1,
           "stroke-r": 1.0,
           "stroke-g": 0.0,
           "stroke-b": 0.25,
           "stroke-a": 1.0
         },
         {
-          "time": 4.0,
+          "time": 3.0,
           "easing": "cubic-in-out",
           "c0": 0.0,
           "c1": 1.0,
@@ -443,16 +446,24 @@
           "stroke-weight": 1.0,
           "stroke-r": 1.0,
           "stroke-g": 0.0,
-          "stroke-b": 0.25,
-          "stroke-a": 1.0
+          "stroke-b": 0.5,
+          "stroke-a": 1.0,
+          "fill-a": 1
         },
         {
-          "time": 7.0,
+          "time": 4,
           "stroke-r": 1.0,
-          "stroke-g": 0.8,
-          "stroke-b": 1.0,
-          "c0": 0,
-          "c1": 0
+          "stroke-g": 0.2,
+          "stroke-b": 0,
+          "fill-a": 0,
+          "stroke-width": 4,
+          "stroke-a": 1
+        },
+        {
+          "time": 5.0,
+          "c0": 0.25,
+          "c1": 0.5,
+          "stroke-a": 0
         }
       ]
     }

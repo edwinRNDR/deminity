@@ -17,12 +17,7 @@
     "vcr-noise-high": 0.95,
     "vcr-tint-r": 1.0,
     "vcr-tint-g": 0.5,
-    "vcr-tint-b": 0.0,
-    "vcr-gap-low": -1.0,
-    "vcr-gap-high": -0.49, // original value is 0.99
-    "vcr-gap-frequency": 55.0, // original value is 10
-    "vcr-deform-gain": 0.02, // original value is 0.1
-    "vcr-deform-frequency": 2.0 // orginal value is 1
+    "vcr-tint-b": 0.0
   },
   {
     "time": 3.0,
@@ -127,6 +122,8 @@
       "duration": 0.0
     }
   },
+
+
   {
     "time": 34.0,
     "crt-amplitude": 0.0
@@ -223,6 +220,7 @@
       "value": 0.0,
       "duration": 0.0
     }
+
   },
   {
     "time": 56.0,
@@ -258,6 +256,7 @@
       "value": 1.0,
       "duration": 0.0
     }
+
   },
   {
     "time": 61.0,
@@ -292,17 +291,27 @@
     }
   },
   {
+    "time": 134.0,
+    "pal-amount": {
+      "value": 0.25,
+      "duration": -1.0
+    },
+    "bloom-gain": -0.125,
+    "crt-amplitude": 0,
+    "laser-abberation": 0
+  },
+  {
     "time": 141.99,
-    "laser-aberration": 0
+    "laser-aberration": 0.0201,
+    "crt-amplitude": 1
   },
   {
     "time": 142.0,
-    "bloom-gain": -0.125,
     "pal-amount": {
-      "value": 0.35,
-      "duration": 7.5
+      "value": 0.115,
+      "duration": 5
     },
-    "laser-aberration": 12
+    "laser-aberration": 1
   },
   {
     "time": 147,
@@ -332,10 +341,16 @@
     "time": 148.5,
     "crt-amplitude": 0.0
   },
+  {"time": 150.5,
+  "crt-amplitude": 1},
   {
-    "time": 152.5,
-    "crt-amplitude": 0.0,
-    "crt-scroll0": 0.0
+    "time": 151.5,
+    "crt-amplitude": -1.0,
+    "crt-scroll0": 0.0001,
+    "pal-amount": {
+      "value": -0.51,
+      "duration": 1
+    }
   },
   {
     "time": 152.75,
@@ -350,12 +365,14 @@
     "crt-amplitude": 0.0,
     "crt-scroll0": 0
   },
+
   {
     "time": 155.0,
     "pal-amount": {
       "value": 0.185,
       "duration": 2.5
     },
+
     "laser-aberration": 1.02
   },
   {
@@ -365,6 +382,7 @@
       "duration": 16.0
     }
   },
+
   {
     "time": 161.5,
     "pal-pixelation": 0.4
