@@ -11,7 +11,6 @@ import java.io.File
 
 fun main() {
     application {
-
         configure {
             width = 1280
             height = 720
@@ -21,8 +20,8 @@ fun main() {
             val lineCount = 120
             val dist = 64.0
 
-            val sx = (1280-720.0)/2.0
-            val ex = 1280.0-sx
+            val sx = (1280 - 720.0) / 2.0
+            val ex = 1280.0 - sx
 
             val s = contour {
                 moveTo(sx, 0.0)
@@ -33,28 +32,17 @@ fun main() {
                 close()
             }
 
-            val (c0, c1, c2, c3) = s.segments
-
-
-
             val bp = bezierPatch(s)
             val composition = drawComposition(documentBounds = Rectangle(0.0, 0.0, 1280.0, 720.0)) {
-
-//                contour(s)
                 for (i in 0 until lineCount) {
-                    contour(bp.horizontal((i+0.5)/lineCount))
+                    contour(bp.horizontal((i + 0.5) / lineCount))
                 }
-
             }
             composition.saveToFile(File("curves-$lineCount.svg"))
             val composition2 = drawComposition(documentBounds = Rectangle(0.0, 0.0, 1280.0, 720.0)) {
-
                 contour(s)
-
             }
             composition2.saveToFile(File("curves-outline.svg"))
-
-
             extend {
                 drawer.clear(ColorRGBa.PINK)
                 drawer.composition(composition)

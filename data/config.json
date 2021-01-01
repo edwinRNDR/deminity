@@ -5,8 +5,8 @@
     "holdAfterEnd": 3000
   },
   "target": {
-    "width": 1280,
-    "height": 720
+    "width": 1920,
+    "height": 1080
   },
   "window": {
     "fullscreen": false,
@@ -20,7 +20,7 @@
     "framerate": 60,
     "constantRateFactor": 13,
     "temporalBlur": {
-      "enabled": false,
+      "enabled": true,
       "samples": 10
     },
     "encoder": "x265"

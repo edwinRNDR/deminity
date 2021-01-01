@@ -19,10 +19,10 @@ fun main() {
             val lineCount = 120
             val composition = drawComposition(documentBounds = Rectangle(0.0, 0.0, 1280.0, 720.0)) {
                 for (i in 0 until lineCount) {
-                    val y = height / (lineCount) * (i+0.5)
+                    val y = height / (lineCount) * (i + 0.5)
 
-                    val sx = (1280-720.0) / 2.0
-                    val ex = 1280 - (1280-720.0) / 2.0
+                    val sx = (1280 - 720.0) / 2.0
+                    val ex = 1280 - (1280 - 720.0) / 2.0
 
                     lineSegment(sx, y, ex, y)
                 }

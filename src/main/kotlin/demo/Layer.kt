@@ -304,6 +304,7 @@ class LayerRenderer(val program: Program, val demo: Demo) {
     private val alphaToRed by lazy { AlphaToRed() }
     private val clipStyle by lazy { ClipStyle() }
 
+    val billOfMaterials = mutableSetOf<String>()
 
     init {
         program.mouse.cursorVisible = false
@@ -349,7 +350,9 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                     }.map { obj ->
                         for (asset in obj.assets) {
                             val image = images.getOrPut(asset) {
-                                loadImage(File(demo.dataBase, "assets/${asset}"))
+                                val imageFile = File(demo.dataBase, "assets/${asset}")
+                                billOfMaterials.add(imageFile.path)
+                                loadImage(imageFile)
                             }
                             processedImages.getOrPut(asset) {
                                 image.createEquivalent(format = ColorFormat.RGBa, type = ColorType.UINT8)
@@ -362,7 +365,9 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                     }.map { obj ->
                         for (asset in obj.assets) {
                             compositionWatchers.getOrPut(asset) {
-                                watchFile(program, File(demo.dataBase, "assets/${asset}")) {
+                                val svgFile = File(demo.dataBase, "assets/${asset}")
+                                billOfMaterials.add(svgFile.path)
+                                watchFile(program, svgFile) {
                                     loadSVG(it)
                                 }.apply {
                                     this.watch {
@@ -380,7 +385,9 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                     }.map { obj ->
                         for (asset in obj.assets) {
                             compositionWatchers.getOrPut(asset) {
-                                watchFile(program, File(demo.dataBase, "assets/${asset}")) {
+                                val svgFile = File(demo.dataBase, "assets/${asset}")
+                                billOfMaterials.add(svgFile.path)
+                                watchFile(program, svgFile) {
                                     loadSVG(it)
                                 }.apply {
                                     this.watch {
