@@ -25,6 +25,7 @@ fun main() {
 
     application {
         configure {
+            windowSetIcon = true
             width = configuration.window.width
             height = configuration.window.height
             title = demo.title
@@ -35,6 +36,35 @@ fun main() {
         program {
             val layerRenderer = LayerRenderer(this, demo)
             var enablePostProcessing = true
+
+            program.ended.listen {
+
+                fun File.listRecursive(): List<File> {
+                    val list = this.listFiles()!!
+                    return list.filter {
+                        it.isFile && !it.isHidden
+                    } + list.filter { it.isDirectory }.flatMap { it.listRecursive() }
+                }
+
+                val billOfMaterials = setOfNotNull(
+                    demo.soundtrack?.let {
+                        File("${demo.dataBase}/assets", it.file).path
+                    }
+                ) + layerRenderer.billOfMaterials
+
+                val allAssets = File("${demo.dataBase}/assets").listRecursive().toSet()
+
+                File("bill-of-materials.txt").writeText(
+                    billOfMaterials.sorted().joinToString("\n")
+                )
+
+                File("unused-materials.txt").writeText(
+                    allAssets.filter {
+                        it.path !in billOfMaterials
+                    }.sorted().joinToString(
+                        "\n")
+                    )
+            }
 
             if (configuration.capture.enabled) {
                 extend(ScreenRecorder()) {
@@ -85,13 +115,13 @@ fun main() {
             val layerResolved = colorBuffer(targetWidth, targetHeight)
 
             val channel =
-            if (!configuration.capture.enabled) {
-                demo.soundtrack?.let {
-                    playMusic(File("${demo.dataBase}/assets", it.file).path, loop = configuration.presentation.loop)
-                } ?: Channel()
-            } else {
-                Channel()
-            }
+                if (!configuration.capture.enabled) {
+                    demo.soundtrack?.let {
+                        playMusic(File("${demo.dataBase}/assets", it.file).path, loop = configuration.presentation.loop)
+                    } ?: Channel()
+                } else {
+                    Channel()
+                }
             layerRenderer.channel = channel
             extend {
                 val time = seconds.coerceAtLeast(0.0)
@@ -121,7 +151,14 @@ fun main() {
                         drawer.image(layerResolved)
                     }
                 }
-                drawer.imageFit(target.colorBuffer(0), 0.0, 0.0, width * 1.0, height * 1.0, fitMethod = FitMethod.Contain)
+                drawer.imageFit(
+                    target.colorBuffer(0),
+                    0.0,
+                    0.0,
+                    width * 1.0,
+                    height * 1.0,
+                    fitMethod = FitMethod.Contain
+                )
                 layerRenderer.renderUI(time * demo.timescale)
             }
         }
