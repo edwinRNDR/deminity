@@ -174,7 +174,6 @@
           "fill-b": 0,
           "fill-a": 1
         },
-
         {
           "time": 4,
           "c0": 0,
@@ -327,10 +326,10 @@
           "rz": 0.0,
           "scale": 1.0,
           "stroke-weight": 0.0,
-            "fill-r": 0.0,
-            "fill-g": 0.0,
-            "fill-b": 0,
-            "fill-a": 1.0
+          "fill-r": 0.0,
+          "fill-g": 0.0,
+          "fill-b": 0,
+          "fill-a": 1.0
         },
         {
           "time": 1.0,

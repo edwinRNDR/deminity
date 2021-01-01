@@ -13,7 +13,6 @@
       {
         "time": 68.0,
         "scale": 1.5
-
       }
     ]
   },
@@ -31,12 +30,10 @@
         "mode": "none",
         "steps": 10,
         "inertia": 0.01
-
       },
       "attributes": {
         "stroke-weight": "asset"
       },
-
       "keyframer": [
         {
           "time": 0.0,
@@ -55,18 +52,16 @@
           "scale": 1.25,
           "stroke-weight": 1.0
         },
-
         {
           "time": 4.0,
           "stroke-g": 0.0,
           "stroke-a": 1.0,
           "stroke-weight": 0.0,
           "c0": 0.05,
-          "c1": 0.95  ,
+          "c1": 0.95,
           "y": 0.0,
           "x": 0.0
         }
-
       ]
     },
     {
@@ -82,12 +77,10 @@
         "mode": "discrete",
         "steps": 10,
         "inertia": 0.01
-
       },
       "attributes": {
         "stroke-weight": "modulate"
       },
-
       "keyframer": [
         {
           "time": 0.0,
@@ -106,7 +99,6 @@
           "asset-index": 3.0,
           "scale": 1.25
         },
-
         {
           "time": 4.0,
           "stroke-weight": 1.0,
@@ -130,9 +122,7 @@
         "mode": "none",
         "steps": 10,
         "inertia": 0.01
-
       },
-
       "keyframer": [
         {
           "time": 0.0,
@@ -155,7 +145,6 @@
           "scale": 1.0,
           "stroke-weight": 1.0
         },
-
         {
           "time": 4.0,
           "scale": 1.2,
@@ -166,7 +155,6 @@
           "y": 0.0,
           "x": 0.0
         }
-
       ]
     },
     {
@@ -182,9 +170,7 @@
         "mode": "none",
         "steps": 10,
         "inertia": 0.01
-
       },
-
       "keyframer": [
         {
           "time": 0.0,
@@ -206,7 +192,6 @@
           "scale": 1.0,
           "stroke-weight": 1.0
         },
-
         {
           "time": 4.0,
           "scale": 1.0,
@@ -216,10 +201,8 @@
           "y": 0.0,
           "x": 0.0
         }
-
       ]
     },
-
     {
       "time": 54.0,
       "type": "svg",
@@ -250,11 +233,9 @@
           "stroke-a": 1.0,
           "asset-index": 3.0
         },
-
         {
           "time": 6.0,
           "stroke-g": 0.25,
-
           "c0": 0.0,
           "c1": 1.0
         }
@@ -294,7 +275,6 @@
           "stroke-a": 1.0,
           "asset-index": 3.0
         },
-
         {
           "time": 7.0,
           "stroke-g": 0.25,
@@ -307,6 +287,5 @@
         }
       ]
     }
-
   ]
 }

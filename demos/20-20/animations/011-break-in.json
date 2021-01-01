@@ -38,7 +38,6 @@
           "stroke-b": 0.0,
           "stroke-a": 1.0
         },
-
         {
           "time": 0.25,
           "stroke-weight": 4.0,
@@ -76,7 +75,6 @@
           "stroke-b": 1.0,
           "stroke-a": 1.0
         },
-
         {
           "time": 0.25,
           "stroke-weight": 4.0,
@@ -114,7 +112,6 @@
           "stroke-b": 1.0,
           "stroke-a": 1.0
         },
-
         {
           "time": 0.25,
           "stroke-weight": 4.0,
@@ -152,7 +149,6 @@
           "stroke-b": 1.0,
           "stroke-a": 1.0
         },
-
         {
           "time": 0.25,
           "stroke-weight": 4.0,
@@ -171,7 +167,6 @@
       "stagger": {
         "mode": "in-out",
         "window": 0
-
       },
       "keyframer": [
         {
@@ -190,7 +185,6 @@
           "stroke-b": 1.0,
           "stroke-a": 1.0
         },
-
         {
           "time": 4.25,
           "stroke-weight": 4.0,

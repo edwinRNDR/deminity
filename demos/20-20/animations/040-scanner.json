@@ -47,7 +47,6 @@
           "stroke-b": 0.0,
           "stroke-a": 1.0
         },
-
         {
           "z": 0.0,
           "time": 16.0,
@@ -65,7 +64,6 @@
       "clipping": {
         "mask": "invert-b"
       },
-
       "type": "svg-3d",
       "asset": "svg/illustrations/illustration-04.svg",
       "stagger": {
@@ -90,7 +88,6 @@
           "stroke-b": 0.0,
           "stroke-a": 1.0
         },
-
         {
           "z": 0.0,
           "time": 16.0,

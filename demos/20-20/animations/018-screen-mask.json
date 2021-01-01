@@ -18,13 +18,12 @@
         "time": 36.0,
         "scale": 1.8,
         "rz": 0.0
-
       }
     ]
   },
   "objects": [
     {
-      "target" : "clip-a",
+      "target": "clip-a",
       "time": 20.0,
       "type": "svg",
       "asset": "svg/curves-outline.svg",
@@ -47,7 +46,7 @@
           }
         },
         {
-//          "time": 18.0,
+          //          "time": 18.0,
           //"fill-a": 0.0
         }
       ]
