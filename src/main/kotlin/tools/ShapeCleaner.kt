@@ -24,7 +24,6 @@ fun main() {
                 }
             }
             cleaned.saveToFile(File("cleaned.svg"))
-
         }
     }
 }

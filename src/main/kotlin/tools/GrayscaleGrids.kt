@@ -23,7 +23,7 @@ fun main() {
             val blockSize = 48
             val comp = drawComposition {
 
-                translate((1280-sourceImage.width)/2.0, 0.0)
+                translate((1280 - sourceImage.width) / 2.0, 0.0)
                 for (y in 0 until sourceImage.height step blockSize) {
                     for (x in 0 until sourceImage.width step blockSize) {
 
@@ -31,26 +31,23 @@ fun main() {
                         var w = 0
                         for (v in 0 until blockSize) {
                             for (u in 0 until blockSize) {
-                                if (x+u < sourceImage.width -1 && y+v <sourceImage.height - 1) {
+                                if (x + u < sourceImage.width - 1 && y + v < sourceImage.height - 1) {
                                     l += shad[x + u, y + v].luminance
                                     w += 1
                                 }
                             }
                         }
                         l /= w
-                        //l /= (blockSize * blockSize)
 
-                        strokeWeight = (pow(l,1.1) * blockSize)
+                        strokeWeight = (pow(l, 1.1) * blockSize)
                         stroke = ColorRGBa.WHITE
-                        //strokeWeight = 10.0
                         if (l * blockSize > 1.0) {
-                            //lineSegment(x * 1.0, y + blockSize / 2.0, x * 1.0 + blockSize, y + blockSize / 2.0)
                             lineSegment(x * 1.0, y + blockSize / 2.0, x * 1.0 + blockSize, y + blockSize / 2.0)
                         }
                     }
                 }
             }
-            comp.saveToFile(File("${String.format("%03d",blockSize)}.svg"))
+            comp.saveToFile(File("${String.format("%03d", blockSize)}.svg"))
 
             extend {
                 drawer.clear(ColorRGBa.BLACK)

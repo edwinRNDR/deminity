@@ -20,10 +20,8 @@ fun main() {
             val composition = drawComposition(documentBounds = Rectangle(0.0, 0.0, 1280.0, 720.0)) {
                 for (i in 0 until lineCount) {
                     val y = height / (lineCount) * (i + 0.5)
-
                     val sx = 0.0 //(1280-720.0) / 2.0
                     val ex = 1280.0 // - (1280-720.0) / 2.0
-
                     lineSegment(sx, y, ex, y)
                 }
                 clipMode = ClipMode.INTERSECT
@@ -33,11 +31,9 @@ fun main() {
             val sc = composition
             val flatComposition = drawComposition(documentBounds = Rectangle(0.0, 0.0, 1280.0, 720.0)) {
                 sc.findShapes().forEach {
-
                     for (contour in it.shape.contours) {
                         contour(contour)
                     }
-
                 }
             }
 
