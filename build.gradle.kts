@@ -78,7 +78,8 @@ val openrndrOs = if (project.hasProperty("targetPlatform")) {
     OperatingSystem.WINDOWS -> "windows"
     OperatingSystem.MAC_OS -> "macos"
     OperatingSystem.LINUX -> when(val h = DefaultNativePlatform("current").architecture.name) {
-        "x86-64" -> "linux64"
+        "x86-64" -> "linux-x64"
+        "aarch64" -> "linux-arm64"
         else ->throw IllegalArgumentException("architecture not supported: $h")
     }
     else -> throw IllegalArgumentException("os not supported")
@@ -95,8 +96,7 @@ val bassOs = if (project.hasProperty("targetPlatform")) {
     OperatingSystem.WINDOWS -> "win64"
     OperatingSystem.MAC_OS -> "macos"
     OperatingSystem.LINUX -> when(val h = DefaultNativePlatform("current").architecture.name) {
-        "x86-64" -> "linux-x64"
-        "aarch64" -> "linux-arm64"
+        "x86-64" -> "linux64"
         else ->throw IllegalArgumentException("architecture not supported: $h")
     }
     else -> throw IllegalArgumentException("os not supported")
