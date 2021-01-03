@@ -139,12 +139,12 @@ fun main() {
                     drawer.ortho(target)
                     drawer.isolatedWithTarget(layerTarget) {
                         drawer.clear(ColorRGBa.BLACK)
-                        layerRenderer.renderLayers(time * demo.timescale)
+                        layerRenderer.renderLayers(time * demo.`time-scale`)
                     }
                     layerTarget.colorBuffer(0).copyTo(layerResolved)
 
                     if (enablePostProcessing) {
-                        postProcessor.postProcess(layerResolved, time * demo.timescale)
+                        postProcessor.postProcess(layerResolved, time * demo.`time-scale`)
                         drawer.clear(ColorRGBa.BLACK)
                         drawer.image(postProcessor.result)
                     } else {
@@ -159,7 +159,7 @@ fun main() {
                     height * 1.0,
                     fitMethod = FitMethod.Contain
                 )
-                layerRenderer.renderUI(time * demo.timescale)
+                layerRenderer.renderUI(time * demo.`time-scale`)
             }
         }
     }
