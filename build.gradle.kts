@@ -128,10 +128,7 @@ repositories {
         mavenLocal()
     }
     maven(url = "https://dl.bintray.com/openrndr/openrndr")
-    //    maven {
-    //        url "file:./m2-repo/"
-    //    }
-    maven(url = "file:/m2-repo/")
+    maven(url = "file:./m2-repo/")
 }
 
 fun DependencyHandler.orx(module: String): Any {
