@@ -80,11 +80,9 @@ fun Program.playMusic(path: String, timescale: Double = 1.0, scrubbable: Boolean
     if (!dummy) {
         initBass()
         val stream = Bass.BASS_StreamCreateFile(false, path, 0, 0, if (loop) BASS_SAMPLE.BASS_SAMPLE_LOOP else 0)
-
         val channel = BassChannel(stream.asInt()).apply {
             play()
         }
-
         var pitch = 1.0
         var volume = 1.0
         var paused = false
@@ -129,7 +127,6 @@ fun Program.playMusic(path: String, timescale: Double = 1.0, scrubbable: Boolean
                     }
                 }
             }
-
             clock = { channel.getPosition() }
         }
         return channel
