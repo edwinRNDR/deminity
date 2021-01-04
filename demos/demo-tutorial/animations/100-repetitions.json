@@ -1,0 +1,63 @@
+{
+  "camera": {
+    "type": "ortho",
+    "keyframer": [
+      {
+        "time": 0.0,
+        "easing": "cubic-in-out",
+        "x": 640.0,
+        "y": 360.0,
+        "magnitude": 720.0
+      }
+    ]
+  },
+  "objects": [
+    {
+      "time": 0.0,
+      "type": "svg",
+      "asset": "svg/geometry/circle-360.svg",
+      "repetitions": {
+        "count": 16,
+        "interval": 1.0
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "stroke-r": 1.0,
+          "stroke-g": 1.0,
+          "stroke-b": 1.0,
+          "stroke-a": 1.0
+        },
+        {
+          "time": 1.0,
+          "stroke-a": 0.0
+        }
+      ]
+    },
+    {
+      "time": 16.0,
+      "type": "svg",
+      "asset": "svg/geometry/circle-360.svg",
+      "repetitions": {
+        "count": 16,
+        "interval": 1.0
+      },
+      "keyframer": [
+        {
+          "time": 0.0,
+          "easing": "cubic-in-out",
+          "fill-r": "rep / 15.0",
+          "fill-g": 1.0,
+          "fill-b": 1.0,
+          "fill-a": 1.0,
+          "stroke-a": 0.0
+        },
+        {
+          "time": 1.0,
+          "fill-a": 0.0
+        }
+      ]
+    }
+  ]
+}

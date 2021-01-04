@@ -1,0 +1,22 @@
+[
+  {
+    "time": 0.0,
+    "bloom-gain": 0.3,
+    "pal-gain": 3.0,
+    "pal-inv-gain": 3.0,
+    "pal-amount": 0.0,
+    "pal-pixelation": 1.0,
+    "laser-aberration": 0.00,
+    "laser-radius": 0.065,
+    "laser-exp": 0.539,
+    "crt-amplitude": 0.0,
+    "crt-scroll0": 0.0,
+    "crt-scroll1": 0.0,
+    "vcr-gain": 0.0,
+    "vcr-noise-low": 0.6,
+    "vcr-noise-high": 0.95,
+    "vcr-tint-r": 1.0,
+    "vcr-tint-g": 0.5,
+    "vcr-tint-b": 0.0
+  }
+]
