@@ -8,7 +8,9 @@ class Configuration(
     val window: Configuration.Window = Window(),
     val target: Configuration.Target = Target(),
     val capture: Capture = Capture(),
-    val presentation: Presentation = Presentation()
+    val presentation: Presentation = Presentation(),
+    val tools: Tools = Tools()
+
 ) {
 
     class Presentation(val loop: Boolean = true, val holdAfterEnd: Long = 3000L)
@@ -29,7 +31,7 @@ class Configuration(
         val framerate: Int = 60,
         val temporalBlur: TemporalBlur = TemporalBlur(),
         val constantRateFactor: Int = 13,
-        val encoder : Encoder = Encoder.x264
+        val encoder: Encoder = Encoder.x264
     ) {
         enum class Encoder {
             x264,
@@ -38,6 +40,8 @@ class Configuration(
 
         class TemporalBlur(val enabled: Boolean = false, val samples: Int = 10)
     }
+
+    class Tools(val generateBillOfMaterials: Boolean = false, val generateUnusedMaterials: Boolean = false)
 
     companion object {
         fun loadFromJson(filename: String): Configuration {
