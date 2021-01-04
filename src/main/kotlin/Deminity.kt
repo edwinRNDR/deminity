@@ -8,8 +8,6 @@ import demo.PostProcessor
 import org.openrndr.Fullscreen
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.BufferMultisample
-import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.isolatedWithTarget
 import org.openrndr.draw.renderTarget
 import org.openrndr.extra.temporalblur.TemporalBlur
@@ -54,19 +52,24 @@ fun main(args: Array<String>) {
                     }
                 ) + layerRenderer.billOfMaterials
 
-                val allAssets = File("${demo.dataBase}/assets").listRecursive().toSet()
 
-                File("bill-of-materials.txt").writeText(
-                    billOfMaterials.sorted().joinToString("\n")
-                )
 
-                File("unused-materials.txt").writeText(
-                    allAssets.filter {
-                        it.path !in billOfMaterials
-                    }.sorted().joinToString(
-                        "\n"
+                if (configuration.tools.generateBillOfMaterials) {
+                    File("bill-of-materials.txt").writeText(
+                        billOfMaterials.sorted().joinToString("\n")
                     )
-                )
+                }
+
+                if (configuration.tools.generateUnusedMaterials) {
+                    val allAssets = File("${demo.dataBase}/assets").listRecursive().toSet()
+                    File("unused-materials.txt").writeText(
+                        allAssets.filter {
+                            it.path !in billOfMaterials
+                        }.sorted().joinToString(
+                            "\n"
+                        )
+                    )
+                }
             }
 
             if (configuration.capture.enabled) {
