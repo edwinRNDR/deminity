@@ -88,7 +88,7 @@ class CameraAnimation : Keyframer() {
 
 class Layer(
     val enabled: Boolean = true,
-    val zIndex: Int = 0,
+    val `z-index`: Int = 0,
     val camera: Camera = Camera(),
     val blend: Blend = Blend(),
     val objects: List<Object> = emptyList()
@@ -258,7 +258,7 @@ class Layer(
 
     fun flattenRepetitions(demo: Demo) = Layer(
         blend = blend,
-        zIndex = zIndex,
+        `z-index` = `z-index`,
         camera = camera,
         objects = objects.flatMap { it.flattenRepetitions(demo) },
     ).also {
@@ -492,7 +492,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
             return
         }
 
-        val sortedLayers = layerWatchers.map { it() }.sortedBy { it.zIndex }
+        val sortedLayers = layerWatchers.map { it() }.sortedBy { it.`z-index` }
         val drawer = program.drawer
         val timescale = (RenderTarget.active.width - 160) / (demo.duration * demo.`time-scale`)
 
@@ -547,7 +547,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
     fun renderLayers(time: Double) {
         val drawer = program.drawer
         val layers = layerWatchers.map { it() }.filter { it.enabled }
-        val sortedLayers = layers.sortedBy { it.zIndex }
+        val sortedLayers = layers.sortedBy { it.`z-index` }
 
         layerTarget.bind()
         drawer.clear(ColorRGBa.TRANSPARENT)
