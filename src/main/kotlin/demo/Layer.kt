@@ -2,13 +2,16 @@ package demo
 
 import bass.Channel
 import com.google.gson.Gson
+import mu.KotlinLogging
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.events.listen
+import org.openrndr.extra.fx.blend.Multiply
 import org.openrndr.extra.fx.dither.ADither
 import org.openrndr.extra.keyframer.FunctionExtensions
 import org.openrndr.extra.keyframer.Keyframer
+import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.map
@@ -21,6 +24,9 @@ import java.io.File
 import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.random.Random
+
+private val logger = KotlinLogging.logger {}
+
 
 class ObjectAnimation : Keyframer() {
     val position by Vector3Channel(arrayOf("x", "y", "z"), Vector3.ZERO)
@@ -84,10 +90,18 @@ class Layer(
     val enabled: Boolean = true,
     val zIndex: Int = 0,
     val camera: Camera = Camera(),
+    val blend: Blend = Blend(),
     val objects: List<Object> = emptyList()
 ) {
 
     var sourceFile = File("[unknown-source]")
+
+    class Blend(val mode: BlendMode = BlendMode.normal, val keyframer: List<Map<String, Any>> = emptyList()) {
+        enum class BlendMode {
+            normal,
+            multiply
+        }
+    }
 
     class Camera(val type: CameraType = CameraType.ortho, val keyframer: List<Map<String, Any>> = emptyList()) {
         val animation by lazy {
@@ -243,6 +257,7 @@ class Layer(
     }
 
     fun flattenRepetitions(demo: Demo) = Layer(
+        blend = blend,
         zIndex = zIndex,
         camera = camera,
         objects = objects.flatMap { it.flattenRepetitions(demo) },
@@ -265,7 +280,7 @@ class Layer(
     }
 }
 
-class LayerRenderer(val program: Program, val demo: Demo) {
+class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, val targetHeight: Int) {
     var channel = Channel()
     var enableUI = false
 
@@ -280,6 +295,12 @@ class LayerRenderer(val program: Program, val demo: Demo) {
 
     class ObjectPath3D(val stroke: ColorRGBa?, val strokeWeight: Double?, val path3D: Path3D)
 
+    val layerTarget = renderTarget(targetWidth, targetHeight, multisample = BufferMultisample.SampleCount(8)) {
+        colorBuffer()
+        depthBuffer()
+    }
+    val layerResolved = colorBuffer(targetWidth, targetHeight)
+
 
     private val compositionWatchers = mutableMapOf<String, () -> Composition>()
     private val compositionShapes = mutableMapOf<String, List<ShapeNode>>()
@@ -288,6 +309,22 @@ class LayerRenderer(val program: Program, val demo: Demo) {
     private val processedImages = mutableMapOf<String, ColorBuffer>()
 
     private val dither by lazy { ADither() }
+
+    private val blendModeTarget by lazy {
+        renderTarget(
+            RenderTarget.active.width,
+            RenderTarget.active.height,
+            multisample = BufferMultisample.SampleCount(8)
+        ) {
+            colorBuffer()
+            depthBuffer()
+        }
+
+    }
+
+    private val blendModeResolved by lazy {
+        colorBuffer(RenderTarget.active.width, RenderTarget.active.height)
+    }
 
     private val clipMaskTargets by lazy {
         List(2) {
@@ -310,7 +347,14 @@ class LayerRenderer(val program: Program, val demo: Demo) {
     private val alphaToRed by lazy { AlphaToRed() }
     private val clipStyle by lazy { ClipStyle() }
 
+    val multiplyFilter by lazy { Multiply() }
+
+
     val billOfMaterials = mutableSetOf<String>()
+
+    val finalTarget by lazy { renderTarget(targetWidth, targetHeight) {
+        colorBuffer()
+    } }
 
     init {
         program.mouse.cursorVisible = false
@@ -365,8 +409,8 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                         }
                     }
 
-                    layer.objects.filter {
-                        it.type == Layer.Object.ObjectType.svg
+                    layer.objects.filter { obj ->
+                        obj.type == Layer.Object.ObjectType.svg || obj.type == Layer.Object.ObjectType.`svg-3d`
                     }.map { obj ->
                         for (asset in obj.assets) {
                             compositionWatchers.getOrPut(asset) {
@@ -375,77 +419,65 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                                 watchFile(program, svgFile) {
                                     loadSVG(it)
                                 }.apply {
-                                    this.watch {
-                                        compositionShapes[asset] = it.findShapes().map {
+                                    this.watch { composition ->
+                                        compositionShapes[asset] = composition.findShapes().map {
                                             it.flatten()
                                         }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    layer.objects.filter { obj ->
-                        obj.type == Layer.Object.ObjectType.`svg-3d`
-                    }.map { obj ->
-                        for (asset in obj.assets) {
-                            compositionWatchers.getOrPut(asset) {
-                                val svgFile = File(demo.dataBase, "assets/${asset}")
-                                billOfMaterials.add(svgFile.path)
-                                watchFile(program, svgFile) { file ->
-                                    loadSVG(file)
-                                }.apply {
-                                    this.watch { composition ->
                                         var contourIndex = 0
-                                        compositionDraws3D[asset] = composition.findShapes().mapIndexed { shapeIndex, shape ->
-                                            val flattened = shape.flatten()
-                                            val paths = flattened.shape.contours.map { contour ->
-                                                val path = path3D {
-                                                    moveTo(contour.position(0.0).xy0)
-                                                    for (c in contour.segments) {
-                                                        when (c.type) {
-                                                            SegmentType.LINEAR -> lineTo(c.end.xy0)
-                                                            SegmentType.QUADRATIC -> curveTo(
-                                                                c.control[0].xy0,
-                                                                c.end.xy0
-                                                            )
-                                                            SegmentType.CUBIC -> curveTo(
-                                                                c.control[0].xy0,
-                                                                c.control[1].xy0,
-                                                                c.end.xy0
-                                                            )
+                                        compositionDraws3D[asset] =
+                                            composition.findShapes().mapIndexed { shapeIndex, shape ->
+                                                val flattened = shape.flatten()
+                                                val paths = flattened.shape.contours.map { contour ->
+                                                    val path = path3D {
+                                                        moveTo(contour.position(0.0).xy0)
+                                                        for (c in contour.segments) {
+                                                            when (c.type) {
+                                                                SegmentType.LINEAR -> lineTo(c.end.xy0)
+                                                                SegmentType.QUADRATIC -> curveTo(
+                                                                    c.control[0].xy0,
+                                                                    c.end.xy0
+                                                                )
+                                                                SegmentType.CUBIC -> curveTo(
+                                                                    c.control[0].xy0,
+                                                                    c.control[1].xy0,
+                                                                    c.end.xy0
+                                                                )
+                                                            }
+                                                        }
+                                                        if (contour.closed) {
+                                                            close()
                                                         }
                                                     }
-                                                    if (contour.closed) {
-                                                        close()
-                                                    }
+                                                    contourIndex++
+                                                    ObjectPath3D(
+                                                        shape.effectiveStroke,
+                                                        shape.effectiveStrokeWeight,
+                                                        path
+                                                    )
                                                 }
-                                                contourIndex++
-                                                ObjectPath3D(shape.effectiveStroke, shape.effectiveStrokeWeight, path)
-                                            }
-                                            val triangulation = if (shape.shape.topology != ShapeTopology.OPEN) {
-                                                val fixedShape = flattened.shape
-                                                val triangles = fixedShape.triangulation
-                                                val vb = vertexBuffer(vertexFormat {
-                                                    position(3)
-                                                    textureCoordinate(2)
-                                                }, triangles.size * 3)
-                                                vb.put {
-                                                    for (triangle in triangles) {
-                                                        write(triangle.x1.xy0)
-                                                        write(triangle.x1 / Vector2(1280.0, 720.0))
-                                                        write(triangle.x2.xy0)
-                                                        write(triangle.x2 / Vector2(1280.0, 720.0))
-                                                        write(triangle.x3.xy0)
-                                                        write(triangle.x3 / Vector2(1280.0, 720.0))
+                                                val triangulation = if (shape.shape.topology != ShapeTopology.OPEN) {
+                                                    val fixedShape = flattened.shape
+                                                    val triangles = fixedShape.triangulation
+                                                    val vb = vertexBuffer(vertexFormat {
+                                                        position(3)
+                                                        textureCoordinate(2)
+                                                    }, triangles.size * 3)
+                                                    vb.put {
+                                                        for (triangle in triangles) {
+                                                            write(triangle.x1.xy0)
+                                                            write(triangle.x1 / Vector2(1280.0, 720.0))
+                                                            write(triangle.x2.xy0)
+                                                            write(triangle.x2 / Vector2(1280.0, 720.0))
+                                                            write(triangle.x3.xy0)
+                                                            write(triangle.x3 / Vector2(1280.0, 720.0))
+                                                        }
                                                     }
+                                                    vb
+                                                } else {
+                                                    null
                                                 }
-                                                vb
-                                            } else {
-                                                null
+                                                ObjectDraw3D(shapeIndex, shape.effectiveFill, triangulation, paths)
                                             }
-                                            ObjectDraw3D(shapeIndex, shape.effectiveFill, triangulation, paths)
-                                        }
                                     }
                                 }
                             }
@@ -517,6 +549,9 @@ class LayerRenderer(val program: Program, val demo: Demo) {
         val layers = layerWatchers.map { it() }.filter { it.enabled }
         val sortedLayers = layers.sortedBy { it.zIndex }
 
+        layerTarget.bind()
+        drawer.clear(ColorRGBa.TRANSPARENT)
+
         clipMaskTargets.forEach {
             it.clearColor(0, ColorRGBa.TRANSPARENT)
             it.clearDepth()
@@ -543,9 +578,9 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                     drawer.perspective(ca.fov, aspectRatio, ca.perspectiveNear, ca.perspectiveFar)
                 }
 
-                drawer.translate(640.0, 360.0, TransformTarget.VIEW)
+                drawer.translate(640.0, 360.0, 0.0, TransformTarget.VIEW)
                 drawer.view *= ca.transform
-                drawer.translate(-640.0, -360.0, TransformTarget.VIEW)
+                drawer.translate(-640.0, -360.0, 0.0, TransformTarget.VIEW)
 
                 val objectGroups = layer.objects
                     .filter { time >= it.time && time < (it.time + it.duration) }
@@ -563,6 +598,13 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                     if (objects.isNotEmpty()) {
                         when (target) {
                             Layer.Object.Target.image -> {
+                                if (layer.blend.mode != Layer.Blend.BlendMode.normal) {
+                                    blendModeTarget.clearColor(0, ColorRGBa.TRANSPARENT)
+                                    blendModeTarget.clearDepth()
+                                    blendModeTarget.bind()
+
+                                }
+
                             }
                             Layer.Object.Target.`clip-a` -> {
                                 clipMaskTargets[0].bind()
@@ -717,10 +759,11 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                                         a(obj.stepping.stepTime(obj.animation, stagger(objectDraw.shapeIndex)))
                                         clipStyle.clipBlend = objectClipBlend * a.clipBlend
                                         drawer.isolated {
-                                            drawer.translate(640.0, 360.0)
+                                            drawer.model = Matrix44.IDENTITY
+                                            drawer.translate(640.0, 360.0, 0.0)
                                             drawer.model *= a.transform
                                             drawer.scale(1.0, -1.0, 1.0)
-                                            drawer.translate(-640.0, -360.0)
+                                            drawer.translate(-640.0, -360.0, 0.0)
                                             if (objectDraw.triangulation != null) {
                                                 drawer.stroke = null
                                                 drawer.fill = obj.fill(objectDraw.fill)
@@ -745,6 +788,22 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                     if (objects.isNotEmpty()) {
                         when (target) {
                             Layer.Object.Target.image -> {
+                                if (layer.blend.mode != Layer.Blend.BlendMode.normal) {
+                                    blendModeTarget.unbind()
+                                    blendModeTarget.colorBuffer(0).copyTo(blendModeResolved)
+                                    layerTarget.colorBuffer(0).copyTo(layerResolved)
+
+                                    when (layer.blend.mode) {
+                                        Layer.Blend.BlendMode.multiply -> {
+                                            println("multiplying")
+                                            multiplyFilter.apply(
+                                                arrayOf(layerResolved, blendModeResolved),
+                                                layerResolved
+                                            )
+                                        }
+                                    }
+                                    layerResolved.copyTo(layerTarget.colorBuffer(0))
+                                }
                             }
                             Layer.Object.Target.`clip-a` -> {
                                 clipMaskTargets[0].unbind()
@@ -761,6 +820,14 @@ class LayerRenderer(val program: Program, val demo: Demo) {
                 }
             }
         }
+        layerTarget.unbind()
+        layerTarget.colorBuffer(0).copyTo(layerResolved)
+        drawer.isolatedWithTarget(finalTarget) {
+            ortho(finalTarget)
+            clear(ColorRGBa.BLACK)
+            image(layerResolved)
+        }
+
     }
 }
 
