@@ -17,7 +17,6 @@
         "time": 36.0,
         "scale": 1.8,
         "rz": 0.0
-
       }
     ]
   },
@@ -39,7 +38,6 @@
         "steps": 16,
         "inertia": 0.1
       },
-
       "keyframer": [
         {
           "time": 0.0,
@@ -59,14 +57,12 @@
         },
         {
           "easing": "cubic-in-out",
-
           "time": 8.0,
           "c0": 0.0,
           "c1": 1.0
         },
         {
           "easing": "cubic-in-out",
-
           "time": 18.0,
           "stroke-r": 0.0,
           "stroke-g": 0.0,

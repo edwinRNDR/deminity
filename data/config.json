@@ -10,10 +10,10 @@
   },
   "window": {
     "fullscreen": false,
-    "alwaysOnTop": true,
+    "alwaysOnTop": false,
     "resizable": true,
-    "width": 1280,
-    "height": 720
+    "width": 1920,
+    "height": 1080
   },
   "capture": {
     "enabled": false,

@@ -1,5 +1,4 @@
 {
-  "zIndex": -2,
   "camera": {
     "type": "ortho",
     "keyframer": [
