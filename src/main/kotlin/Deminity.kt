@@ -1,4 +1,5 @@
 import bass.Channel
+import bass.DummyChannel
 import bass.playMusic
 import demo.Configuration
 import demo.Demo
@@ -19,8 +20,9 @@ import org.openrndr.ffmpeg.MP4Profile
 import org.openrndr.ffmpeg.ScreenRecorder
 import java.io.File
 
-fun main() {
-    val configuration = Configuration.loadFromJson("data/config.json")
+fun main(args: Array<String>) {
+    val configFilename = args.getOrElse(0) { "data/config.json" }
+    val configuration = Configuration.loadFromJson(configFilename)
     val demo = Demo.loadFromJson("${configuration.demo}/demo.json")
 
     application {
@@ -34,7 +36,7 @@ fun main() {
             fullscreen = if (configuration.window.fullscreen) Fullscreen.CURRENT_DISPLAY_MODE else Fullscreen.DISABLED
         }
         program {
-            val layerRenderer = LayerRenderer(this, demo)
+            val layerRenderer = LayerRenderer(this, demo, configuration.target.width, configuration.target.height)
             var enablePostProcessing = true
 
             program.ended.listen {
@@ -62,8 +64,9 @@ fun main() {
                     allAssets.filter {
                         it.path !in billOfMaterials
                     }.sorted().joinToString(
-                        "\n")
+                        "\n"
                     )
+                )
             }
 
             if (configuration.capture.enabled) {
@@ -108,17 +111,12 @@ fun main() {
                 colorBuffer()
             }
 
-            val layerTarget = renderTarget(targetWidth, targetHeight, multisample = BufferMultisample.SampleCount(8)) {
-                colorBuffer()
-                depthBuffer()
-            }
-            val layerResolved = colorBuffer(targetWidth, targetHeight)
 
             val channel =
                 if (!configuration.capture.enabled) {
                     demo.soundtrack?.let {
                         playMusic(File("${demo.dataBase}/assets", it.file).path, loop = configuration.presentation.loop)
-                    } ?: Channel()
+                    } ?: DummyChannel(this)
                 } else {
                     Channel()
                 }
@@ -137,18 +135,14 @@ fun main() {
                 drawer.isolatedWithTarget(target) {
                     drawer.clear(ColorRGBa.BLACK)
                     drawer.ortho(target)
-                    drawer.isolatedWithTarget(layerTarget) {
-                        drawer.clear(ColorRGBa.BLACK)
-                        layerRenderer.renderLayers(time * demo.timescale)
-                    }
-                    layerTarget.colorBuffer(0).copyTo(layerResolved)
+                    layerRenderer.renderLayers(time * demo.`time-scale`)
 
                     if (enablePostProcessing) {
-                        postProcessor.postProcess(layerResolved, time * demo.timescale)
+                        postProcessor.postProcess(layerRenderer.finalTarget.colorBuffer(0), time * demo.`time-scale`)
                         drawer.clear(ColorRGBa.BLACK)
                         drawer.image(postProcessor.result)
                     } else {
-                        drawer.image(layerResolved)
+                        drawer.image(layerRenderer.finalTarget.colorBuffer(0))
                     }
                 }
                 drawer.imageFit(
@@ -159,7 +153,7 @@ fun main() {
                     height * 1.0,
                     fitMethod = FitMethod.Contain
                 )
-                layerRenderer.renderUI(time * demo.timescale)
+                layerRenderer.renderUI(time * demo.`time-scale`)
             }
         }
     }

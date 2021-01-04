@@ -58,11 +58,11 @@ val openrndrFeatures = setOf(
 )
 
 /*  Which version of OPENRNDR and ORX should be used? */
-val openrndrUseSnapshot = true
-val openrndrVersion = if (openrndrUseSnapshot) "0.4.0-SNAPSHOT" else "0.3.45-rc.6"
+val openrndrUseSnapshot = false
+val openrndrVersion = if (openrndrUseSnapshot) "0.4.0-SNAPSHOT" else "0.3.45-rc.7"
 
-val orxUseSnapshot = true
-val orxVersion = if (orxUseSnapshot) "0.4.0-SNAPSHOT" else "0.3.55-rc.6"
+val orxUseSnapshot = false
+val orxVersion = if (orxUseSnapshot) "0.4.0-SNAPSHOT" else "0.3.55-rc.7"
 
 //<editor-fold desc="This is code for OPENRNDR, no need to edit this .. most of the times">
 val supportedPlatforms = setOf("windows", "macos", "linux-x64", "linux-arm64")
@@ -84,6 +84,24 @@ val openrndrOs = if (project.hasProperty("targetPlatform")) {
     }
     else -> throw IllegalArgumentException("os not supported")
 }
+
+val bassOs = if (project.hasProperty("targetPlatform")) {
+    val platform : String = project.property("targetPlatform") as String
+    if (platform !in supportedPlatforms) {
+        throw IllegalArgumentException("target platform not supported: $platform")
+    } else {
+        platform
+    }
+} else when (OperatingSystem.current()) {
+    OperatingSystem.WINDOWS -> "win64"
+    OperatingSystem.MAC_OS -> "macos"
+    OperatingSystem.LINUX -> when(val h = DefaultNativePlatform("current").architecture.name) {
+        "x86-64" -> "linux64"
+        else ->throw IllegalArgumentException("architecture not supported: $h")
+    }
+    else -> throw IllegalArgumentException("os not supported")
+}
+
 //</editor-fold>
 
 enum class Logging {
@@ -110,10 +128,7 @@ repositories {
         mavenLocal()
     }
     maven(url = "https://dl.bintray.com/openrndr/openrndr")
-    //    maven {
-    //        url "file:./m2-repo/"
-    //    }
-    maven(url = "file:/m2-repo/")
+    maven(url = "file:./m2-repo/")
 }
 
 fun DependencyHandler.orx(module: String): Any {
@@ -137,7 +152,7 @@ dependencies {
 
 //    implementation("org.jsoup:jsoup:1.12.2")
     implementation("org.nativebass:nativebass:1.1.2")
-    runtimeOnly("org.nativebass:nativebass-win64:1.1.2")
+    runtimeOnly("org.nativebass:nativebass-$bassOs:1.1.2")
 
 
     implementation("com.google.code.gson:gson:2.8.6")

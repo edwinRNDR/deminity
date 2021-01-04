@@ -6,13 +6,11 @@ import java.io.File
 class Soundtrack(val file: String = "assets/sound/missing.mp3")
 
 class Demo(
-    val title: String = "nameless",
-    val duration: Double = 0.0,
-    val soundtrack: Soundtrack? = null,
-    val timescale: Double = (112.0/60.0),
+        val title: String = "nameless",
+        val duration: Double = 0.0,
+        val soundtrack: Soundtrack? = null,
+        val `time-scale`: Double = (112.0/60.0),
 ) {
-
-
     var dataBase = File("demos/missing")
 
     companion object {

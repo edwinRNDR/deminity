@@ -131,7 +131,6 @@ class PostProcessor(val animationWatcher: () -> PostAnimation) {
         vcr.deformAmplitude = animation.vcrDeformGain
         vcr.deformFrequency = animation.vcrDeformFrequency
 
-
         laserBlur.apply(input, intermediate[0])
         add.apply(arrayOf(intermediate[0], input), intermediate[0])
         bloom.apply(intermediate[0], intermediate[1])
@@ -143,9 +142,7 @@ class PostProcessor(val animationWatcher: () -> PostAnimation) {
 
     companion object {
         fun loadFromJson(program: Program, file: File): PostProcessor {
-
             val watcher = program.watchFile(file) {
-
                 val postAnimation = PostAnimation()
                 try {
                     postAnimation.loadFromJson(file)
@@ -153,6 +150,7 @@ class PostProcessor(val animationWatcher: () -> PostAnimation) {
                     logger.error {
                         e.message
                     }
+                    throw e
                 }
                 postAnimation
             }

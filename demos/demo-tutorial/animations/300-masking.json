@@ -1,0 +1,59 @@
+{
+  "camera": {
+    "type": "ortho",
+    "keyframer": [
+      {
+        "time": 0.0,
+        "easing": "cubic-in-out",
+        "x": 640.0,
+        "y": 360.0,
+        "magnitude": 720.0
+      }
+    ]
+  },
+  "objects": [
+    {
+      "time": 48.0,
+      "target": "clip-a",
+      "type": "svg",
+      "asset": "svg/geometry/circle-360.svg",
+      "keyframer": [
+        {
+          "time": 0.0,
+          "fill-a": 1.0
+        },
+        {
+          "time": 16.0,
+          "fill-a": 1.0
+        }
+      ]
+    },
+    {
+      "time": 48.0,
+
+      "type": "svg",
+      "asset": "svg/fields/circle-360-120.svg",
+      "clipping": {
+        "mask": "a"
+      },
+
+      "keyframer": [
+        {
+          "time": 0.0,
+          "stroke-r": 1.0,
+          "stroke-g": 1.0,
+          "stroke-b": 1.0,
+          "stroke-a": 1.0,
+          "scale": 1.0,
+          "rz": 0.0
+        },
+        {
+          "time": 16.0,
+          "stroke-a": 1.0,
+          "scale": 4.0,
+          "rz": 360.0
+        }
+      ]
+    }
+  ]
+}
