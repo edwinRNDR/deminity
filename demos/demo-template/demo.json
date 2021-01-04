@@ -1,9 +1,5 @@
 {
   "title": "Demo template",
-  "duration": 89,
-  // set this to BPM/60 if you want beat-based timing, 1.0 otherwise
+  "duration": 32,
   "time-scale": 1.0
-//  "soundtrack": {
-//    "file": "your-soundtrack.mp3"
-//  }
 }
