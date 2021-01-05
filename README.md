@@ -37,5 +37,5 @@ Some other keys to press:
  * [ORX](https://github.com/openrndr/openrndr)
    * [orx-keyframer](https://github.com/openrndr/orx/tree/master/orx-keyframer) for practically all animation
    * [orx-file-watcher](https://github.com/openrndr/orx/tree/master/orx-file-watcher) for hot-reloading support
-   * [orx-shapes](https://github.com/openrndr/orx/tree/master/orx-file-watcher) notably the bezier patches in some of the tools.
+   * [orx-shapes](https://github.com/openrndr/orx/tree/master/orx-shapes) notably the bezier patches in some of the tools.
    * [orx-fx](https://github.com/openrndr/orx/tree/master/orx-fx) for all post-processing
