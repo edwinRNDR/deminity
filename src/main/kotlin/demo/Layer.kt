@@ -86,7 +86,7 @@ class CameraAnimation : Keyframer() {
         }
 }
 
-class Layer(
+data class Layer(
     val enabled: Boolean = true,
     val `z-index`: Int = 0,
     val camera: Camera = Camera(),
@@ -120,7 +120,7 @@ class Layer(
         }
     }
 
-    class Object(
+    data class Object(
         val time: Double = 0.0,
         val `z-index`: Int = 0,
         val type: ObjectType = ObjectType.svg,
@@ -178,7 +178,6 @@ class Layer(
         class Stepping(val mode: SteppingMode = SteppingMode.none, val steps: Int = 10, val inertia: Double = 0.0) {
             fun stepTime(animation: Keyframer, time: Double): Double {
                 val duration by lazy { animation.duration }
-
                 return when (mode) {
                     SteppingMode.none -> time
                     SteppingMode.discrete -> {
@@ -203,7 +202,7 @@ class Layer(
             random,
         }
 
-        class Stagger(
+        data class Stagger(
             val mode: StaggerMode = StaggerMode.none,
             val order: StaggerOrder = StaggerOrder.`contour-index`,
             val seed: Int = 100,
@@ -211,7 +210,7 @@ class Layer(
         )
 
 
-        class Repetitions(val count: Int = 1, val interval: Double = 0.0)
+        data class Repetitions(val count: Int = 1, val interval: Double = 0.0)
 
         enum class AttributeSource {
             user,
@@ -219,21 +218,15 @@ class Layer(
             modulate
         }
 
-        class Attributes(
+        data class Attributes(
             val `stroke-weight`: AttributeSource = AttributeSource.user,
             val stroke: AttributeSource = AttributeSource.user,
             val fill: AttributeSource = AttributeSource.user
         )
 
-
         fun flattenRepetitions(demo: Demo) = (0 until repetitions.count).map { repetition ->
-            Object(
+            copy(
                 time = time + repetition * repetitions.interval,
-                `z-index` = `z-index`,
-                type = type,
-                target = target,
-                clipping = clipping,
-                asset = asset,
                 assets = assets.let { if (it.isEmpty()) listOf(asset) else it }.flatMap { assetPath ->
                     if (assetPath.contains("*")) {
                         val path = assetPath.split("*").first()
@@ -246,20 +239,12 @@ class Layer(
                         listOf(assetPath)
                     }
                 },
-                keyframer = keyframer,
                 repetitions = Repetitions(1, 0.0),
-                repetitionCounter = repetition,
-                stagger = stagger,
-                stepping = stepping,
-                attributes = attributes
             )
         }
     }
 
-    fun flattenRepetitions(demo: Demo) = Layer(
-        blend = blend,
-        `z-index` = `z-index`,
-        camera = camera,
+    fun flattenRepetitions(demo: Demo) = copy(
         objects = objects.flatMap { it.flattenRepetitions(demo) },
     ).also {
         it.sourceFile = this.sourceFile
@@ -319,7 +304,6 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
             colorBuffer()
             depthBuffer()
         }
-
     }
 
     private val blendModeResolved by lazy {
