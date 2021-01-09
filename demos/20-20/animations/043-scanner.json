@@ -22,7 +22,7 @@
       "z-index": 2,
       "time": 115.0,
       "type": "svg-3d",
-      "asset": "svg/geometry/circle-360-b.svg",
+      "assets": ["svg/geometry/circle-360-b.svg"],
       "repetitions": {
         "count": 4,
         "interval": 0.25
@@ -85,7 +85,7 @@
     {
       "time": 116.0,
       "type": "svg-3d",
-      "asset": "svg/illustration-07-scan/120.svg",
+      "assets": ["svg/illustration-07-scan/120.svg"],
       "stagger": {
         "mode": "in-out",
         "order": "random",
@@ -127,7 +127,7 @@
       },
       "type": "svg-3d",
       "z-index": 4,
-      "asset": "svg/illustration-07-scan/120.svg",
+      "assets": ["svg/illustration-07-scan/120.svg"],
       "stagger": {
         "mode": "none",
         "order": "contour-index",
@@ -166,7 +166,7 @@
     {
       "time": 116.0,
       "type": "svg-3d",
-      "asset": "svg/illustrations/illustration-07.svg",
+      "assets": ["svg/illustrations/illustration-07.svg"],
       "stagger": {
         "mode": "none",
         "order": "random",

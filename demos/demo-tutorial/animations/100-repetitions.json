@@ -15,7 +15,7 @@
     {
       "time": 0.0,
       "type": "svg",
-      "asset": "svg/geometry/circle-360.svg",
+      "assets": ["svg/geometry/circle-360.svg"],
       "repetitions": {
         "count": 16,
         "interval": 1.0
@@ -38,7 +38,7 @@
     {
       "time": 16.0,
       "type": "svg",
-      "asset": "svg/geometry/circle-360.svg",
+      "assets": ["svg/geometry/circle-360.svg"],
       "repetitions": {
         "count": 16,
         "interval": 1.0

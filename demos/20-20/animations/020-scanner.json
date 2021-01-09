@@ -15,7 +15,7 @@
     {
       "time": 6.0,
       "type": "svg",
-      "asset": "svg/lines-60-square.svg",
+      "assets": ["svg/lines-60-square.svg"],
       "stagger": {
         "mode": "in-out",
         "window": 0,

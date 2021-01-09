@@ -27,7 +27,7 @@
       "clipping": {
         "mask": "a"
       },
-      "asset": "svg/curves-120.svg",
+      "assets": ["svg/curves-120.svg"],
       "stagger": {
         "mode": "in-out",
         "order": "random",

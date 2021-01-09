@@ -1,0 +1,71 @@
+{
+  "camera": {
+    "type": "ortho",
+    "keyframer": [
+      {
+        "time": 0.0,
+        "easing": "cubic-in-out",
+        "x": 640.0,
+        "y": 360.0,
+        "magnitude": 720.0
+      }
+    ]
+  },
+  "prototypes": {
+    "proto-1": {
+      "type": "svg",
+      "stagger": {
+        "mode": "in-out",
+        "window": 25
+      }
+    },
+    "proto-2": {
+      "assets": [
+        "svg/fields/circle-360-120.svg"
+      ]
+    },
+    "scale-anim": {
+      "keyframer": [
+        {
+          "time": 0.0,
+          "scale": 1.0
+        },
+        {
+          "time": 16.0,
+          "scale": 0.0
+        }
+      ]
+    },
+    "color-anim": {
+      "keyframer": [
+        {
+          "time": 0.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.25,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0
+        },
+        {
+          "time": 8.0,
+          "stroke-r": 0.0,
+          "stroke-g": 0.0,
+          "stroke-b": 1.0,
+          "stroke-a": 1.0
+        },
+        {
+          "time": 16.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0
+        }
+      ]
+    }
+  },
+  "objects": [
+    {
+      "time": 112.0,
+      "prototype": "proto-1 proto-2 scale-anim color-anim"
+    }
+  ]
+}

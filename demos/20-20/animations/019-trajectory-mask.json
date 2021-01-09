@@ -31,7 +31,7 @@
       "time": 20.0,
       "target": "clip-a",
       "type": "svg-3d",
-      "asset": "svg/trajectory/trajectory-orbit-saturn.svg",
+      "assets": ["svg/trajectory/trajectory-orbit-saturn.svg"],
       "keyframer": [
         {
           "time": 0.0,
@@ -63,7 +63,7 @@
     {
       "time": 20.0,
       "type": "svg-3d",
-      "asset": "svg/trajectory/trajectory-orbit-jupiter.svg",
+      "assets": ["svg/trajectory/trajectory-orbit-jupiter.svg"],
       "target": "clip-a",
       "keyframer": [
         {
@@ -101,7 +101,7 @@
       "time": 20.0,
       "type": "svg-3d",
       "target": "clip-a",
-      "asset": "svg/trajectory/trajectory-orbit-earth.svg",
+      "assets": ["svg/trajectory/trajectory-orbit-earth.svg"],
       "keyframer": [
         {
           "time": 0.0,

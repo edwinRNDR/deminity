@@ -21,7 +21,7 @@
     {
       "time": 80.0,
       "type": "svg-3d",
-      "asset": "svg/geometry/circle-360.svg",
+      "assets": ["svg/geometry/circle-360.svg"],
       "keyframer": [
         {
           "time": 0.0,

@@ -26,7 +26,7 @@
       "target": "clip-a",
       "time": 20.0,
       "type": "svg",
-      "asset": "svg/curves-outline.svg",
+      "assets": ["svg/curves-outline.svg"],
       "keyframer": [
         {
           "time": 0.0,

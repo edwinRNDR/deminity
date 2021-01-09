@@ -91,9 +91,9 @@ data class Layer(
     val `z-index`: Int = 0,
     val camera: Camera = Camera(),
     val blend: Blend = Blend(),
+    val prototypes: Map<String, Object> = emptyMap(),
     val objects: List<Object> = emptyList()
 ) {
-
     var sourceFile = File("[unknown-source]")
 
     class Blend(val mode: BlendMode = BlendMode.normal, val keyframer: List<Map<String, Any>> = emptyList()) {
@@ -121,20 +121,20 @@ data class Layer(
     }
 
     data class Object(
-        val time: Double = 0.0,
-        val `z-index`: Int = 0,
-        val type: ObjectType = ObjectType.svg,
-        val target: Target = Target.image,
+        val prototype: String = "",
+        val time: Double? = null,
+        val `z-index`: Int? = null,
+        val type: ObjectType? = null,
+        val target: Target? = null,
         val clipping: Clipping = Clipping(),
-        val asset: String = "default-asset",
-        var assets: List<String> = emptyList(),
+        val assets: List<String>? = null,
         val keyframer: List<Map<String, Any>> = emptyList(),
         val repetitions: Repetitions = Repetitions(),
         val repetitionCounter: Int = 0,
         val stagger: Stagger = Stagger(),
         val stepping: Stepping = Stepping(),
         val attributes: Attributes = Attributes()
-    ) {
+    ) : Cascadable<Object> {
         val animation by lazy {
             ObjectAnimation().apply {
                 loadFromKeyObjects(
@@ -147,6 +147,33 @@ data class Layer(
         val duration
             get() = animation.duration
 
+        override fun over(lower: Object): Object {
+            return copy(
+                prototype,
+                time over lower.time,
+                `z-index` over lower.`z-index`,
+                type over lower.type,
+                target over lower.target,
+                clipping over lower.clipping,
+                assets over lower.assets,
+                keyframer + lower.keyframer,
+                repetitions over lower.repetitions,
+                repetitionCounter,
+                stagger over lower.stagger,
+                stepping over lower.stepping,
+                attributes over lower.attributes
+            )
+        }
+
+        fun resolve(prototypes: Map<String, Object>): Object {
+            val toCascade = listOfNotNull(default, prototypes["*"]) + prototype.split(" ").map { it.trim() }.mapNotNull { prototypes[it] } + listOf(this)
+
+            return toCascade.reduce { acc, p ->
+                p over acc
+            }
+
+
+        }
 
         enum class Target {
             image,
@@ -168,19 +195,28 @@ data class Layer(
             `invert-b`
         }
 
-        class Clipping(val mask: ClipMask = ClipMask.none)
+        class Clipping(val mask: ClipMask? = null) : Cascadable<Clipping> {
+            override fun over(lower: Clipping): Clipping {
+                return Clipping(mask over lower.mask)
+            }
+        }
 
         enum class SteppingMode {
             none,
             discrete
         }
 
-        class Stepping(val mode: SteppingMode = SteppingMode.none, val steps: Int = 10, val inertia: Double = 0.0) {
+        class Stepping(
+            val mode: SteppingMode? = null,
+            val steps: Int? = null,
+            val inertia: Double? = null
+        ) : Cascadable<Stepping> {
             fun stepTime(animation: Keyframer, time: Double): Double {
                 val duration by lazy { animation.duration }
                 return when (mode) {
-                    SteppingMode.none -> time
+                    null, SteppingMode.none -> time
                     SteppingMode.discrete -> {
+                        steps!!; inertia!!
                         val stepDuration = duration / steps
                         val step = time / stepDuration
                         val stepIndex = floor(step)
@@ -188,6 +224,10 @@ data class Layer(
                         (stepIndex * stepDuration + stepProgress * stepDuration * inertia).coerceIn(0.0, duration)
                     }
                 }
+            }
+
+            override fun over(lower: Stepping): Stepping {
+                return Stepping(mode over lower.mode, steps over lower.steps, inertia over lower.inertia)
             }
         }
 
@@ -203,14 +243,29 @@ data class Layer(
         }
 
         data class Stagger(
-            val mode: StaggerMode = StaggerMode.none,
-            val order: StaggerOrder = StaggerOrder.`contour-index`,
-            val seed: Int = 100,
-            val window: Int = 0
-        )
+            val mode: StaggerMode? = null,
+            val order: StaggerOrder? = null,
+            val seed: Int? = null,
+            val window: Int? = null
+        ) : Cascadable<Stagger> {
+            override fun over(lower: Stagger): Stagger {
+                return Stagger(
+                    mode over lower.mode,
+                    order over lower.order,
+                    seed over lower.seed,
+                    window over lower.window
+                )
+            }
+        }
 
-
-        data class Repetitions(val count: Int = 1, val interval: Double = 0.0)
+        data class Repetitions(
+            val count: Int? = null,
+            val interval: Double? = null
+        ) : Cascadable<Repetitions> {
+            override fun over(lower: Repetitions): Repetitions {
+                return Repetitions(count over lower.count, interval over lower.interval)
+            }
+        }
 
         enum class AttributeSource {
             user,
@@ -219,15 +274,23 @@ data class Layer(
         }
 
         data class Attributes(
-            val `stroke-weight`: AttributeSource = AttributeSource.user,
-            val stroke: AttributeSource = AttributeSource.user,
-            val fill: AttributeSource = AttributeSource.user
-        )
+            val `stroke-weight`: AttributeSource? = null,
+            val stroke: AttributeSource? = null,
+            val fill: AttributeSource? = null
+        ) : Cascadable<Attributes> {
+            override fun over(lower: Attributes): Attributes {
+                return Attributes(
+                    `stroke-weight` over lower.`stroke-weight`,
+                    stroke over lower.stroke,
+                    fill over lower.fill
+                )
+            }
+        }
 
-        fun flattenRepetitions(demo: Demo) = (0 until repetitions.count).map { repetition ->
+        fun flattenRepetitions(demo: Demo) = (0 until repetitions.count!!).map { repetition ->
             copy(
-                time = time + repetition * repetitions.interval,
-                assets = assets.let { if (it.isEmpty()) listOf(asset) else it }.flatMap { assetPath ->
+                time = time!! + repetition * repetitions.interval!!,
+                assets = assets?.flatMap { assetPath ->
                     if (assetPath.contains("*")) {
                         val path = assetPath.split("*").first()
                         val ext = assetPath.split("*.")[1].toLowerCase()
@@ -239,13 +302,47 @@ data class Layer(
                         listOf(assetPath)
                     }
                 },
+                repetitionCounter = repetition,
                 repetitions = Repetitions(1, 0.0),
+            )
+        }
+
+        companion object {
+            val default = Object(
+                time = 0.0,
+                `z-index` = 0,
+                type = ObjectType.svg,
+                target = Target.image,
+                clipping = Clipping(mask = ClipMask.none),
+                assets = listOf("asset-not-specified"),
+                keyframer = emptyList(),
+                repetitions = Repetitions(
+                    count = 1,
+                    interval = 0.0
+                ),
+                repetitionCounter = 0,
+                stagger = Stagger(
+                    mode = StaggerMode.none,
+                    order = StaggerOrder.`contour-index`,
+                    seed = 100,
+                    window = 0
+                ),
+                stepping = Stepping(
+                    mode = SteppingMode.none,
+                    steps = 10,
+                    inertia = 0.0
+                ),
+                attributes = Attributes(
+                    `stroke-weight` = AttributeSource.user,
+                    stroke = AttributeSource.user,
+                    fill = AttributeSource.user
+                )
             )
         }
     }
 
     fun flattenRepetitions(demo: Demo) = copy(
-        objects = objects.flatMap { it.flattenRepetitions(demo) },
+        objects = objects.map { it.resolve(prototypes) }.flatMap { it.flattenRepetitions(demo) },
     ).also {
         it.sourceFile = this.sourceFile
     }
@@ -336,9 +433,11 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
 
     val billOfMaterials = mutableSetOf<String>()
 
-    val finalTarget by lazy { renderTarget(targetWidth, targetHeight) {
-        colorBuffer()
-    } }
+    val finalTarget by lazy {
+        renderTarget(targetWidth, targetHeight) {
+            colorBuffer()
+        }
+    }
 
     init {
         program.mouse.cursorVisible = false
@@ -381,6 +480,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                     layer.objects.filter { obj ->
                         obj.type == Layer.Object.ObjectType.image
                     }.map { obj ->
+                        obj.assets!!
                         for (asset in obj.assets) {
                             val image = images.getOrPut(asset) {
                                 val imageFile = File(demo.dataBase, "assets/${asset}")
@@ -396,6 +496,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                     layer.objects.filter { obj ->
                         obj.type == Layer.Object.ObjectType.svg || obj.type == Layer.Object.ObjectType.`svg-3d`
                     }.map { obj ->
+                        obj.assets!!
                         for (asset in obj.assets) {
                             compositionWatchers.getOrPut(asset) {
                                 val svgFile = File(demo.dataBase, "assets/${asset}")
@@ -493,6 +594,8 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
         drawer.translate(150.0, 24.0)
         for ((layerIndex, layer) in sortedLayers.withIndex()) {
             for (obj in layer.objects) {
+                obj.time!!
+
                 drawer.fill = if (layerIndex % 2 == 0) ColorRGBa.GRAY else ColorRGBa.GRAY.shade(0.5)
                 if (obj.time <= time && (obj.time + obj.duration) > time) {
                     drawer.fill = ColorRGBa.WHITE
@@ -567,7 +670,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                 drawer.translate(-640.0, -360.0, 0.0, TransformTarget.VIEW)
 
                 val objectGroups = layer.objects
-                    .filter { time >= it.time && time < (it.time + it.duration) }
+                    .filter { it.time!!; time >= it.time && time < (it.time + it.duration) }
                     .sortedBy { it.`z-index` }
                     .groupBy { it.target }
 
@@ -625,6 +728,9 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                         }
 
                         if (obj.type == Layer.Object.ObjectType.image) {
+                            obj.time!!
+                            obj.assets!!
+
                             obj.animation(time - obj.time)
                             val a = obj.animation
                             val objectClipBlend = a.objectClipBlend
@@ -652,6 +758,8 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                             }
                         } else if (obj.type == Layer.Object.ObjectType.svg || obj.type == Layer.Object.ObjectType.`svg-3d`) {
                             val a = obj.animation
+                            obj.time!!
+                            obj.assets!!
                             a(time - obj.time)
                             val objectClipBlend = a.objectClipBlend
                             val assetIndex = a.assetIndex.roundToInt().coerceIn(0, obj.assets.size - 1)
@@ -668,13 +776,17 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                             val unitTime = objectTime / duration
 
                             val staggerOrder = when (obj.stagger.order) {
-                                Layer.Object.StaggerOrder.`contour-index` -> List(shapeCount) { it }
+                                null, Layer.Object.StaggerOrder.`contour-index` -> List(shapeCount) { it }
                                 Layer.Object.StaggerOrder.`reverse-contour-index` -> List(shapeCount) { it }.reversed()
-                                Layer.Object.StaggerOrder.random -> List(shapeCount) { it }.shuffled(Random(obj.stagger.seed))
+                                Layer.Object.StaggerOrder.random -> {
+                                    obj.stagger.seed!!
+                                    List(shapeCount) { it }.shuffled(Random(obj.stagger.seed))
+                                }
                             }
 
                             val stagger: (Int) -> Double = when (obj.stagger.mode) {
                                 Layer.Object.StaggerMode.`in-out` -> { shapeIndex ->
+                                    obj.stagger.window!!
                                     val staggerIndex = staggerOrder[shapeIndex]
                                     val staggerStart =
                                         (staggerIndex * 1.0) / (shapeCount + obj.stagger.window)
@@ -687,7 +799,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                             }
 
                             fun Layer.Object.fill(objectFill: ColorRGBa?) = when (obj.attributes.fill) {
-                                Layer.Object.AttributeSource.user -> animation.fill
+                                null, Layer.Object.AttributeSource.user -> animation.fill
                                 Layer.Object.AttributeSource.asset -> objectFill
                                     ?: ColorRGBa.TRANSPARENT
                                 Layer.Object.AttributeSource.modulate -> animation.fill * (objectFill
@@ -695,7 +807,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                             }
 
                             fun Layer.Object.stroke(objectStroke: ColorRGBa?) = when (obj.attributes.stroke) {
-                                Layer.Object.AttributeSource.user -> animation.stroke
+                                null, Layer.Object.AttributeSource.user -> animation.stroke
                                 Layer.Object.AttributeSource.asset -> objectStroke
                                     ?: ColorRGBa.TRANSPARENT
                                 Layer.Object.AttributeSource.modulate -> animation.fill * (objectStroke
@@ -704,7 +816,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
 
                             fun Layer.Object.strokeWeight(objectStrokeWeight: Double?) =
                                 when (obj.attributes.`stroke-weight`) {
-                                    Layer.Object.AttributeSource.user -> animation.strokeWeight
+                                    null, Layer.Object.AttributeSource.user -> animation.strokeWeight
                                     Layer.Object.AttributeSource.asset ->
                                         objectStrokeWeight ?: 0.0
                                     Layer.Object.AttributeSource.modulate -> animation.strokeWeight * (objectStrokeWeight
@@ -811,7 +923,6 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
             clear(ColorRGBa.BLACK)
             image(layerResolved)
         }
-
     }
 }
 

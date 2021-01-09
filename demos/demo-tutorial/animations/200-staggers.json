@@ -15,7 +15,7 @@
     {
       "time": 32.0,
       "type": "svg",
-      "asset": "svg/fields/circle-360-120.svg",
+      "assets": ["svg/fields/circle-360-120.svg"],
       "stagger": {
         "mode": "in-out",
         "window": 5
@@ -41,7 +41,7 @@
     {
       "time": 36.0,
       "type": "svg",
-      "asset": "svg/fields/circle-360-120.svg",
+      "assets": ["svg/fields/circle-360-120.svg"],
       "stagger": {
         "mode": "in-out",
         "window": 50
@@ -67,7 +67,7 @@
     {
       "time": 36.0,
       "type": "svg",
-      "asset": "svg/fields/circle-360-120.svg",
+      "assets": ["svg/fields/circle-360-120.svg"],
       "stagger": {
         "mode": "in-out",
         "window": 100
@@ -96,7 +96,7 @@
     {
       "time": 40.0,
       "type": "svg",
-      "asset": "svg/fields/circle-360-120.svg",
+      "assets": ["svg/fields/circle-360-120.svg"],
       "stagger": {
         "mode": "in-out",
         "window": 25
@@ -125,7 +125,7 @@
     {
       "time": 44.0,
       "type": "svg",
-      "asset": "svg/fields/circle-360-120.svg",
+      "assets": ["svg/fields/circle-360-120.svg"],
       "stagger": {
         "mode": "in-out",
         "window": 25

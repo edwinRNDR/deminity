@@ -20,7 +20,7 @@
     {
       "time": 52.0,
       "type": "svg",
-      "asset": "svg/photo-04-grid/*.svg",
+      "assets": ["svg/photo-04-grid/*.svg"],
       "stagger": {
         "mode": "in-out",
         "window": 200,
@@ -67,7 +67,7 @@
     {
       "time": 56.0,
       "type": "svg",
-      "asset": "svg/photo-03-grid/*.svg",
+      "assets": ["svg/photo-03-grid/*.svg"],
       "stagger": {
         "mode": "in-out",
         "window": 200,
@@ -112,7 +112,7 @@
     {
       "time": 52.0,
       "type": "svg",
-      "asset": "svg/type/type-01.svg",
+      "assets": ["svg/type/type-01.svg"],
       "stagger": {
         "mode": "none",
         "window": 20,
@@ -160,7 +160,7 @@
     {
       "time": 56.0,
       "type": "svg",
-      "asset": "svg/type/type-02.svg",
+      "assets": ["svg/type/type-02.svg"],
       "stagger": {
         "mode": "none",
         "window": 20,
@@ -206,7 +206,7 @@
     {
       "time": 54.0,
       "type": "svg",
-      "asset": "svg/illustration-02-scan/*.svg",
+      "assets": ["svg/illustration-02-scan/*.svg"],
       "stagger": {
         "mode": "in-out",
         "window": 0
@@ -244,7 +244,7 @@
     {
       "time": 57.0,
       "type": "svg",
-      "asset": "svg/circle-360-60.svg",
+      "assets": ["svg/circle-360-60.svg"],
       "clipping": {
         "mask": "a"
       },

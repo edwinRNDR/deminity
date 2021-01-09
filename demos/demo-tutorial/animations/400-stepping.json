@@ -15,7 +15,7 @@
     {
       "time": 64.0,
       "type": "svg",
-      "asset": "svg/geometry/circle-360.svg",
+      "assets": ["svg/geometry/circle-360.svg"],
       "stepping":{
         "mode": "discrete",
         "steps": 4,
@@ -38,7 +38,7 @@
     {
       "time": 68.0,
       "type": "svg",
-      "asset": "svg/geometry/circle-360.svg",
+      "assets": ["svg/geometry/circle-360.svg"],
       "stepping":{
         "mode": "discrete",
         "steps": 4,
@@ -60,7 +60,7 @@
     {
       "time": 72.0,
       "type": "svg",
-      "asset": "svg/geometry/circle-360.svg",
+      "assets": ["svg/geometry/circle-360.svg"],
       "stepping":{
         "mode": "discrete",
         "steps": 4,
@@ -82,7 +82,7 @@
     {
       "time": 76.0,
       "type": "svg",
-      "asset": "svg/geometry/circle-360.svg",
+      "assets": ["svg/geometry/circle-360.svg"],
       "stepping":{
         "mode": "discrete",
         "steps": 16,

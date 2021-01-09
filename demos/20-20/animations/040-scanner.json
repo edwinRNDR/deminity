@@ -21,7 +21,7 @@
     {
       "time": 68.0,
       "type": "svg-3d",
-      "asset": "svg/illustration-04-scan/120.svg",
+      "assets": ["svg/illustration-04-scan/120.svg"],
       "stagger": {
         "mode": "in-out",
         "order": "random",
@@ -65,7 +65,7 @@
         "mask": "invert-b"
       },
       "type": "svg-3d",
-      "asset": "svg/illustrations/illustration-04.svg",
+      "assets": ["svg/illustrations/illustration-04.svg"],
       "stagger": {
         "mode": "in-out",
         "order": "random",

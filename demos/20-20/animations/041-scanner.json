@@ -25,7 +25,7 @@
       },
       "type": "svg-3d",
       "z-index": 4,
-      "asset": "svg/illustration-05-scan/120.svg",
+      "assets": ["svg/illustration-05-scan/120.svg"],
       "stagger": {
         "mode": "in-out",
         "order": "random",
@@ -67,7 +67,7 @@
       },
       "type": "svg-3d",
       "z-index": 4,
-      "asset": "svg/illustration-05-scan/120.svg",
+      "assets": ["svg/illustration-05-scan/120.svg"],
       "stagger": {
         "mode": "in-out",
         "order": "contour-index",
@@ -109,7 +109,7 @@
         "mask": "invert-b"
       },
       "type": "svg-3d",
-      "asset": "svg/illustrations/illustration-05.svg",
+      "assets": ["svg/illustrations/illustration-05.svg"],
       "stagger": {
         "mode": "in-out",
         "order": "random",
@@ -154,7 +154,7 @@
       "clipping": {
         "mask": "invert-b"
       },
-      "asset": "svg/circle-360-120.svg",
+      "assets": ["svg/circle-360-120.svg"],
       "stagger": {
         "mode": "in-out",
         "order": "contour-index",

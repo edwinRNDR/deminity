@@ -15,7 +15,7 @@
     {
       "time": 133.5,
       "type": "svg",
-      "asset": "svg/circle-360-60.svg",
+      "assets": ["svg/circle-360-60.svg"],
       "stagger": {
         "mode": "in-out",
         "window": 2
@@ -51,7 +51,7 @@
     {
       "time": 161.5,
       "type": "svg",
-      "asset": "svg/circle-360-60.svg",
+      "assets": ["svg/circle-360-60.svg"],
       "keyframer": [
         {
           "time": 0.0,

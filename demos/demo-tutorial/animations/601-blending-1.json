@@ -18,7 +18,7 @@
     {
       "time": 96.0,
       "type": "svg",
-      "asset": "svg/geometry/circle-360.svg",
+      "assets": ["svg/geometry/circle-360.svg"],
       "keyframer": [
         {
           "time": 0.0,
@@ -39,7 +39,7 @@
     {
       "time": 104.0,
       "type": "svg",
-      "asset": "svg/geometry/circle-360.svg",
+      "assets": ["svg/geometry/circle-360.svg"],
       "keyframer": [
         {
           "x": 100.0,

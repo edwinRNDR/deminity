@@ -15,7 +15,7 @@
     {
       "time": 0.0,
       "type": "svg",
-      "asset": "svg/prelude/*.svg",
+      "assets": ["svg/prelude/*.svg"],
       "repetitions": {
         "count": 4,
         "interval": 1.0
