@@ -1,0 +1,84 @@
+{
+  "camera": {
+    "type": "ortho",
+    "keyframer": [
+      {
+        "time": 0.0,
+        "easing": "cubic-in-out",
+        "x": 640.0,
+        "y": 360.0,
+        "magnitude": 720.0
+      }
+    ]
+  },
+  "properties": {
+    "start_r": 0.0,
+    "start_g": 1.0,
+    "start_b": 0.0
+  },
+  "prototypes": {
+    "proto-1": {
+      "type": "svg",
+      "stagger": {
+        "mode": "in-out",
+        "window": 25
+      }
+    },
+    "proto-2": {
+      "assets": [
+        "svg/fields/circle-360-120.svg"
+      ]
+    },
+    "scale-anim": {
+      "keyframer": [
+        {
+          "time": 0.0,
+          "scale": 1.0
+        },
+        {
+          "time": 16.0,
+          "scale": 0.0
+        }
+      ]
+    },
+    "color-anim": {
+      "keyframer": [
+        {
+          "time": 0.0,
+          "stroke-r": "start_r",
+          "stroke-g": "start_g",
+          "stroke-b": "start_b",
+          "stroke-a": 1.0
+        },
+        {
+          "time": 8.0,
+          "stroke-r": 0.0,
+          "stroke-g": 0.0,
+          "stroke-b": 1.0,
+          "stroke-a": 1.0
+        },
+        {
+          "time": 16.0,
+          "stroke-r": 1.0,
+          "stroke-g": 0.0,
+          "stroke-b": 0.0,
+          "stroke-a": 1.0
+        }
+      ]
+    },
+    "blue": {
+      "properties": {
+        "start_b": 1.0
+      }
+    }
+  },
+  "objects": [
+    {
+      "time": 128.0,
+      "properties": {
+        "start_r": 0.5
+      },
+      "prototype": "proto-1 proto-2 scale-anim color-anim blue"
+    }
+  ]
+}

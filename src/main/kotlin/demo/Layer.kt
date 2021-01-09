@@ -92,7 +92,8 @@ data class Layer(
     val camera: Camera = Camera(),
     val blend: Blend = Blend(),
     val prototypes: Map<String, Object> = emptyMap(),
-    val objects: List<Object> = emptyList()
+    val objects: List<Object> = emptyList(),
+    val properties: Map<String, Double> = emptyMap()
 ) {
     var sourceFile = File("[unknown-source]")
 
@@ -133,13 +134,15 @@ data class Layer(
         val repetitionCounter: Int = 0,
         val stagger: Stagger = Stagger(),
         val stepping: Stepping = Stepping(),
-        val attributes: Attributes = Attributes()
+        val attributes: Attributes = Attributes(),
+        val properties: Map<String, Double> = emptyMap()
+
     ) : Cascadable<Object> {
         val animation by lazy {
             ObjectAnimation().apply {
                 loadFromKeyObjects(
                     keyframer,
-                    mapOf("rep" to repetitionCounter.toDouble()),
+                    properties + mapOf("rep" to repetitionCounter.toDouble()),
                     FunctionExtensions.EMPTY
                 )
             }
@@ -161,12 +164,13 @@ data class Layer(
                 repetitionCounter,
                 stagger over lower.stagger,
                 stepping over lower.stepping,
-                attributes over lower.attributes
+                attributes over lower.attributes,
+                lower.properties + properties
             )
         }
 
-        fun resolve(prototypes: Map<String, Object>): Object {
-            val toCascade = listOfNotNull(default, prototypes["*"]) + prototype.split(" ").map { it.trim() }.mapNotNull { prototypes[it] } + listOf(this)
+        fun resolve(prototypes: Map<String, Object>, properties: Map<String, Double>): Object {
+            val toCascade = listOfNotNull(default.copy(properties = default.properties + properties), prototypes["*"]) + prototype.split(" ").map { it.trim() }.mapNotNull { prototypes[it] } + listOf(this)
 
             return toCascade.reduce { acc, p ->
                 p over acc
@@ -342,7 +346,7 @@ data class Layer(
     }
 
     fun flattenRepetitions(demo: Demo) = copy(
-        objects = objects.map { it.resolve(prototypes) }.flatMap { it.flattenRepetitions(demo) },
+        objects = objects.map { it.resolve(prototypes, properties) }.flatMap { it.flattenRepetitions(demo) },
     ).also {
         it.sourceFile = this.sourceFile
     }
