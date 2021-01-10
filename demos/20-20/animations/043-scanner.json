@@ -86,11 +86,11 @@
       "time": 116.0,
       "type": "svg-3d",
       "assets": ["svg/illustration-07-scan/120.svg"],
-      "stagger": {
+      "staggers": [{
         "mode": "in-out",
         "order": "random",
         "window": 40
-      },
+      }],
       "keyframer": [
         {
           "time": 0.0,
@@ -128,11 +128,11 @@
       "type": "svg-3d",
       "z-index": 4,
       "assets": ["svg/illustration-07-scan/120.svg"],
-      "stagger": {
+      "staggers": [{
         "mode": "none",
         "order": "contour-index",
         "window": 1000
-      },
+      }],
       "keyframer": [
         {
           "time": 0.0,
@@ -167,11 +167,6 @@
       "time": 116.0,
       "type": "svg-3d",
       "assets": ["svg/illustrations/illustration-07.svg"],
-      "stagger": {
-        "mode": "none",
-        "order": "random",
-        "window": 4
-      },
       "keyframer": [
         {
           "time": 0.0,

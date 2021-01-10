@@ -22,15 +22,19 @@
       "time": 100.0,
       "type": "svg-3d",
       "z-index": 5,
-      "assets": ["svg/illustration-06-scan/120.svg"],
+      "assets": [
+        "svg/illustration-06-scan/120.svg"
+      ],
       "clipping": {
         "mask": "invert-b"
       },
-      "stagger": {
-        "mode": "in-out",
-        "order": "random",
-        "window": 40
-      },
+      "staggers": [
+        {
+          "mode": "in-out",
+          "order": "random",
+          "window": 40
+        }
+      ],
       "keyframer": [
         {
           "time": 0.0,
@@ -64,15 +68,17 @@
       "time": 100.0,
       "type": "svg-3d",
       "z-index": 4,
-      "assets": ["svg/illustrations/illustration-06.svg"],
+      "assets": [
+        "svg/illustrations/illustration-06.svg"
+      ],
       "clipping": {
         "mask": "invert-b"
       },
-      "stagger": {
+      "staggers": [{
         "mode": "in-out",
         "order": "random",
         "window": 4
-      },
+      }],
       "keyframer": [
         {
           "time": 0.0,
@@ -113,12 +119,14 @@
       },
       "type": "svg-3d",
       "z-index": 4,
-      "assets": ["svg/illustration-06-scan/120.svg"],
-      "stagger": {
+      "assets": [
+        "svg/illustration-06-scan/120.svg"
+      ],
+      "staggers": [{
         "mode": "in-out",
         "order": "contour-index",
         "window": 140
-      },
+      }],
       "keyframer": [
         {
           "time": 0.0,
@@ -151,13 +159,15 @@
     {
       "time": 100.0,
       "type": "svg-3d",
-      "assets": ["svg/circle-360-120.svg"],
+      "assets": [
+        "svg/circle-360-120.svg"
+      ],
       "z-index": 3,
-      "stagger": {
+      "staggers": [{
         "mode": "in-out",
         "order": "contour-index",
         "window": 4
-      },
+      }],
       "keyframer": [
         {
           "time": 0.0,

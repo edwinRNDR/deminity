@@ -21,9 +21,6 @@
         "count": 4,
         "interval": 16.0
       },
-      "stagger": {
-        "mode": "none"
-      },
       "keyframer": [
         {
           "time": 0.0,

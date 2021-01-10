@@ -5,7 +5,8 @@ package demo
 import com.google.gson.Gson
 import demo.Layer.Object.Attributes.*
 import demo.Layer.Object.Clipping.*
-import demo.Layer.Object.Stagger.*
+import demo.Layer.Object.Staggers.Stagger
+import demo.Layer.Object.Staggers.Stagger.*
 import demo.Layer.Object.Stepping.*
 import mu.KotlinLogging
 import org.openrndr.*
@@ -14,11 +15,13 @@ import org.openrndr.draw.*
 import org.openrndr.extra.keyframer.FunctionExtensions
 import org.openrndr.extra.keyframer.Keyframer
 import org.openrndr.math.Vector3
+import org.openrndr.math.map
 import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.*
 import org.operndr.extras.filewatcher.watchFile
 import java.io.File
 import kotlin.math.floor
+import kotlin.random.Random
 
 private val logger = KotlinLogging.logger {}
 
@@ -113,7 +116,7 @@ data class Layer(
         val keyframer: List<Map<String, Any>> = emptyList(),
         val repetitions: Repetitions = Repetitions(),
         val repetitionCounter: Int = 0,
-        val stagger: Stagger = Stagger(),
+        val staggers: Staggers? = null,
         val stepping: Stepping = Stepping(),
         val attributes: Attributes = Attributes(),
         val properties: Map<String, Double> = emptyMap()
@@ -188,7 +191,7 @@ data class Layer(
                 keyframer + lower.keyframer,
                 repetitions over lower.repetitions,
                 repetitionCounter,
-                stagger over lower.stagger,
+                staggers over lower.staggers,
                 stepping over lower.stepping,
                 attributes over lower.attributes,
                 lower.properties + properties
@@ -199,14 +202,29 @@ data class Layer(
          * Resolve the object.
          * apply defaults and prototypes and return a [Layer.Object] copy without null properties
          */
-        fun resolve(prototypes: Map<String, Object>, properties: Map<String, Double>): Object {
+        fun resolve(demo: Demo, prototypes: Map<String, Object>, properties: Map<String, Double>): Object {
             val toCascade = listOfNotNull(
                 default.copy(properties = default.properties + properties),
                 prototypes["*"]
             ) + prototype.split(" ").map { it.trim() }.mapNotNull { prototypes[it] } + listOf(this)
-            return toCascade.reduce { acc, p ->
-                p over acc
-            }
+            val resolved = toCascade.reduce { acc, p -> p over acc }
+            resolved.staggers!!
+            resolved.assets!!
+            return resolved.copy(
+                staggers = resolved.staggers.resolve(resolved.animation),
+                assets = resolved.assets.flatMap { assetPath ->
+                    if (assetPath.contains("*")) {
+                        val path = assetPath.split("*").first()
+                        val ext = assetPath.split("*.")[1].toLowerCase()
+                        File(demo.dataBase, "assets/$path").listFiles { it -> it.extension.toLowerCase() == ext }!!
+                            .map {
+                                it.relativeTo(File(demo.dataBase, "assets")).path
+                            }.sorted()
+                    } else {
+                        listOf(assetPath)
+                    }
+                },
+            )
         }
 
         enum class Target {
@@ -273,32 +291,113 @@ data class Layer(
             )
         }
 
-        /**
-         * [Layer.Object] animation staggering settings
-         */
-        data class Stagger(
-            val mode: StaggerMode? = null,
-            val order: StaggerOrder? = null,
-            val seed: Int? = null,
-            val window: Int? = null
-        ) : Cascadable<Stagger> {
-            enum class StaggerMode {
-                none,
-                `in-out`,
+        class Staggers : ArrayList<Stagger>() {
+            companion object {
+                fun of(vararg staggers: Stagger): Staggers {
+                    val s = Staggers()
+                    s.addAll(staggers)
+                    return s
+                }
+
+                fun of(staggers: List<Stagger>): Staggers {
+                    val s = Staggers()
+                    s.addAll(staggers)
+                    return s
+                }
             }
 
-            enum class StaggerOrder {
-                `contour-index`,
-                `reverse-contour-index`,
-                random,
+            /**
+             * [Layer.Object] animation staggering settings
+             */
+            data class Stagger(
+                val time: Double = 0.0,
+                val duration: Double = 0.0,
+                val mode: StaggerMode = StaggerMode.none,
+                val order: StaggerOrder = StaggerOrder.`contour-index`,
+                val seed: Int = 100,
+                val window: Int = 0
+            ) {
+                enum class StaggerMode {
+                    none,
+                    `in-out`,
+                    `in`,
+                    out,
+                }
+
+                enum class StaggerOrder {
+                    `contour-index`,
+                    `reverse-contour-index`,
+                    random,
+                }
+
+                val end: Double
+                    get() {
+                        return time + duration
+                    }
+                private val shapeOrder = mutableMapOf<Int, List<Int>>()
+
+                /**
+                 * calculate staggered time
+                 */
+                fun stagger(objectTime: Double, shapeCount: Int, shapeIndex: Int): Double {
+                    val shapeOrder = shapeOrder.getOrPut(shapeCount) {
+                        when (order) {
+                            StaggerOrder.`contour-index` -> List(shapeCount) { it }
+                            StaggerOrder.`reverse-contour-index` -> List(shapeCount) { it }.reversed()
+                            StaggerOrder.random -> {
+                                List(shapeCount) { it }.shuffled(Random(seed))
+                            }
+                        }
+                    }[shapeIndex]
+                    val segmentTime = ((objectTime - time) / duration).coerceIn(0.0, 1.0)
+                    return when (mode) {
+                        StaggerMode.none -> objectTime
+                        StaggerMode.`in-out` -> {
+                            val staggerStart = (shapeOrder * 1.0) / (shapeCount + window)
+                            val staggerEnd = (shapeOrder + 1.0 + window) / (shapeCount + window)
+                            segmentTime.map(staggerStart, staggerEnd, time, end, clamp = true)
+                        }
+                        StaggerMode.`in` -> {
+                            val staggerStart = (shapeOrder * 1.0) / (shapeCount + window)
+                            val staggerEnd = 1.0
+                            segmentTime.map(staggerStart, staggerEnd, time, end, clamp = true)
+                        }
+                        StaggerMode.out -> {
+                            val staggerStart = 0.0
+                            val staggerEnd = (shapeOrder + 1.0 + window) / (shapeCount + window)
+                            segmentTime.map(staggerStart, staggerEnd, time, end, clamp = true)
+                        }
+                    }
+                }
             }
 
-            override fun over(lower: Stagger) = Stagger(
-                mode over lower.mode,
-                order over lower.order,
-                seed over lower.seed,
-                window over lower.window
-            )
+            /**
+             * Find the active stagger segment
+             */
+            fun stagger(objectTime: Double): Stagger {
+                if (objectTime <= 0.0) {
+                    return first()
+                }
+                if (objectTime >= last().time) {
+                    return last()
+                }
+                return find { it.time <= objectTime && it.end > objectTime }!!
+            }
+
+            /**
+             * Resolve stagger duration and shape count
+             */
+            fun resolve(animation: Animation): Staggers {
+                if (isEmpty()) {
+                    return of(Stagger(0.0, duration = animation.duration))
+                }
+                val durations = this.windowed(2, 1).map { it[1].time - it[0].time } + listOf(
+                    animation.duration - last().time
+                )
+                return of((this zip durations).map {
+                    it.first.copy(duration = it.second)
+                })
+            }
         }
 
         /**
@@ -340,21 +439,9 @@ data class Layer(
          * Create a copy of this [Layer] in which all [Layer.Object] repetitions have been flattened out.
          * That means that [Layer.Object] is cloned as many times as it is repeated.
          */
-        fun flattenRepetitions(demo: Demo) = (0 until repetitions.count!!).map { repetition ->
+        fun flattenRepetitions() = (0 until repetitions.count!!).map { repetition ->
             copy(
                 time = time!! + repetition * repetitions.interval!!,
-                assets = assets?.flatMap { assetPath ->
-                    if (assetPath.contains("*")) {
-                        val path = assetPath.split("*").first()
-                        val ext = assetPath.split("*.")[1].toLowerCase()
-                        File(demo.dataBase, "assets/$path").listFiles { it -> it.extension.toLowerCase() == ext }!!
-                            .map {
-                                it.relativeTo(File(demo.dataBase, "assets")).path
-                            }.sorted()
-                    } else {
-                        listOf(assetPath)
-                    }
-                },
                 repetitionCounter = repetition,
                 repetitions = Repetitions(1, 0.0),
             )
@@ -377,11 +464,14 @@ data class Layer(
                     interval = 0.0
                 ),
                 repetitionCounter = 0,
-                stagger = Stagger(
-                    mode = StaggerMode.none,
-                    order = StaggerOrder.`contour-index`,
-                    seed = 100,
-                    window = 0
+                staggers = Staggers.of(
+                    Stagger(
+                        time = 0.0,
+                        mode = StaggerMode.none,
+                        order = StaggerOrder.`contour-index`,
+                        seed = 100,
+                        window = 0
+                    )
                 ),
                 stepping = Stepping(
                     mode = SteppingMode.none,
@@ -402,14 +492,18 @@ data class Layer(
      * In a resolved copy all [Layer.Object] prototypes have been applied and repetitions have been flattened.
      */
     fun resolve(demo: Demo) = copy(
-        objects = objects.map { it.resolve(prototypes, properties) }.flatMap { it.flattenRepetitions(demo) },
+        objects = objects.map { it.resolve(demo, prototypes, properties) }.flatMap { it.flattenRepetitions() },
     ).also {
         it.sourceFile = this.sourceFile
     }
 
     companion object {
         fun loadFromJson(file: File): Layer {
-            return Gson().fromJson(file.readText(), Layer::class.java)
+            try {
+                return Gson().fromJson(file.readText(), Layer::class.java)
+            } catch (e: Throwable) {
+                error("failed to load layer from ${file.path}. ${e.message}")
+            }
         }
 
         fun watch(program: Program, demo: Demo, file: File): () -> Layer {

@@ -21,12 +21,16 @@
     {
       "time": 68.0,
       "type": "svg-3d",
-      "assets": ["svg/illustration-04-scan/120.svg"],
-      "stagger": {
-        "mode": "in-out",
-        "order": "random",
-        "window": 40
-      },
+      "assets": [
+        "svg/illustration-04-scan/120.svg"
+      ],
+      "staggers": [
+        {
+          "mode": "in-out",
+          "order": "random",
+          "window": 40
+        }
+      ],
       "clipping": {
         "mask": "invert-b"
       },
@@ -65,12 +69,14 @@
         "mask": "invert-b"
       },
       "type": "svg-3d",
-      "assets": ["svg/illustrations/illustration-04.svg"],
-      "stagger": {
+      "assets": [
+        "svg/illustrations/illustration-04.svg"
+      ],
+      "staggers": [{
         "mode": "in-out",
         "order": "random",
         "window": 4
-      },
+      }],
       "keyframer": [
         {
           "time": 0.0,

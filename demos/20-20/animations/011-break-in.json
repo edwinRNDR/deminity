@@ -15,12 +15,16 @@
     {
       "time": 3.0,
       "type": "svg",
-      "assets": ["svg/circle-360-5.svg"],
-      "stagger": {
-        "mode": "in-out",
-        "window": 0,
-        "order": "random"
-      },
+      "assets": [
+        "svg/circle-360-5.svg"
+      ],
+      "staggers": [
+        {
+          "mode": "in-out",
+          "window": 0,
+          "order": "random"
+        }
+      ],
       "keyframer": [
         {
           "time": 0.0,
@@ -52,12 +56,16 @@
     {
       "time": 3.25,
       "type": "svg",
-      "assets": ["svg/circle-360-15.svg"],
-      "stagger": {
-        "mode": "in-out",
-        "window": 0,
-        "order": "random"
-      },
+      "assets": [
+        "svg/circle-360-15.svg"
+      ],
+      "staggers": [
+        {
+          "mode": "in-out",
+          "window": 0,
+          "order": "random"
+        }
+      ],
       "keyframer": [
         {
           "time": 0.0,
@@ -89,12 +97,16 @@
     {
       "time": 3.5,
       "type": "svg",
-      "assets": ["svg/circle-360-30.svg"],
-      "stagger": {
-        "mode": "in-out",
-        "window": 0,
-        "order": "random"
-      },
+      "assets": [
+        "svg/circle-360-30.svg"
+      ],
+      "staggers": [
+        {
+          "mode": "in-out",
+          "window": 0,
+          "order": "random"
+        }
+      ],
       "keyframer": [
         {
           "time": 0.0,
@@ -126,12 +138,14 @@
     {
       "time": 3.75,
       "type": "svg",
-      "assets": ["svg/circle-360-60.svg"],
-      "stagger": {
+      "assets": [
+        "svg/circle-360-60.svg"
+      ],
+      "staggers": [{
         "mode": "in-out",
         "window": 0,
         "order": "random"
-      },
+      }],
       "keyframer": [
         {
           "time": 0.0,
@@ -163,11 +177,13 @@
     {
       "time": 4.0,
       "type": "svg",
-      "assets": ["svg/circle-360-60.svg"],
-      "stagger": {
+      "assets": [
+        "svg/circle-360-60.svg"
+      ],
+      "staggers": [{
         "mode": "in-out",
         "window": 0
-      },
+      }],
       "keyframer": [
         {
           "time": 0.0,

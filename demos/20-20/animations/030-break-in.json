@@ -20,9 +20,6 @@
         "count": 3,
         "interval": 16.0
       },
-      "stagger": {
-        "mode": "none"
-      },
       "keyframer": [
         {
           "time": 0.0,
@@ -59,9 +56,6 @@
       "repetitions": {
         "count": 1,
         "interval": 16.0
-      },
-      "stagger": {
-        "mode": "none"
       },
       "keyframer": [
         {

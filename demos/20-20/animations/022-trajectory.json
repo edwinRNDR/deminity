@@ -22,7 +22,9 @@
     {
       "time": 36.0,
       "type": "svg-3d",
-      "assets": ["svg/trajectory/trajectory-orbit-earth.svg"],
+      "assets": [
+        "svg/trajectory/trajectory-orbit-earth.svg"
+      ],
       "keyframer": [
         {
           "time": 0.0,
@@ -50,7 +52,9 @@
     {
       "time": 36.0,
       "type": "svg-3d",
-      "assets": ["svg/trajectory/trajectory-orbit-jupiter.svg"],
+      "assets": [
+        "svg/trajectory/trajectory-orbit-jupiter.svg"
+      ],
       "keyframer": [
         {
           "time": 0.0,
@@ -78,7 +82,9 @@
     {
       "time": 36.0,
       "type": "svg-3d",
-      "assets": ["svg/trajectory/trajectory-orbit-saturn.svg"],
+      "assets": [
+        "svg/trajectory/trajectory-orbit-saturn.svg"
+      ],
       "keyframer": [
         {
           "time": 0.0,
@@ -106,7 +112,9 @@
     {
       "time": 42.0,
       "type": "svg-3d",
-      "assets": ["svg/trajectory/trajectory-curve.svg"],
+      "assets": [
+        "svg/trajectory/trajectory-curve.svg"
+      ],
       "keyframer": [
         {
           "time": 0.0,
@@ -136,11 +144,15 @@
     {
       "time": 42.0,
       "type": "svg-3d",
-      "assets": ["svg/trajectory/trajectory-dots.svg"],
-      "stagger": {
-        "mode": "in-out",
-        "window": 0
-      },
+      "assets": [
+        "svg/trajectory/trajectory-dots.svg"
+      ],
+      "staggers": [
+        {
+          "mode": "in-out",
+          "window": 0
+        }
+      ],
       "keyframer": [
         {
           "time": 0.0,
@@ -162,11 +174,15 @@
     {
       "time": 42.0,
       "type": "svg-3d",
-      "assets": ["svg/trajectory/trajectory-dots.svg"],
-      "stagger": {
-        "mode": "in-out",
-        "window": 0
-      },
+      "assets": [
+        "svg/trajectory/trajectory-dots.svg"
+      ],
+      "staggers": [
+        {
+          "mode": "in-out",
+          "window": 0
+        }
+      ],
       "keyframer": [
         {
           "time": 0.0,
@@ -190,11 +206,15 @@
     {
       "time": 42.0,
       "type": "svg-3d",
-      "assets": ["svg/trajectory/trajectory-dates.svg"],
-      "stagger": {
-        "mode": "in-out",
-        "window": 0
-      },
+      "assets": [
+        "svg/trajectory/trajectory-dates.svg"
+      ],
+      "staggers": [
+        {
+          "mode": "in-out",
+          "window": 0
+        }
+      ],
       "keyframer": [
         {
           "time": 0.0,

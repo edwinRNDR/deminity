@@ -28,11 +28,11 @@
         "mask": "a"
       },
       "assets": ["svg/curves-120.svg"],
-      "stagger": {
+      "staggers": [{
         "mode": "in-out",
         "order": "random",
         "window": 20
-      },
+      }],
       "stepping": {
         "mode": "discrete",
         "steps": 16,

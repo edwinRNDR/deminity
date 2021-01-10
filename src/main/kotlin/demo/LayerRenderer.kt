@@ -4,10 +4,11 @@ import bass.Channel
 import demo.Layer.Blend.BlendMode
 import demo.Layer.Object.Attributes.AttributeSource
 import demo.Layer.Object.Clipping.ClipMask
-import demo.Layer.Object.Stagger.StaggerMode
-import demo.Layer.Object.Stagger.StaggerOrder
+import demo.Layer.Object.Staggers.Stagger.StaggerMode
+import demo.Layer.Object.Staggers.Stagger.StaggerOrder
 import demo.Layer.Object.Target
 import demo.Layer.Object.ObjectType
+import mu.KotlinLogging
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
@@ -22,8 +23,11 @@ import org.openrndr.svg.loadSVG
 import org.operndr.extras.filewatcher.watch
 import org.operndr.extras.filewatcher.watchFile
 import java.io.File
+import java.io.FileNotFoundException
 import kotlin.math.roundToInt
 import kotlin.random.Random
+
+private val logger = KotlinLogging.logger {}
 
 class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, val targetHeight: Int) {
     var channel = Channel()
@@ -172,7 +176,15 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                                 val svgFile = File(demo.dataBase, "assets/${asset}")
                                 billOfMaterials.add(svgFile.path)
                                 watchFile(program, svgFile) {
-                                    loadSVG(it)
+                                    try {
+                                        loadSVG(it)
+                                    } catch (e : FileNotFoundException) {
+                                        logger.error {
+                                            "asset ${svgFile.path} not found in layer ${layer.sourceFile}. ${obj}"
+
+                                        }
+                                        error("asset ${svgFile.path} not found in layer ${layer.sourceFile}")
+                                    }
                                 }.apply {
                                     this.watch { composition ->
                                         compositionShapes[asset] = composition.findShapes().map {
@@ -431,8 +443,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                             }
                         } else if (obj.type == ObjectType.svg || obj.type == ObjectType.`svg-3d`) {
                             val animation = obj.animation
-                            obj.time!!
-                            obj.assets!!
+                            obj.time!!; obj.assets!!; obj.staggers!!
                             animation(time - obj.time)
                             val objectClipBlend = animation.objectClipBlend
                             val assetIndex = animation.assetIndex.roundToInt().coerceIn(0, obj.assets.size - 1)
@@ -446,29 +457,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
 
                             val duration = animation.duration
                             val objectTime = time - obj.time
-                            val unitTime = objectTime / duration
-
-                            val staggerOrder = when (obj.stagger.order) {
-                                null, StaggerOrder.`contour-index` -> List(shapeCount) { it }
-                                StaggerOrder.`reverse-contour-index` -> List(shapeCount) { it }.reversed()
-                                StaggerOrder.random -> {
-                                    obj.stagger.seed!!
-                                    List(shapeCount) { it }.shuffled(Random(obj.stagger.seed))
-                                }
-                            }
-
-                            /** stagger resolve function */
-                            val stagger: (Int) -> Double = when (obj.stagger.mode) {
-                                StaggerMode.`in-out` -> { shapeIndex ->
-                                    obj.stagger.window!!
-                                    val staggerIndex = staggerOrder[shapeIndex]
-                                    val staggerStart = (staggerIndex * 1.0) / (shapeCount + obj.stagger.window)
-                                    val staggerEnd =
-                                        (staggerIndex + 1.0 + obj.stagger.window) / (shapeCount + obj.stagger.window)
-                                    unitTime.map(staggerStart, staggerEnd, 0.0, duration, clamp = true)
-                                }
-                                else -> { shapeIndex -> objectTime }
-                            }
+                            val stagger = obj.staggers.stagger(objectTime)
 
                             /** [Layer.Object] fil color resolver */
                             fun Layer.Object.fill(objectFill: ColorRGBa?) = when (this.attributes.fill) {
@@ -502,7 +491,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                                 ObjectType.svg -> {
                                     for ((shapeIndex, shape) in compositionShapes[asset].orEmpty().withIndex()) {
                                         drawer.isolated {
-                                            animation(obj.stepping.stepTime(obj.animation, stagger(shapeIndex)))
+                                            animation(obj.stepping.stepTime(obj.animation, stagger.stagger(objectTime, shapeCount, shapeIndex)))
                                             clipStyle.clipBlend = objectClipBlend * animation.clipBlend
                                             drawer.translate(640.0, 360.0)
                                             drawer.model *= animation.transform
@@ -527,7 +516,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                                 ObjectType.`svg-3d` -> {
                                     val objectDraws = compositionDraws3D[asset].orEmpty()
                                     for (objectDraw in objectDraws) {
-                                        animation(obj.stepping.stepTime(obj.animation, stagger(objectDraw.shapeIndex)))
+                                        animation(obj.stepping.stepTime(obj.animation, stagger.stagger(objectTime, shapeCount, objectDraw.shapeIndex)))
                                         clipStyle.clipBlend = objectClipBlend * animation.clipBlend
                                         drawer.isolated {
                                             drawer.model = Matrix44.IDENTITY

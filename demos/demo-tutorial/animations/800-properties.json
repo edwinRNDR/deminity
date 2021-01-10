@@ -19,10 +19,12 @@
   "prototypes": {
     "proto-1": {
       "type": "svg",
-      "stagger": {
-        "mode": "in-out",
-        "window": 25
-      }
+      "staggers": [
+        {
+          "mode": "in-out",
+          "window": 25
+        }
+      ]
     },
     "proto-2": {
       "assets": [

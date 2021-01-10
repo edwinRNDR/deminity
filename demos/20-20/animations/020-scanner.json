@@ -15,12 +15,16 @@
     {
       "time": 6.0,
       "type": "svg",
-      "assets": ["svg/lines-60-square.svg"],
-      "stagger": {
-        "mode": "in-out",
-        "window": 0,
-        "order": "random"
-      },
+      "assets": [
+        "svg/lines-60-square.svg"
+      ],
+      "staggers": [
+        {
+          "mode": "in-out",
+          "window": 0,
+          "order": "random"
+        }
+      ],
       "keyframer": [
         {
           "time": 0.0,
