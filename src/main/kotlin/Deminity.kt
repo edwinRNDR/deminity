@@ -38,7 +38,11 @@ fun main(args: Array<String>) {
             var enablePostProcessing = true
 
             program.ended.listen {
+                /**
+                 * Generate a bill of materials when the program is closed.
+                 */
 
+                /** Recursive file lister */
                 fun File.listRecursive(): List<File> {
                     val list = this.listFiles()!!
                     return list.filter {
@@ -51,8 +55,6 @@ fun main(args: Array<String>) {
                         File("${demo.dataBase}/assets", it.file).path
                     }
                 ) + layerRenderer.billOfMaterials
-
-
 
                 if (configuration.tools.generateBillOfMaterials) {
                     File("bill-of-materials.txt").writeText(
@@ -72,6 +74,9 @@ fun main(args: Array<String>) {
                 }
             }
 
+            /**
+             * Set up video capturing
+             */
             if (configuration.capture.enabled) {
                 extend(ScreenRecorder()) {
                     width = configuration.target.width
@@ -114,7 +119,6 @@ fun main(args: Array<String>) {
                 colorBuffer()
             }
 
-
             val channel =
                 if (!configuration.capture.enabled) {
                     demo.soundtrack?.let {
@@ -133,7 +137,6 @@ fun main(args: Array<String>) {
                         application.exit()
                     }
                 }
-
                 drawer.clear(ColorRGBa.BLACK)
                 drawer.isolatedWithTarget(target) {
                     drawer.clear(ColorRGBa.BLACK)

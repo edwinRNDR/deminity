@@ -1,6 +1,5 @@
 package demo
 
-import com.google.gson.Gson
 import mu.KotlinLogging
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
@@ -18,6 +17,7 @@ import org.openrndr.extra.keyframer.Keyframer
 import org.openrndr.math.Vector2
 import org.operndr.extras.filewatcher.watchFile
 import java.io.File
+
 private val logger = KotlinLogging.logger {}
 
 class PostAnimation : Keyframer() {
@@ -50,35 +50,18 @@ class PostAnimation : Keyframer() {
     val vcrGapHigh by DoubleChannel("vcr-gap-high", -0.99)
     val vcrDeformGain by DoubleChannel("vcr-deform-gain", 0.1)
     val vcrDeformFrequency by DoubleChannel("vcr-deform-frequency", 1.0)
-
 }
 
 class PostProcessor(val animationWatcher: () -> PostAnimation) {
-    private val bloom by lazy {
-        GaussianBloom()
-    }
+    private val bloom by lazy { GaussianBloom() }
+    private val add by lazy { Add() }
+    private val laserBlur by lazy { LaserBlur() }
+    private val pal by lazy { Pal() }
+    private val crt by lazy { VideoGlitch() }
+    private val vcr by lazy { TapeNoise() }
 
-    private val add by lazy {
-        Add()
-    }
-
-    private val laserBlur by lazy {
-        LaserBlur()
-    }
-
-    private val pal by lazy {
-        Pal()
-    }
-
-    private val crt by lazy {
-        VideoGlitch()
-    }
-
-    private val vcr by lazy {
-        TapeNoise()
-    }
-
-    val intermediate by lazy {
+    /** intermediate targets */
+    private val intermediate by lazy {
         val w = RenderTarget.active.width
         val h = RenderTarget.active.height
         List(2) {
@@ -86,6 +69,7 @@ class PostProcessor(val animationWatcher: () -> PostAnimation) {
         }
     }
 
+    /** final result */
     val result by lazy {
         val w = RenderTarget.active.width
         val h = RenderTarget.active.height
@@ -95,6 +79,8 @@ class PostProcessor(val animationWatcher: () -> PostAnimation) {
     fun postProcess(input: ColorBuffer, time: Double) {
         val animation = animationWatcher()
         animation(time)
+
+        // marshall parameters from the animation into the filters
 
         bloom.gain = animation.bloomGain
 
@@ -112,7 +98,6 @@ class PostProcessor(val animationWatcher: () -> PostAnimation) {
         laserBlur.vignette = animation.laserVignette
         laserBlur.vignetteSize = animation.laserVignetteSize
         laserBlur.phase = animation.laserPhase
-
 
         crt.time = time
         crt.amplitude = animation.crtAmplitude
@@ -146,7 +131,7 @@ class PostProcessor(val animationWatcher: () -> PostAnimation) {
                 val postAnimation = PostAnimation()
                 try {
                     postAnimation.loadFromJson(file)
-                } catch(e: Throwable) {
+                } catch (e: Throwable) {
                     logger.error {
                         e.message
                     }

@@ -3,20 +3,18 @@ package demo
 import com.google.gson.Gson
 import java.io.File
 
-class Configuration(
+/** Deminity configuration */
+data class Configuration(
     val demo: String = "no demo specified",
     val window: Configuration.Window = Window(),
     val target: Configuration.Target = Target(),
     val capture: Capture = Capture(),
     val presentation: Presentation = Presentation(),
     val tools: Tools = Tools()
-
 ) {
+    data class Presentation(val loop: Boolean = true, val holdAfterEnd: Long = 3000L)
 
-    class Presentation(val loop: Boolean = true, val holdAfterEnd: Long = 3000L)
-
-
-    class Window(
+    data class Window(
         val fullscreen: Boolean = false,
         val resizable: Boolean = false,
         val alwaysOnTop: Boolean = false,
@@ -24,9 +22,9 @@ class Configuration(
         val height: Int = 720
     )
 
-    class Target(val width: Int = 1280, val height: Int = 720)
+    data class Target(val width: Int = 1280, val height: Int = 720)
 
-    class Capture(
+    data class Capture(
         val enabled: Boolean = false,
         val framerate: Int = 60,
         val temporalBlur: TemporalBlur = TemporalBlur(),
@@ -38,10 +36,10 @@ class Configuration(
             x265
         }
 
-        class TemporalBlur(val enabled: Boolean = false, val samples: Int = 10)
+        data class TemporalBlur(val enabled: Boolean = false, val samples: Int = 10)
     }
 
-    class Tools(val generateBillOfMaterials: Boolean = false, val generateUnusedMaterials: Boolean = false)
+    data class Tools(val generateBillOfMaterials: Boolean = false, val generateUnusedMaterials: Boolean = false)
 
     companion object {
         fun loadFromJson(filename: String): Configuration {
