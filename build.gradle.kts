@@ -16,7 +16,7 @@ val orxFeatures = setOf(
 //  "orx-chataigne",
     "orx-compositor",
 //  "orx-dnk3",
-//  "orx-easing",
+  "orx-easing",
   "orx-file-watcher",
 //  "orx-parameters",
 //  "orx-filter-extension",

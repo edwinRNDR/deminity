@@ -14,6 +14,8 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.extra.keyframer.FunctionExtensions
 import org.openrndr.extra.keyframer.Keyframer
+import org.openrndr.extras.easing.Easing
+import org.openrndr.extras.easing.EasingFunction
 import org.openrndr.math.Vector3
 import org.openrndr.math.map
 import org.openrndr.math.transforms.buildTransform
@@ -34,6 +36,7 @@ private val logger = KotlinLogging.logger {}
  * - Excessive use of optional types. They are due to the cascading property of Layer.Object.
  * - Immutable data. Just makes things easier.
  */
+
 
 /**
  * Layer class.
@@ -314,9 +317,12 @@ data class Layer(
                 val duration: Double = 0.0,
                 val mode: StaggerMode = StaggerMode.none,
                 val order: StaggerOrder = StaggerOrder.`contour-index`,
+                val easing: String = "linear",
                 val seed: Int = 100,
                 val window: Int = 0
             ) {
+                val easingFunction by lazy { easingFunctionFromName(easing) }
+
                 enum class StaggerMode {
                     none,
                     `in-out`,
@@ -344,12 +350,10 @@ data class Layer(
                         when (order) {
                             StaggerOrder.`contour-index` -> List(shapeCount) { it }
                             StaggerOrder.`reverse-contour-index` -> List(shapeCount) { it }.reversed()
-                            StaggerOrder.random -> {
-                                List(shapeCount) { it }.shuffled(Random(seed))
-                            }
+                            StaggerOrder.random -> List(shapeCount) { it }.shuffled(Random(seed))
                         }
                     }[shapeIndex]
-                    val segmentTime = ((objectTime - time) / duration).coerceIn(0.0, 1.0)
+                    val segmentTime = easingFunction.invoke(((objectTime - time) / duration).coerceIn(0.0, 1.0), 0.0, 1.0, 1.0)
                     return when (mode) {
                         StaggerMode.none -> objectTime
                         StaggerMode.`in-out` -> {
@@ -513,5 +517,44 @@ data class Layer(
                 layer.resolve(demo)
             }
         }
+    }
+}
+
+fun easingFunctionFromName(easingCandidate: String): EasingFunction {
+    return when (easingCandidate) {
+        "linear" -> Easing.Linear.function
+        "back-in" -> Easing.BackIn.function
+        "back-out" -> Easing.BackOut.function
+        "back-in-out" -> Easing.BackInOut.function
+        "bounce-in" -> Easing.BounceIn.function
+        "bounce-out" -> Easing.BounceOut.function
+        "bounce-in-out" -> Easing.BackInOut.function
+        "circ-in" -> Easing.CircIn.function
+        "circ-out" -> Easing.CircOut.function
+        "circ-in-out" -> Easing.CircInOut.function
+        "cubic-in" -> Easing.CubicIn.function
+        "cubic-out" -> Easing.CubicOut.function
+        "cubic-in-out" -> Easing.CubicInOut.function
+        "elastic-in" -> Easing.ElasticIn.function
+        "elastic-out" -> Easing.ElasticInOut.function
+        "elastic-in-out" -> Easing.ElasticOut.function
+        "expo-in" -> Easing.ExpoIn.function
+        "expo-out" -> Easing.ExpoOut.function
+        "expo-in-out" -> Easing.ExpoInOut.function
+        "quad-in" -> Easing.QuadIn.function
+        "quad-out" -> Easing.QuadOut.function
+        "quad-in-out" -> Easing.QuadInOut.function
+        "quart-in" -> Easing.QuartIn.function
+        "quart-out" -> Easing.QuartOut.function
+        "quart-in-out" -> Easing.QuartInOut.function
+        "quint-in" -> Easing.QuintIn.function
+        "quint-out" -> Easing.QuintOut.function
+        "quint-in-out" -> Easing.QuintInOut.function
+        "sine-in" -> Easing.SineIn.function
+        "sine-out" -> Easing.SineOut.function
+        "sine-in-out" -> Easing.SineInOut.function
+        "one" -> Easing.One.function
+        "zero" -> Easing.Zero.function
+        else -> error("unknown easing name '$easingCandidate'")
     }
 }
