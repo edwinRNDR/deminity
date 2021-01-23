@@ -5,8 +5,6 @@
       {
         "time": 68.0,
         "easing": "cubic-in-out",
-        "x": 640.0,
-        "y": 360.0,
         "z": 480.0,
         "perspective-far": 10000,
         "rx": 0

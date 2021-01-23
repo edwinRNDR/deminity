@@ -13,10 +13,18 @@ import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.events.listen
+import org.openrndr.extra.dnk3.AmbientLight
+import org.openrndr.extra.dnk3.Scene
+import org.openrndr.extra.dnk3.SceneNode
+import org.openrndr.extra.dnk3.SceneRenderer
+import org.openrndr.extra.dnk3.gltf.buildSceneNodes
+import org.openrndr.extra.dnk3.gltf.loadGltfFromFile
+import org.openrndr.extra.dnk3.renderers.dryRenderer
 import org.openrndr.extra.fx.blend.Multiply
 import org.openrndr.extra.fx.dither.ADither
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
+import org.openrndr.math.Vector3
 import org.openrndr.math.map
 import org.openrndr.shape.*
 import org.openrndr.svg.loadSVG
@@ -44,6 +52,8 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
 
     private class ObjectPath3D(val stroke: ColorRGBa?, val strokeWeight: Double?, val path3D: Path3D)
 
+    private class SceneDraw(val renderer: SceneRenderer, val scene: Scene)
+
     private val layerTarget = renderTarget(targetWidth, targetHeight, multisample = BufferMultisample.SampleCount(8)) {
         colorBuffer()
         depthBuffer()
@@ -53,6 +63,8 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
     private val compositionWatchers = mutableMapOf<String, () -> Composition>()
     private val compositionShapes = mutableMapOf<String, List<ShapeNode>>()
     private val compositionDraws3D = mutableMapOf<String, List<ObjectDraw3D>>()
+    private val sceneDraws = mutableMapOf<String, SceneDraw>()
+
     private val images = mutableMapOf<String, ColorBuffer>()
     private val processedImages = mutableMapOf<String, ColorBuffer>()
 
@@ -151,6 +163,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                 watch { layer ->
                     channel.setPosition(cuePoint / demo.`time-scale`)
 
+                    /* preload images */
                     layer.objects.filter { obj ->
                         obj.type == ObjectType.image
                     }.map { obj ->
@@ -166,7 +179,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                             }
                         }
                     }
-
+                    /** preload svg */
                     layer.objects.filter { obj ->
                         obj.type == ObjectType.svg || obj.type == ObjectType.`svg-3d`
                     }.map { obj ->
@@ -246,6 +259,24 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                                                 ObjectDraw3D(shapeIndex, shape.effectiveFill, triangulation, paths)
                                             }
                                     }
+                                }
+                            }
+                        }
+                    }
+                    /** preload gltf */
+                    layer.objects.filter { obj ->  obj.type == ObjectType.gltf }.map { obj ->
+                        obj.assets!!
+                        for (asset in obj.assets) {
+                            sceneDraws.getOrPut(asset) {
+                                val gltfFile = File(demo.dataBase, "assets/${asset}")
+                                if (gltfFile.isFile) {
+                                    val gltfScene = loadGltfFromFile(gltfFile)
+                                    val scene = Scene(SceneNode())
+                                    val sceneData = gltfScene.buildSceneNodes()
+                                    scene.root.children.addAll(sceneData.scenes.first())
+                                    SceneDraw(dryRenderer(), scene)
+                                } else {
+                                    error("gltf asset not found ${gltfFile.absolutePath}")
                                 }
                             }
                         }
@@ -353,9 +384,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                     drawer.perspective(ca.fov, aspectRatio, ca.perspectiveNear, ca.perspectiveFar)
                 }
 
-                drawer.translate(640.0, 360.0, 0.0, TransformTarget.VIEW)
                 drawer.view *= ca.transform
-                drawer.translate(-640.0, -360.0, 0.0, TransformTarget.VIEW)
 
                 val objectGroups = layer.objects
                     .filter { it.time!!; time >= it.time && time < (it.time + it.duration) }
@@ -424,7 +453,6 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                             val image = images[asset] ?: error("no image")
                             val processed = processedImages[asset] ?: error("no image")
                             drawer.isolated {
-                                drawer.translate(640.0, 360.0)
                                 drawer.model *= a.transform
                                 drawer.scale(1.0, -1.0, 1.0)
                                 drawer.drawStyle.colorMatrix = tint(a.imageTint)
@@ -493,7 +521,6 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                                         drawer.isolated {
                                             animation(obj.stepping.stepTime(obj.animation, stagger.stagger(objectTime, shapeCount, shapeIndex)))
                                             clipStyle.clipBlend = objectClipBlend * animation.clipBlend
-                                            drawer.translate(640.0, 360.0)
                                             drawer.model *= animation.transform
                                             drawer.scale(1.0, -1.0, 1.0)
                                             drawer.translate(-640.0, -360.0)
@@ -514,13 +541,16 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                                     }
                                 }
                                 ObjectType.`svg-3d` -> {
+                                    val strokeGain = when (layer.camera.type) {
+                                        Layer.Camera.CameraType.ortho -> 1.0
+                                        Layer.Camera.CameraType.perspective -> 256.0
+                                    }
                                     val objectDraws = compositionDraws3D[asset].orEmpty()
                                     for (objectDraw in objectDraws) {
                                         animation(obj.stepping.stepTime(obj.animation, stagger.stagger(objectTime, shapeCount, objectDraw.shapeIndex)))
                                         clipStyle.clipBlend = objectClipBlend * animation.clipBlend
                                         drawer.isolated {
                                             drawer.model = Matrix44.IDENTITY
-                                            drawer.translate(640.0, 360.0, 0.0)
                                             drawer.model *= animation.transform
                                             drawer.scale(1.0, -1.0, 1.0)
                                             drawer.translate(-640.0, -360.0, 0.0)
@@ -534,7 +564,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                                                     objectPath.path3D.sub(animation.c0, animation.c1)
                                                 }
                                                 drawer.stroke = obj.stroke(objectPath.stroke)
-                                                drawer.strokeWeight = obj.strokeWeight(objectPath.strokeWeight)
+                                                drawer.strokeWeight = obj.strokeWeight(objectPath.strokeWeight) * strokeGain
                                                 drawer.fill = null
                                                 drawer.path(drawPath)
                                             }
@@ -543,6 +573,17 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                                 }
                                 else -> error("unreachable")
                             }
+                        } else if (obj.type == ObjectType.gltf) {
+                            obj.time!!; obj.assets!!; obj.staggers!!
+                            val animation = obj.animation
+                            animation(time - obj.time)
+                            val assetIndex = animation.assetIndex.roundToInt().coerceIn(0, obj.assets.size - 1)
+                            val asset = obj.assets[assetIndex]
+                            val sceneDraw = sceneDraws[asset] ?: error("scene asset missing for $asset")
+                            //drawer.model *= obj.animation.transform
+                            sceneDraw.scene.root.transform = obj.animation.transform
+                            drawer.rotate(Vector3.UNIT_Y, time*180.0)
+                            sceneDraw.renderer.draw(drawer, sceneDraw.scene)
                         }
                     }
                     if (renderObjects.isNotEmpty()) {

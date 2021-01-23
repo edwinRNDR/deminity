@@ -5,8 +5,6 @@
       {
         "time": 20.0,
         "easing": "cubic-in-out",
-        "x": 640.0,
-        "y": 360.0,
         "magnitude": 720.0,
         "scale": 0.8,
         "rx": 0.0,

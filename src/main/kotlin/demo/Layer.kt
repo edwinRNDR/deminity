@@ -36,8 +36,6 @@ private val logger = KotlinLogging.logger {}
  * - Excessive use of optional types. They are due to the cascading property of Layer.Object.
  * - Immutable data. Just makes things easier.
  */
-
-
 /**
  * Layer class.
  * A  [Layer] is typically loaded from a json file.
@@ -49,7 +47,7 @@ data class Layer(
     val blend: Blend = Blend(),
     val prototypes: Map<String, Object> = emptyMap(),
     val objects: List<Object> = emptyList(),
-    val properties: Map<String, Double> = emptyMap()
+    val properties: Map<String, Double> = emptyMap(),
 ) {
     var sourceFile = File("[unknown-source]")
 
@@ -104,6 +102,7 @@ data class Layer(
             }
         }
     }
+
 
     /**
      * Object is a renderable entity
@@ -239,7 +238,8 @@ data class Layer(
         enum class ObjectType {
             svg,
             image,
-            `svg-3d`
+            `svg-3d`,
+            gltf
         }
 
         /**
@@ -353,7 +353,8 @@ data class Layer(
                             StaggerOrder.random -> List(shapeCount) { it }.shuffled(Random(seed))
                         }
                     }[shapeIndex]
-                    val segmentTime = easingFunction.invoke(((objectTime - time) / duration).coerceIn(0.0, 1.0), 0.0, 1.0, 1.0)
+                    val segmentTime =
+                        easingFunction.invoke(((objectTime - time) / duration).coerceIn(0.0, 1.0), 0.0, 1.0, 1.0)
                     return when (mode) {
                         StaggerMode.none -> objectTime
                         StaggerMode.`in-out` -> {

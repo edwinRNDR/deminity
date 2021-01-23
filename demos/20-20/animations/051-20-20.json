@@ -4,8 +4,6 @@
     "keyframer": [
       {
         "time": 144.5,
-        "x": 640.0,
-        "y": 360.0,
         "z": -10,
         "perspective-far": 1000000
       },
