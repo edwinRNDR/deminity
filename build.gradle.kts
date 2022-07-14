@@ -127,7 +127,7 @@ repositories {
     if (openrndrUseSnapshot || orxUseSnapshot) {
         mavenLocal()
     }
-    maven(url = "https://dl.bintray.com/openrndr/openrndr")
+    maven(url = "https://maven.openrndr.org")
     maven(url = "file:./m2-repo/")
 }
 
