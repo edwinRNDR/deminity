@@ -113,11 +113,11 @@ enum class Logging {
 /*  What type of logging should this project use? */
 val applicationLogging = Logging.FULL
 
-val kotlinVersion = "1.4.21"
+val kotlinVersion = "1.6.21"
 
 plugins {
     java
-    kotlin("jvm") version("1.4.21")
+    kotlin("jvm") version("1.6.21")
     id("com.github.johnrengelman.shadow") version ("6.0.0")
     id("org.beryx.runtime") version ("1.11.4")
 }
@@ -155,7 +155,7 @@ dependencies {
     runtimeOnly("org.nativebass:nativebass-$bassOs:1.1.2")
 
 
-    implementation("com.google.code.gson:gson:2.8.6")
+    implementation("com.google.code.gson:gson:2.9.0")
 
 
 
@@ -210,7 +210,7 @@ dependencies {
 // --------------------------------------------------------------------------------------------------------------------
 
 configure<JavaPluginConvention> {
-    sourceCompatibility = JavaVersion.VERSION_1_8
+   sourceCompatibility = JavaVersion.VERSION_1_8
 }
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"

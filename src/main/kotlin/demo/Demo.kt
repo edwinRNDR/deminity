@@ -14,11 +14,15 @@ data class Demo(
 ) {
     data class Soundtrack(val file: String = "assets/sound/missing.mp3")
 
+    @Transient
     var dataBase = File("demos/missing")
 
     companion object {
         fun loadFromJson(filename: String): Demo {
-            return Gson().fromJson(File(filename).readText(), Demo::class.java).apply {
+
+            val json = File(filename).readText()
+
+            return Gson().fromJson(json, Demo::class.java).apply {
                 dataBase = File(filename).parentFile
             }
         }

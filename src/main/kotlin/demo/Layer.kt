@@ -49,6 +49,7 @@ data class Layer(
     val objects: List<Object> = emptyList(),
     val properties: Map<String, Double> = emptyMap(),
 ) {
+    @Transient
     var sourceFile = File("[unknown-source]")
 
     /**
