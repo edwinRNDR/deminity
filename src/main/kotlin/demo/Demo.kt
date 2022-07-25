@@ -1,6 +1,7 @@
 package demo
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import java.io.File
 
 /**
@@ -19,10 +20,7 @@ data class Demo(
 
     companion object {
         fun loadFromJson(filename: String): Demo {
-
-            val json = File(filename).readText()
-
-            return Gson().fromJson(json, Demo::class.java).apply {
+            return GsonBuilder().setLenient().create().fromJson(File(filename).readText(), Demo::class.java).apply {
                 dataBase = File(filename).parentFile
             }
         }

@@ -3,6 +3,7 @@
 package demo
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import demo.Layer.Object.Attributes.*
 import demo.Layer.Object.Clipping.*
 import demo.Layer.Object.Staggers.Stagger
@@ -506,7 +507,7 @@ data class Layer(
     companion object {
         fun loadFromJson(file: File): Layer {
             try {
-                return Gson().fromJson(file.readText(), Layer::class.java)
+                return GsonBuilder().setLenient().create().fromJson(file.readText(), Layer::class.java)
             } catch (e: Throwable) {
                 error("failed to load layer from ${file.path}. ${e.message}")
             }

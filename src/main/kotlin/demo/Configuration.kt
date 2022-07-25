@@ -1,6 +1,7 @@
 package demo
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import java.io.File
 
 /** Deminity configuration */
@@ -43,7 +44,7 @@ data class Configuration(
 
     companion object {
         fun loadFromJson(filename: String): Configuration {
-            return Gson().fromJson(File(filename).readText(), Configuration::class.java)
+            return GsonBuilder().setLenient().create().fromJson(File(filename).readText(), Configuration::class.java)
         }
     }
 }
