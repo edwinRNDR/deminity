@@ -4,8 +4,6 @@ import bass.Channel
 import demo.Layer.Blend.BlendMode
 import demo.Layer.Object.Attributes.AttributeSource
 import demo.Layer.Object.Clipping.ClipMask
-import demo.Layer.Object.Staggers.Stagger.StaggerMode
-import demo.Layer.Object.Staggers.Stagger.StaggerOrder
 import demo.Layer.Object.Target
 import demo.Layer.Object.ObjectType
 import mu.KotlinLogging
@@ -13,7 +11,6 @@ import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.events.listen
-import org.openrndr.extra.dnk3.AmbientLight
 import org.openrndr.extra.dnk3.Scene
 import org.openrndr.extra.dnk3.SceneNode
 import org.openrndr.extra.dnk3.SceneRenderer
@@ -25,7 +22,6 @@ import org.openrndr.extra.fx.dither.ADither
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
-import org.openrndr.math.map
 import org.openrndr.shape.*
 import org.openrndr.svg.loadSVG
 import org.operndr.extras.filewatcher.watch
@@ -33,7 +29,6 @@ import org.operndr.extras.filewatcher.watchFile
 import java.io.File
 import java.io.FileNotFoundException
 import kotlin.math.roundToInt
-import kotlin.random.Random
 
 private val logger = KotlinLogging.logger {}
 
@@ -63,6 +58,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
     private val compositionWatchers = mutableMapOf<String, () -> Composition>()
     private val compositionShapes = mutableMapOf<String, List<ShapeNode>>()
     private val compositionDraws3D = mutableMapOf<String, List<ObjectDraw3D>>()
+    private val textCurtains = mutableMapOf<String, TextCurtain>()
     private val sceneDraws = mutableMapOf<String, SceneDraw>()
 
     private val images = mutableMapOf<String, ColorBuffer>()
@@ -277,6 +273,21 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                                     SceneDraw(dryRenderer(), scene)
                                 } else {
                                     error("gltf asset not found ${gltfFile.absolutePath}")
+                                }
+                            }
+                        }
+                    }
+
+                    /** preload text-curtain */
+                    layer.objects.filter { obj ->  obj.type == ObjectType.`text-curtain` }.map { obj ->
+                        obj.assets!!
+                        for (asset in obj.assets) {
+                            textCurtains.getOrPut(asset) {
+                                val txtFile = File(demo.dataBase, "assets/${asset}")
+                                if (txtFile.isFile) {
+                                    loadTextCurtain(txtFile)
+                                } else {
+                                    error("text curtain asset not found ${txtFile.absolutePath}")
                                 }
                             }
                         }
@@ -519,7 +530,12 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                                 ObjectType.svg -> {
                                     for ((shapeIndex, shape) in compositionShapes[asset].orEmpty().withIndex()) {
                                         drawer.isolated {
-                                            animation(obj.stepping.stepTime(obj.animation, stagger.stagger(objectTime, shapeCount, shapeIndex)))
+                                            animation(
+                                                obj.stepping.stepTime(
+                                                    obj.animation,
+                                                    stagger.stagger(objectTime, shapeCount, shapeIndex)
+                                                )
+                                            )
                                             clipStyle.clipBlend = objectClipBlend * animation.clipBlend
                                             drawer.model *= animation.transform
                                             drawer.scale(1.0, -1.0, 1.0)
@@ -530,9 +546,10 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                                             drawer.shape(shape.shape)
                                             drawer.fill = null
                                             for (contour in shape.shape.contours) {
-                                                val drawContour = if (animation.c0 == 0.0 && animation.c1 == 1.0) contour else {
-                                                    contour.sub(animation.c0, animation.c1)
-                                                }
+                                                val drawContour =
+                                                    if (animation.c0 == 0.0 && animation.c1 == 1.0) contour else {
+                                                        contour.sub(animation.c0, animation.c1)
+                                                    }
                                                 drawer.stroke = obj.stroke(shape.effectiveStroke)
                                                 drawer.strokeWeight = obj.strokeWeight(shape.effectiveStrokeWeight)
                                                 drawer.contour(drawContour)
@@ -547,7 +564,12 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                                     }
                                     val objectDraws = compositionDraws3D[asset].orEmpty()
                                     for (objectDraw in objectDraws) {
-                                        animation(obj.stepping.stepTime(obj.animation, stagger.stagger(objectTime, shapeCount, objectDraw.shapeIndex)))
+                                        animation(
+                                            obj.stepping.stepTime(
+                                                obj.animation,
+                                                stagger.stagger(objectTime, shapeCount, objectDraw.shapeIndex)
+                                            )
+                                        )
                                         clipStyle.clipBlend = objectClipBlend * animation.clipBlend
                                         drawer.isolated {
                                             drawer.model = Matrix44.IDENTITY
@@ -560,11 +582,13 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                                                 drawer.vertexBuffer(objectDraw.triangulation, DrawPrimitive.TRIANGLES)
                                             }
                                             for (objectPath in objectDraw.paths) {
-                                                val drawPath = if (animation.c0 == 0.0 && animation.c1 == 1.0) objectPath.path3D else {
-                                                    objectPath.path3D.sub(animation.c0, animation.c1)
-                                                }
+                                                val drawPath =
+                                                    if (animation.c0 == 0.0 && animation.c1 == 1.0) objectPath.path3D else {
+                                                        objectPath.path3D.sub(animation.c0, animation.c1)
+                                                    }
                                                 drawer.stroke = obj.stroke(objectPath.stroke)
-                                                drawer.strokeWeight = obj.strokeWeight(objectPath.strokeWeight) * strokeGain
+                                                drawer.strokeWeight =
+                                                    obj.strokeWeight(objectPath.strokeWeight) * strokeGain
                                                 drawer.fill = null
                                                 drawer.path(drawPath)
                                             }
@@ -582,8 +606,27 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                             val sceneDraw = sceneDraws[asset] ?: error("scene asset missing for $asset")
                             //drawer.model *= obj.animation.transform
                             sceneDraw.scene.root.transform = obj.animation.transform
-                            drawer.rotate(Vector3.UNIT_Y, time*180.0)
+                            drawer.rotate(Vector3.UNIT_Y, time * 180.0)
                             sceneDraw.renderer.draw(drawer, sceneDraw.scene)
+                        } else if (obj.type == ObjectType.`text-curtain`) {
+                            obj.time!!; obj.assets!!; obj.staggers!!
+                            val animation = obj.animation
+                            animation(time - obj.time)
+                            val assetIndex = animation.assetIndex.roundToInt().coerceIn(0, obj.assets.size - 1)
+                            val asset = obj.assets[assetIndex]
+                            val curtain = textCurtains[asset] ?: error("scene asset missing for $asset")
+                            drawer.isolated {
+                                drawer.fill = animation.fill
+                                //drawer.model *= animation.transform
+                                drawer.scale(1.0, -1.0, 1.0)
+                                drawer.translate(-640.0, -360.0)
+                                val text = curtain.prepareText(animation.curtainStart, animation.curtainEnd)
+                                for (line in text) {
+                                    drawer.text(line)
+                                    drawer.translate(0.0, 14.0)
+                                }
+
+                            }
                         }
                     }
                     if (renderObjects.isNotEmpty()) {
@@ -631,6 +674,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
         }
     }
 }
+
 
 private operator fun ColorRGBa.times(other: ColorRGBa): ColorRGBa {
     return ColorRGBa(r * other.r, g * other.g, b * other.b, a * other.a)

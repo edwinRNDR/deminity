@@ -161,6 +161,8 @@ data class Layer(
             val clipBlend by DoubleChannel("clip-blend", 1.0)
             val objectClipBlend by DoubleChannel("object-clip-blend", 1.0)
 
+            val curtainStart by DoubleChannel("curtain-start", 0.0)
+            val curtainEnd by DoubleChannel("curtain-end", 1.0)
             val transform
                 get() = buildTransform {
                     translate(position)
@@ -241,7 +243,8 @@ data class Layer(
             svg,
             image,
             `svg-3d`,
-            gltf
+            gltf,
+            `text-curtain`
         }
 
         /**
