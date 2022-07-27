@@ -5,7 +5,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.math.Vector2
 import org.openrndr.shape.ClipMode
 import org.openrndr.shape.Rectangle
-import org.openrndr.shape.drawComposition
+import polyfill.drawComposition
 import org.openrndr.svg.saveToFile
 import java.io.File
 

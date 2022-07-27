@@ -5,7 +5,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.shapes.bezierPatch
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.contour
-import org.openrndr.shape.drawComposition
+import polyfill.drawComposition
 import org.openrndr.svg.saveToFile
 import java.io.File
 

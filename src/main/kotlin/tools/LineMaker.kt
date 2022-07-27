@@ -3,7 +3,7 @@ package tools
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.shape.Rectangle
-import org.openrndr.shape.drawComposition
+import polyfill.drawComposition
 import org.openrndr.svg.saveToFile
 import java.io.File
 

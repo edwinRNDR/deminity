@@ -3,7 +3,7 @@ package tools
 import org.openrndr.application
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.ShapeContour
-import org.openrndr.shape.drawComposition
+import polyfill.drawComposition
 import org.openrndr.shape.shape
 import org.openrndr.svg.loadSVG
 import org.openrndr.svg.saveToFile
