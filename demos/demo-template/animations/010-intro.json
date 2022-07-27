@@ -5,8 +5,8 @@
       {
         "time": 0.0,
         "easing": "cubic-in-out",
-        "x": 640.0,
-        "y": 360.0,
+        "x": 0.0,
+        "y": 0.0,
         "magnitude": 720.0
       }
     ]
