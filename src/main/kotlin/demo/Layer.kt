@@ -23,6 +23,8 @@ import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.*
 import org.openrndr.extra.filewatcher.watchFile
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.floor
 import kotlin.random.Random
 
@@ -48,7 +50,7 @@ data class Layer(
     val blend: Blend = Blend(),
     val prototypes: Map<String, Object> = emptyMap(),
     val objects: List<Object> = emptyList(),
-    val properties: Map<String, Double> = emptyMap(),
+    val properties: Map<String, Any> = emptyMap(),
 ) {
     @Transient
     var sourceFile = File("[unknown-source]")
@@ -123,7 +125,7 @@ data class Layer(
         val staggers: Staggers? = null,
         val stepping: Stepping = Stepping(),
         val attributes: Attributes = Attributes(),
-        val properties: Map<String, Double> = emptyMap()
+        val properties: Map<String, Any> = emptyMap()
     ) : Cascadable<Object> {
         /**
          * Object animation keyframer
@@ -173,12 +175,32 @@ data class Layer(
                 }
         }
 
+        @Suppress("UNCHECKED_CAST")
         val animation by lazy {
             Animation().apply {
                 loadFromKeyObjects(
                     keyframer,
-                    properties + mapOf("rep" to repetitionCounter.toDouble()),
-                    FunctionExtensions.EMPTY
+                    properties.filterValues {
+                        it is Double
+                    } as Map<String, Double> + mapOf("rep" to repetitionCounter.toDouble()),
+
+                    FunctionExtensions(functions1 = properties.filterValues {
+                        it is List<*> || it is Array<*>
+                    }.mapValues {
+                        when (it.value) {
+                            is List<*> -> { x: Double ->
+                                (it.value as List<Double>)[x.toInt().coerceIn(0 until (it.value as List<Double>).size)]
+                            }
+                            is Array<*> -> { x: Double ->
+                                (it.value as Array<Double>)[x.toInt()
+                                    .coerceIn(0 until (it.value as Array<Double>).size)]
+                            }
+                            is DoubleArray -> { x: Double ->
+                                (it.value as DoubleArray)[x.toInt().coerceIn(0 until (it.value as DoubleArray).size)]
+                            }
+                            else -> error("unsupported type")
+                        }
+                    })
                 )
             }
         }
@@ -208,7 +230,7 @@ data class Layer(
          * Resolve the object.
          * apply defaults and prototypes and return a [Layer.Object] copy without null properties
          */
-        fun resolve(demo: Demo, prototypes: Map<String, Object>, properties: Map<String, Double>): Object {
+        fun resolve(demo: Demo, prototypes: Map<String, Object>, properties: Map<String, Any>): Object {
             val toCascade = listOfNotNull(
                 default.copy(properties = default.properties + properties),
                 prototypes["*"]
@@ -221,7 +243,7 @@ data class Layer(
                 assets = resolved.assets.flatMap { assetPath ->
                     if (assetPath.contains("*")) {
                         val path = assetPath.split("*").first()
-                        val ext = assetPath.split("*.")[1].toLowerCase()
+                        val ext = assetPath.split("*.")[1].lowercase()
                         File(demo.dataBase, "assets/$path").listFiles { it -> it.extension.toLowerCase() == ext }!!
                             .map {
                                 it.relativeTo(File(demo.dataBase, "assets")).path
