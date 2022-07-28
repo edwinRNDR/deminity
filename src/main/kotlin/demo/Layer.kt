@@ -15,13 +15,13 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.extra.keyframer.FunctionExtensions
 import org.openrndr.extra.keyframer.Keyframer
-import org.openrndr.extras.easing.Easing
-import org.openrndr.extras.easing.EasingFunction
+import org.openrndr.extra.easing.Easing
+import org.openrndr.extra.easing.EasingFunction
 import org.openrndr.math.Vector3
 import org.openrndr.math.map
 import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.*
-import org.operndr.extras.filewatcher.watchFile
+import org.openrndr.extra.filewatcher.watchFile
 import java.io.File
 import kotlin.math.floor
 import kotlin.random.Random

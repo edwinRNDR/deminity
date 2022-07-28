@@ -15,7 +15,7 @@ import org.openrndr.extra.fx.distort.TapeNoise
 import org.openrndr.extra.fx.distort.VideoGlitch
 import org.openrndr.extra.keyframer.Keyframer
 import org.openrndr.math.Vector2
-import org.operndr.extras.filewatcher.watchFile
+import org.openrndr.extra.filewatcher.watchFile
 import java.io.File
 
 private val logger = KotlinLogging.logger {}

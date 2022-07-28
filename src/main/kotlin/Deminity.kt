@@ -12,8 +12,8 @@ import org.openrndr.draw.isolatedWithTarget
 import org.openrndr.draw.renderTarget
 import org.openrndr.extra.temporalblur.TemporalBlur
 import org.openrndr.extra.videoprofiles.X265Profile
-import org.openrndr.extras.imageFit.FitMethod
-import org.openrndr.extras.imageFit.imageFit
+import org.openrndr.extra.imageFit.FitMethod
+import org.openrndr.extra.imageFit.imageFit
 import org.openrndr.ffmpeg.MP4Profile
 import org.openrndr.ffmpeg.ScreenRecorder
 import java.io.File

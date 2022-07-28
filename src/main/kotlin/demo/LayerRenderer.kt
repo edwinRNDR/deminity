@@ -24,8 +24,8 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.shape.*
 import org.openrndr.svg.loadSVG
-import org.operndr.extras.filewatcher.watch
-import org.operndr.extras.filewatcher.watchFile
+import org.openrndr.extra.filewatcher.watch
+import org.openrndr.extra.filewatcher.watchFile
 import java.io.File
 import java.io.FileNotFoundException
 import kotlin.math.roundToInt
