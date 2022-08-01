@@ -22,6 +22,8 @@ import org.openrndr.math.map
 import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.*
 import org.openrndr.extra.filewatcher.watchFile
+import org.openrndr.extra.keyframer.Function1
+import org.openrndr.extra.keyframer.evaluateExpression
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
@@ -175,32 +177,34 @@ data class Layer(
                 }
         }
 
+
         @Suppress("UNCHECKED_CAST")
         val animation by lazy {
             Animation().apply {
                 loadFromKeyObjects(
                     keyframer,
-                    properties.filterValues {
+                    externalParameters = properties.filterValues {
                         it is Double
                     } as Map<String, Double> + mapOf("rep" to repetitionCounter.toDouble()),
-
-                    FunctionExtensions(functions1 = properties.filterValues {
-                        it is List<*> || it is Array<*>
-                    }.mapValues {
-                        when (it.value) {
-                            is List<*> -> { x: Double ->
-                                (it.value as List<Double>)[x.toInt().coerceIn(0 until (it.value as List<Double>).size)]
-                            }
-                            is Array<*> -> { x: Double ->
-                                (it.value as Array<Double>)[x.toInt()
-                                    .coerceIn(0 until (it.value as Array<Double>).size)]
-                            }
-                            is DoubleArray -> { x: Double ->
-                                (it.value as DoubleArray)[x.toInt().coerceIn(0 until (it.value as DoubleArray).size)]
-                            }
-                            else -> error("unsupported type")
-                        }
-                    })
+                    functions = FunctionExtensions(
+                        functions1 = properties.filterValues { it is List<*> }.flatMap {
+                            val fc = Pair(it.key, propertyListEvaluator1(it.key, it.value as List<Any>))
+                            val fn = Pair("${it.key}-n", propertyListEvaluator1(it.key, it.value as List<Any>, ::normalized))
+                            val fi = Pair("${it.key}-i", propertyListEvaluatorMix1(it.key, it.value as List<Any>))
+                            val fni = Pair("${it.key}-ni", propertyListEvaluatorMix1(it.key, it.value as List<Any>, ::normalized))
+                            listOf(fc, fn)
+                        }.toMap(),
+                        functions2 = properties.filterValues { it is List<*> }.flatMap {
+                            val fc = Pair(it.key, propertyListEvaluator2(it.key, it.value as List<Any>))
+                            val fn = Pair("${it.key}-n", propertyListEvaluator2(it.key, it.value as List<Any>, ::normalized))
+                            listOf(fc, fn)
+                        }.toMap(),
+                        functions3 = properties.filterValues { it is List<*> }.flatMap {
+                            val fc = Pair(it.key, propertyListEvaluator3(it.key, it.value as List<Any>))
+                            val fn = Pair("${it.key}-n", propertyListEvaluator3(it.key, it.value as List<Any>, ::normalized))
+                            listOf(fc, fn)
+                        }.toMap()
+                    )
                 )
             }
         }
@@ -389,11 +393,13 @@ data class Layer(
                             val staggerEnd = (shapeOrder + 1.0 + window) / (shapeCount + window)
                             segmentTime.map(staggerStart, staggerEnd, time, end, clamp = true)
                         }
+
                         StaggerMode.`in` -> {
                             val staggerStart = (shapeOrder * 1.0) / (shapeCount + window)
                             val staggerEnd = 1.0
                             segmentTime.map(staggerStart, staggerEnd, time, end, clamp = true)
                         }
+
                         StaggerMode.out -> {
                             val staggerStart = 0.0
                             val staggerEnd = (shapeOrder + 1.0 + window) / (shapeCount + window)

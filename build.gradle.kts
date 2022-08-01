@@ -59,10 +59,10 @@ val openrndrFeatures = setOf(
 
 /*  Which version of OPENRNDR and ORX should be used? */
 val openrndrUseSnapshot = false
-val openrndrVersion = if (openrndrUseSnapshot) "0.4.0-SNAPSHOT" else "0.4.0"
+val openrndrVersion = if (openrndrUseSnapshot) "0.4.0-SNAPSHOT" else "0.4.1-rc.1"
 
 val orxUseSnapshot = false
-val orxVersion = if (orxUseSnapshot) "0.4.0-SNAPSHOT" else "0.4.0-1"
+val orxVersion = if (orxUseSnapshot) "0.4.0-SNAPSHOT" else "0.4.1-rc.1"
 
 //<editor-fold desc="This is code for OPENRNDR, no need to edit this .. most of the times">
 val supportedPlatforms = setOf("windows", "macos", "linux-x64", "linux-arm64")
@@ -204,6 +204,8 @@ dependencies {
     }
 
     implementation(kotlin("stdlib-jdk8"))
+    testImplementation(kotlin("test", kotlinVersion))
+
     testImplementation("junit", "junit", "4.12")
 }
 
@@ -294,3 +296,4 @@ runtime {
     modules.add("java.management")
     modules.add("java.sql")
 }
+
