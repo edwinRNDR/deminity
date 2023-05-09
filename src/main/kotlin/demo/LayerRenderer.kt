@@ -113,7 +113,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
     }
 
     init {
-        program.mouse.cursorVisible = false
+        //program.cursorVisible = false
 
         listOf(program.mouse.dragged, program.mouse.buttonDown).listen {
             val timescale = (RenderTarget.active.width - 160) / (demo.duration * demo.`time-scale`)
@@ -128,7 +128,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
             when (it.key) {
                 KEY_TAB -> {
                     enableUI = !enableUI
-                    program.mouse.cursorVisible = enableUI
+                    //program.mouse.cursorVisible = enableUI
                 }
                 KEY_ARROW_DOWN -> {
                     cuePoint = program.seconds * demo.`time-scale`
@@ -451,6 +451,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                                 clipStyle.invertMask = true
                                 drawer.shadeStyle = clipStyle
                             }
+                            else -> error("unsupported mask mode")
                         }
 
                         if (obj.type == ObjectType.image) {
@@ -469,7 +470,7 @@ class LayerRenderer(val program: Program, val demo: Demo, val targetWidth: Int, 
                                 drawer.drawStyle.colorMatrix = tint(a.imageTint)
 
                                 val source = image.bounds.sub(a.imageLeft, a.imageTop, a.imageRight, a.imageBottom)
-                                val target = source.moved(Vector2(-image.width / 2.0, -image.height / 2.0))
+                                val target = source.movedBy(Vector2(-image.width / 2.0, -image.height / 2.0))
 
                                 clipStyle.clipBlend = objectClipBlend * a.clipBlend
                                 if (a.imageDither >= 1.0) {
